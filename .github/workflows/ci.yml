@@ -1,0 +1,29 @@
+# Generated repository — this workflow comes from coding/glass/overlay.
+# Daemon, interception and CLI tests on every platform glass installs on
+# natively (Linux, macOS and Windows), then the
+# install check: pack → npm install -g (offline) → one measured run per agent →
+# uninstall → HOME unchanged.
+name: glass tests
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  test:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        node: ['22.13.0', '22.x']
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node }}
+      - run: npm install --omit=dev --ignore-scripts --no-audit --no-fund
+      - run: node --test "tests/**/*.test.mjs"
+      - run: node tests/install-check.mjs
