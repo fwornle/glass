@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "1b4ffd2db4b55fa31618bd1164a5e5aade2492bb",
+      "sha": "30c7411d12cb0ad1a28922d17383afd11c2e5f4e",
       "dirty": false
     },
     "proxy": {
@@ -29,7 +29,7 @@
     "docs/_tiers/index.deep.md": "27e1f167cbb2e66218f31da44abcd9e5e25eaf42e043ba5badba851f5abb9a47",
     "docs/_tiers/privacy.deep.md": "fa157ef17b1be13aead7859bdeff7ecdd102b8eaea60f845a5d87f25fbd27bb5",
     "docs/_tiers/reference.deep.md": "4ec98cac0df9971d4653481b76d4695b038f22ba6f820a21ee77ce1c748e0a32",
-    "docs/_tiers/status-line.deep.md": "cedf090062952c81c05c353866d563e800b85237a5cd3610be62b3be5ef673c9",
+    "docs/_tiers/status-line.deep.md": "6a0481f0996d196dc819666978fed11fd3acbd3d91aba551ac12e43c1bda0983",
     "docs/_tiers/token-usage.deep.md": "d7f1f9b0c2404673dc256e227bcd6d8d819dec8ea137bffb13590087c0c167a7",
     "docs/_tiers/troubleshooting.deep.md": "9bd68c6c37cb9628a7bb2e776674dcf6877b8e7aa6a2c978b17e4c2aaa81128d",
     "docs/architecture.md": "215e9559d8b9fba8f67c12e8f16a23cdf129e4a8e98e0d183d0d48c69812a3a5",
@@ -101,7 +101,7 @@
     "lib/measurement/context-turns-retention.mjs": "056e9ff69d572687515656d818f5defde47ec983bc17cf535595becab6b408a7",
     "lib/measurement/foreground-sessions.mjs": "24c0616302cc485edda87bec0506d4f0fb2699f1e74b770c0d766538df0f2a19",
     "lib/network/location-hysteresis.mjs": "bc380bf8fc36c9a41a86db49d68bcbaecdf2a9351ee33295e66149c825337302",
-    "lib/network/location-probe.mjs": "5c07803e97e080506945063392dc0833efe6ef412c9d1072982957e63f4508fc",
+    "lib/network/location-probe.mjs": "9e0e810f30ff78d2a446c039f39283792bf3accf2c688cd44ac6327de42072f3",
     "lib/network/network-change-watcher.mjs": "963b18f27a9a276a9bbad5ada92d4f29c894b10830aece89ec2753d5d399e320",
     "lib/paths/data-home.cjs": "6a80f9f1f142c322e6abcae52b9d78ecba86e6055098dc4be84f683ce279c371",
     "lib/paths/index.mjs": "1d04dc77ffe39e4617b6f1501a71f43cc98d407da791625949ca281534f6ed0a",
@@ -114,7 +114,7 @@
     "lib/statusline/visible-cell-width.cjs": "ff6a0f08f5deb2320d710645450c902aee209ff772189b5067232fd66a600226",
     "lib/teams/config.cjs": "0cba623e569258faee7c75cab715e12afcba27a7a14b8729858f74743950c3b8",
     "mkdocs.yml": "b4ef870c829fb9064f7c1e1abe8c54efc6d09a2e97ad29344daf46faf8093482",
-    "package.json": "3cd554dfdb4d9bd023580e8b58f0f5749137c1520f560eefb26b426f5c455688",
+    "package.json": "35e86ca886f7b3f021a6bdbbca627149b95026d1425ab60be5620ffd6653e4f9",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "eb88c78f1d1a0329e3baee8dd5d5bcabffa536b4b60491f0113dc7ebc1589629",
