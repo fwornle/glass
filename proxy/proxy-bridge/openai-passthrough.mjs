@@ -17,7 +17,7 @@
 
 import { randomUUID } from 'node:crypto';
 import { buildAnthropicForwardHeaders } from './anthropic-headers.mjs';
-import { forwardWithRetry, copyResponseHeaders, pipeAndTap } from './anthropic-forward.mjs';
+import { forwardWithRetry, copyResponseHeaders, pipeAndTap, answeringProvider } from './anthropic-forward.mjs';
 import { createOpenAIUsageTap, tapCapturesRawBodies } from './measurement.mjs';
 import { responsesToChatBody } from './shim-tools.mjs';
 
@@ -117,7 +117,9 @@ export async function handleOpenAIPassthrough(req, res, {
 
   if (upstream.ok && chatBody) {
     measurement.recordOpenAITap({
-      provider, wire, body: chatBody, proc, agent, project, requestId, taskId,
+      // A routing upstream (this proxy, as an opencode provider) names the account
+      // that answered; the label the agent gave the router is not a provider.
+      provider: answeringProvider(upstream, provider), wire, body: chatBody, proc, agent, project, requestId, taskId,
       usage: usageTap.usage, latencyMs: Date.now() - startTime, captureRaw,
     });
   }
