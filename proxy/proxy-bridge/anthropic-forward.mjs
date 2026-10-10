@@ -63,6 +63,19 @@ export async function forwardWithRetry(url, init, { fetch, attempts, backoffMs, 
 }
 
 /** Upstream response headers minus the ones the re-framed response must not carry. */
+/**
+ * The account that answered, named by an upstream that routes (this proxy names it
+ * on its own responses). A forwarder in front of such a router records it rather
+ * than its own label for the router — the router is not a provider.
+ */
+export const ANSWERING_PROVIDER_HEADER = 'x-llm-provider';
+
+/** The upstream's x-llm-provider when it is a plain account id, else `fallback`. */
+export function answeringProvider(upstream, fallback) {
+  const v = (upstream?.headers?.get?.(ANSWERING_PROVIDER_HEADER) || '').trim();
+  return /^[A-Za-z0-9][\w.:-]{0,63}$/.test(v) ? v : fallback;
+}
+
 export function copyResponseHeaders(upstream) {
   const out = {};
   upstream.headers.forEach((v, k) => {
@@ -183,7 +196,8 @@ export async function handleAnthropicMessages(req, res, {
 
   const requestId = upstream.headers.get('request-id') || '';
   const isSse = (upstream.headers.get('content-type') || '').includes('text/event-stream');
-  res.writeHead(upstream.status, copyResponseHeaders(upstream));
+  const answered = answeringProvider(upstream, provider || route?.provider || 'claude-code-max');
+  res.writeHead(upstream.status, { ...copyResponseHeaders(upstream), [ANSWERING_PROVIDER_HEADER]: answered });
 
   const usageTap = createAnthropicUsageTap({ captureRaw });
   await pipeAndTap(upstream, res, {
@@ -194,7 +208,7 @@ export async function handleAnthropicMessages(req, res, {
   if (isCompletion) {
     measurement.recordAnthropicTap({
       route, model, reqJson, proc, agent, project, requestId, taskId,
-      usage: usageTap.usage, latencyMs: Date.now() - startTime, captureRaw, provider, subscription,
+      usage: usageTap.usage, latencyMs: Date.now() - startTime, captureRaw, provider: answered, subscription,
     });
   }
 }
