@@ -3,11 +3,11 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "b76a7b9260a5f2988e168b9efdda6dbce4ff9378",
+      "sha": "1b4ffd2db4b55fa31618bd1164a5e5aade2492bb",
       "dirty": false
     },
     "proxy": {
-      "sha": "aa5f9702ea19fa4c1a74430cec68390f99e3d95d",
+      "sha": "477dcfec62c20dea2082cdc71ba4cc87c4473094",
       "dirty": false
     }
   },
@@ -114,12 +114,12 @@
     "lib/statusline/visible-cell-width.cjs": "ff6a0f08f5deb2320d710645450c902aee209ff772189b5067232fd66a600226",
     "lib/teams/config.cjs": "0cba623e569258faee7c75cab715e12afcba27a7a14b8729858f74743950c3b8",
     "mkdocs.yml": "b4ef870c829fb9064f7c1e1abe8c54efc6d09a2e97ad29344daf46faf8093482",
-    "package.json": "e6eed4ff6640a4ce35049255dd26976386cc82394b8af40fbc5dd92f9b2d8b11",
+    "package.json": "3cd554dfdb4d9bd023580e8b58f0f5749137c1520f560eefb26b426f5c455688",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "eb88c78f1d1a0329e3baee8dd5d5bcabffa536b4b60491f0113dc7ebc1589629",
     "proxy/dist/usage-cache.js": "4faff1e1a7b20826f5a2cd1b67784797fd26987e0be07159d242da7ea063a003",
-    "proxy/proxy-bridge/anthropic-forward.mjs": "31a17df9dae4370fe6f46ce315851028edfc7d3bc5939f51ffabbfc3baf2dea6",
+    "proxy/proxy-bridge/anthropic-forward.mjs": "b4322e1cf2352c7b80c9ba4f0cd3846c88c56d10749b293909b9c4e994fc3f83",
     "proxy/proxy-bridge/anthropic-headers.mjs": "80324cd288c6d7ee89062fe1f9974b3c05ba903944f9bb1a74a2b264b857ebaa",
     "proxy/proxy-bridge/context-capture.mjs": "b07bcb8a498db26180b99e726657b66dfcb70538eb67b6a75f4613446daa46e9",
     "proxy/proxy-bridge/context-turns.mjs": "527f15080d15b9c1e539cdf9aba227238dcd0459d34ddb258248f5371e3d1745",
@@ -128,14 +128,14 @@
     "proxy/proxy-bridge/measurement.mjs": "d42186e2c4685038a7221b32680133912b4378c4fd286667b5865a93afeffec9",
     "proxy/proxy-bridge/model-canonical.mjs": "11ae0531ecd4f921f468070a3a487de1a33c61c3191a09a2a06d900a671cb099",
     "proxy/proxy-bridge/no-proxy.mjs": "0424d04623443b0c1027df2677c2c38698cc07bfcc67656dcef7deab0507fa9e",
-    "proxy/proxy-bridge/openai-passthrough.mjs": "33463310379965b810f84951885ee1e5d57b5810b91d19a24933bb2503ab9635",
+    "proxy/proxy-bridge/openai-passthrough.mjs": "1104659f6581a135334007c293fabedb050d9c46ee9ef61893fad4b59e95fedd",
     "proxy/proxy-bridge/raw-bodies.mjs": "dc0a777780fad655611eb9729c55b2b4835215164ee08ff4059cbff0ce815008",
     "proxy/proxy-bridge/shim-tools.mjs": "a4108cabaf0540160dfb44f5a9a53c61f0202c1e5f0f0fa6a72583469ba04534",
     "proxy/proxy-bridge/turn-identity.mjs": "3eafc48e069831fc78adafb53e13ea84e9c1a31bf147d65f8d10e974667dd8b2",
     "proxy/proxy-bridge/usage-api.mjs": "6005d17571e6928e71f31dfa343d30d1922d5e18c5101795fe5ced26630a4ffc",
     "scripts/measurement-reconciler.mjs": "ad1c27f8542855bfed4c5f3dc0cbb1fe62ba9ae315c40cde57930f530807ae97",
     "tests/coexist.test.mjs": "7a2eebd161be8d9f87144cd58664d5ceca10939a303b27fa6ccb2140aa72fc28",
-    "tests/daemon.test.mjs": "65645f4c693bbb981e487173b9517b9df32753ecbce794643cc70ccafb80f635",
+    "tests/daemon.test.mjs": "f43c4f00fc322f801db12e365edce6b4b85383dfc0368fd018ad0d13d3ae7367",
     "tests/install-check.mjs": "eb661257e7accb8df31215e3a83cdfdd9d1d5e83bbc294815261ecbcaaf9acbe",
     "tests/network.test.mjs": "6863bf1cd358d46d8114cf80f1a8b6b6bf04176a891e0eb49a0d5f12c3e31491",
     "tests/provenance.test.mjs": "2cd499bb23d6d2e7ac9f3628f370509971dc7be64a293b50c7a9051f85241916",
