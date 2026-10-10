@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "52e6bed0d644db984382819ab9da71dbb8641fe4",
+      "sha": "b76a7b9260a5f2988e168b9efdda6dbce4ff9378",
       "dirty": false
     },
     "proxy": {
@@ -14,7 +14,7 @@
   "manifest": "12ba22f4c84d131fac6c8720cbae0ac6441387f67e3b87afd7e2b79fb828e4e1",
   "files": {
     ".github/workflows/ci.yml": "c3f08263c3a99b15e7eee54e056f75cc6b3272b3a732f572d4f95772ea12f8a5",
-    ".github/workflows/docs.yml": "1d0ac5f4cbf0c058d501aaf56885ba210ac18eb5b0a03bee1fb62d91eabe279f",
+    ".github/workflows/docs.yml": "7d4d94b5f6ab30d96bcbabc9741fcc7e4f19eb03c03ec42ae094ffa193c12701",
     ".github/workflows/release.yml": "d888e1a185e7ef9cc61c1ccfe54ef68aac791f86c77b03f3f44cfbf80bb2f6f1",
     "CLAUDE.md": "6387f39b31be30f733ad2ab4994b923b24bbda27961f798c90a3babe279d10d3",
     "LICENSE": "a3f1da6c00419f6121a588d4926b402d63a8b8ad1117c42fdc65648cdbb7881f",
