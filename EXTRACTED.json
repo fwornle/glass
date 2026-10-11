@@ -3,11 +3,11 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "ea3c702c4f12df787e78931e7272fd2ef7ff53c7",
+      "sha": "614987a14527007f42f07f2be2a68ae13f19c4be",
       "dirty": false
     },
     "proxy": {
-      "sha": "bf8fb9cfeae2bebf5d8515dd4e7a46682cc97f37",
+      "sha": "0afc4d5d2e0b86117e09b609ac222d272415aaf8",
       "dirty": false
     }
   },
@@ -118,10 +118,10 @@
     "lib/statusline/visible-cell-width.cjs": "ff6a0f08f5deb2320d710645450c902aee209ff772189b5067232fd66a600226",
     "lib/teams/config.cjs": "0cba623e569258faee7c75cab715e12afcba27a7a14b8729858f74743950c3b8",
     "mkdocs.yml": "15e53ce255fed6b4c0751470a1f87b0ea839ccfdeadb519ca275c67bf837af47",
-    "package.json": "67d0a0e027d16170725ac4b55e4bfecbe1ca92ab2b35bdd5617f396d95f98e53",
+    "package.json": "1e9f0a1772d70c427604037cd0117a03145f9f6eda82a957141367fce1c35e1b",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
-    "proxy/dist/token-usage.js": "dad94ea8b91f837a42ddc62f817c088569eda1a7d28b16466e9e2c3adfc84617",
+    "proxy/dist/token-usage.js": "b542db59a01a8e2895f089c81f099687bc84533a39b928e5a063e15ccf79bde3",
     "proxy/dist/usage-cache.js": "4faff1e1a7b20826f5a2cd1b67784797fd26987e0be07159d242da7ea063a003",
     "proxy/proxy-bridge/anthropic-forward.mjs": "621d85a3606be5f9be4b8e25c149e29cc39867c919de46807d171b227ea98083",
     "proxy/proxy-bridge/anthropic-headers.mjs": "80324cd288c6d7ee89062fe1f9974b3c05ba903944f9bb1a74a2b264b857ebaa",
