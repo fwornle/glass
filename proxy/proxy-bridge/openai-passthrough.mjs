@@ -92,6 +92,9 @@ export async function handleOpenAIPassthrough(req, res, {
   const chatBody = reqJson ? (wire === 'responses' ? responsesToChatBody(reqJson) : reqJson) : null;
   const captureRaw = tapCapturesRawBodies(taskId);
   const proc = `token-adapter-${agent}`;
+  // From the request as sent: a Responses request's non-function tools
+  // (web_search, …) are dropped by the chat conversion but still make it a loop call.
+  const callKind = reqJson ? (Array.isArray(reqJson.tools) && reqJson.tools.length ? 'main' : 'side') : '';
 
   if (chatBody && taskId) measurement.captureOpenAIBreakdown({ oaBody: chatBody, agent, taskId });
 
@@ -121,6 +124,7 @@ export async function handleOpenAIPassthrough(req, res, {
       // that answered; the label the agent gave the router is not a provider.
       provider: answeringProvider(upstream, provider), wire, body: chatBody, proc, agent, project, requestId, taskId,
       usage: usageTap.usage, latencyMs: Date.now() - startTime, captureRaw,
+      upstream: upstreamBase, callKind,
     });
   }
 }

@@ -176,6 +176,11 @@ export async function handleAnthropicMessages(req, res, {
   const proc = agent !== 'claude'
     ? `token-adapter-${agent}`
     : (isSubagent ? 'token-adapter-claude-subagent' : 'token-adapter-claude');
+  // For the row's call_kind the toolless utility call IS distinguished: it is the
+  // side call a reader wants to tell apart from the loop. 'subagent' is claude's
+  // rule only — other agents' tool sets have no spawner tool to look for.
+  const callKind = toolNames.length === 0 ? 'side'
+    : (agent === 'claude' && isSubagent ? 'subagent' : 'main');
 
   // Phase 78: snapshot the REAL per-category size of the context window
   // (non-fatal — a capture failure must never touch forwarding).
@@ -209,6 +214,7 @@ export async function handleAnthropicMessages(req, res, {
     measurement.recordAnthropicTap({
       route, model, reqJson, proc, agent, project, requestId, taskId,
       usage: usageTap.usage, latencyMs: Date.now() - startTime, captureRaw, provider: answered, subscription,
+      upstream: upstreamBase, callKind,
     });
   }
 }
