@@ -1174,7 +1174,7 @@ export function logCall(handle, row) {
     }
 }
 /**
- * Bucket size scales with the requested window so the timeline series stays
+ * Bucket size scales with the span the timeline covers so the series stays
  * bounded (~300-500 buckets max) no matter whether the caller asks for the
  * last 24h or the full DB. Callers can still override via opts.bucketMinutes.
  */
@@ -1236,8 +1236,6 @@ export function scopeClause(scope) {
 }
 export function getSummary(handle, opts = {}) {
     const hours = opts.hours ?? 24;
-    const bucketMinutes = Math.max(1, opts.bucketMinutes ?? defaultBucketMinutes(hours));
-    const bucketSeconds = bucketMinutes * 60;
     // Foreground/background restriction, applied to EVERY aggregate below so the
     // headline, the breakdowns and the stacked series all describe the same set
     // of rows. A scope that reached only some of them would be worse than none.
@@ -1250,7 +1248,15 @@ export function getSummary(handle, opts = {}) {
     const rawSince = Date.now() - hours * 3600_000;
     const earliestRow = handle.db.prepare(`SELECT MIN(timestamp) AS earliest FROM token_usage`).get();
     const earliestMs = earliestRow.earliest ? Date.parse(earliestRow.earliest) : rawSince;
-    const since = new Date(Math.max(rawSince, earliestMs)).toISOString();
+    const sinceMs = Math.max(rawSince, earliestMs);
+    const since = new Date(sinceMs).toISOString();
+    // Size buckets from the span actually shown, not the one requested: on a DB
+    // younger than the window, "7 days" and "all" cover the same rows as "48h"
+    // and must draw the same chart — not 30-minute or 6-hour buckets smoothed
+    // into a handful of points.
+    const shownHours = Math.max(0, (Date.now() - sinceMs) / 3600_000);
+    const bucketMinutes = Math.max(1, opts.bucketMinutes ?? defaultBucketMinutes(shownHours));
+    const bucketSeconds = bucketMinutes * 60;
     const totals = handle.db.prepare(`
     SELECT COUNT(*) AS calls,
            COALESCE(SUM(input_tokens),  0) AS input_tokens,
