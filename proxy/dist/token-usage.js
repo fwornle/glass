@@ -648,6 +648,23 @@ export function initTokenDb(overrideDataDir) {
         process.stderr.write(`[token-usage] project column migration failed (non-fatal): ${err.message}\n`);
     }
     // -----------------------------------------------------------------------
+    // Call facts — upstream + call_kind (see TokenUsageRow). Same shape as every
+    // block above: PRAGMA-guarded, additive, non-fatal. No index: they are read
+    // with a session's rows, which the task_id / timestamp indexes already find.
+    // -----------------------------------------------------------------------
+    try {
+        const cols9 = db.prepare(`PRAGMA table_info(token_usage)`).all();
+        const existingFacts = new Set(cols9.map(c => c.name));
+        for (const name of ['upstream', 'call_kind']) {
+            if (!existingFacts.has(name)) {
+                db.exec(`ALTER TABLE token_usage ADD COLUMN ${name} TEXT NOT NULL DEFAULT ''`);
+            }
+        }
+    }
+    catch (err) {
+        process.stderr.write(`[token-usage] call-facts column migration failed (non-fatal): ${err.message}\n`);
+    }
+    // -----------------------------------------------------------------------
     // Phase 83-02 (D-11): duplicate-id collision fix — request-id dedup index.
     //
     // The /v1/messages tap (this proxy) and the coding-side adapters
@@ -777,8 +794,9 @@ export function initTokenDb(overrideDataDir) {
       cache_read_tokens, cache_write_tokens,
       route_key, route_band, route_step, offloaded_from, chain_position,
       attempt_trail, routing_source,
-      conversation_key, turn_index, band_source, project
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      conversation_key, turn_index, band_source, project,
+      upstream, call_kind
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
     // Local id counter for this machine's USER_HASH. Seeded LATE (after
     // hydrate runs, see below) so peer-row imports tagged with USER_HASH
@@ -999,6 +1017,23 @@ export function sanitizeProject(value) {
         return '';
     return /^[A-Za-z0-9._~@+-]+$/.test(v) ? v : '';
 }
+/**
+ * An upstream as it may be stored: host[:port] only. A URL is reduced to its
+ * host; userinfo, path and query never reach the row. Anything unparseable
+ * records '' (a gap, not a dropped call).
+ */
+export function sanitizeUpstream(value) {
+    if (typeof value !== 'string' || !value.trim())
+        return '';
+    const v = value.trim();
+    try {
+        return new URL(/^[a-z][a-z0-9+.-]*:\/\//i.test(v) ? v : `http://${v}`).host;
+    }
+    catch {
+        return '';
+    }
+}
+const CALL_KINDS = new Set(['main', 'subagent', 'side']);
 export function logCall(handle, row) {
     try {
         // ATTR-05: per-row user_hash override (e.g. 'cladpt' for the /v1/messages
@@ -1034,7 +1069,7 @@ export function logCall(handle, row) {
             // a caller that predates them — or one that genuinely has no messages to
             // key on, like the file adapters — writes "not recorded" rather than a
             // fabricated turn 0 that would group with every other unkeyed row.
-            row.conversation_key ?? '', row.turn_index ?? 0, row.band_source ?? '', sanitizeProject(row.project));
+            row.conversation_key ?? '', row.turn_index ?? 0, row.band_source ?? '', sanitizeProject(row.project), sanitizeUpstream(row.upstream), CALL_KINDS.has(row.call_kind ?? '') ? row.call_kind : '');
         };
         // D-11: coordinated, DB-authoritative id allocation with retry-on-conflict.
         // For the MACHINE hash the in-process counter (handle.nextLocalId) is a fast

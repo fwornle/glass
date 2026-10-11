@@ -531,7 +531,7 @@ export function createMeasurement({ dataDir, tokenDb, redactRawBody, canonicalMo
      * bodies. Only genuine completions with real usage — the caller excludes
      * count_tokens. A no-op without a token DB, like the row itself.
      */
-    recordAnthropicTap({ route, model, reqJson, proc, agent, project, requestId, taskId, usage, latencyMs, captureRaw, provider = '', subscription = 'max-oauth-passthrough' }) {
+    recordAnthropicTap({ route, model, reqJson, proc, agent, project, requestId, taskId, usage, latencyMs, captureRaw, provider = '', subscription = 'max-oauth-passthrough', upstream = '', callKind = '' }) {
       const db = tokenDb();
       if (!db || !usage.sawUsage) return;
       const uIn = usage.input; const uOut = usage.output;
@@ -599,6 +599,8 @@ export function createMeasurement({ dataDir, tokenDb, redactRawBody, canonicalMo
           ...turnIdentity(reqJson?.messages, agent),
           band_source: route?.matchedKey ? `route ${route.matchedKey}` : '',
           project,
+          upstream,
+          call_kind: callKind,
         });
         log(`/v1/messages tap: ${proc} model=${model} in=${uIn} out=${uOut} task=${taskId || '(none)'} req=${requestId || '(none)'}`);
       } catch (err) {
@@ -674,7 +676,7 @@ export function createMeasurement({ dataDir, tokenDb, redactRawBody, canonicalMo
      * bodies. `body` is the chat-shaped request (a Responses-API request converted
      * with responsesToChatBody). A no-op without a token DB or without usage.
      */
-    recordOpenAITap({ provider, wire, body, proc, agent, project, requestId, taskId, usage, latencyMs, captureRaw }) {
+    recordOpenAITap({ provider, wire, body, proc, agent, project, requestId, taskId, usage, latencyMs, captureRaw, upstream = '', callKind = '' }) {
       const db = tokenDb();
       if (!db || !usage.sawUsage) return;
       const rawModel = usage.model || body?.model || 'unknown';
@@ -712,6 +714,8 @@ export function createMeasurement({ dataDir, tokenDb, redactRawBody, canonicalMo
           ...turnIdentity(body?.messages, agent),
           band_source: '',
           project,
+          upstream,
+          call_kind: callKind,
         });
         log(`openai ${wire} tap: ${proc} model=${model} in=${usage.input} out=${usage.output} task=${taskId || '(none)'} req=${requestId || '(none)'}`);
       } catch (err) {
