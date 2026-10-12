@@ -3,11 +3,11 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "c29f024de5a252bfb5fbf2563bce29e3ae038a57",
+      "sha": "abee313235937423e7cbf8f94601a27545a6297f",
       "dirty": false
     },
     "proxy": {
-      "sha": "0afc4d5d2e0b86117e09b609ac222d272415aaf8",
+      "sha": "b82be0304d10a997710856b2931e8acf175aa28b",
       "dirty": false
     }
   },
@@ -82,7 +82,7 @@
     "lib/glass/cli.mjs": "0b796c53dae497dada2ec0f7d6bec6f2585ecf75aa48dc06095da7b5ea44c501",
     "lib/glass/client.mjs": "8515158e8e6606e4c4dd4ea4410fc353110282e1c89d6d6c1b7f8ac52efa23fc",
     "lib/glass/coexist.mjs": "4daeee65cf43596dbf96e014f653248edd1f9701dfca74688e4f3521b37bac07",
-    "lib/glass/daemon.mjs": "99df535440744c01e4bd33abe416965d1ba46deac3baa2d8db569849327af7f7",
+    "lib/glass/daemon.mjs": "cc0803bf4159209097c2888cc847c43899fe6669be07b8d5620cf9b9d12b640c",
     "lib/glass/egress.mjs": "7ef747eb2eb65c5bcade782657b81bbd753111a34a90d4c69e8b71e89d335c4a",
     "lib/glass/home.mjs": "4f94b34129d8a2eebecd6536301816e4aac32680e6cb16b9ce670e1dd9a9ab74",
     "lib/glass/network.mjs": "da97a57f63bb9bb3c6e9e77cc87634a9fd985c57233a78ab2f6c159aa867b0e0",
@@ -96,11 +96,11 @@
     "lib/lsl/adapters/claude-subagent-path.mjs": "1bc309a3f9b28a760c8c3af2a1f69cbbaa8d9fcf327d12275d8d405cc32a60df",
     "lib/lsl/adapters/index.mjs": "48d77734109f3b33dbb3100ce1312eef743bc23cfad2107302bfddb9b8998896",
     "lib/lsl/token/claude-token-rows.mjs": "a25c0f83ce0e8cff4b084b3b601df72674f897dd803d4ab38827add7009e7235",
-    "lib/lsl/token/copilot-token-rows.mjs": "62daaa3724bbd93429ecafb0080bcecf2f9de55ab654dfcba401b3a6f4038279",
+    "lib/lsl/token/copilot-token-rows.mjs": "bfe1b85a48848b8bcd9aeadcb1206999a31a7351a49d28e7facee877c1765eae",
     "lib/lsl/token/opencode-token-rows.mjs": "34dc7f54350c95bc9478646684cb68058e3d56ab162ca85028a3083baf935994",
     "lib/lsl/token/project-of.mjs": "0ff51fa9e962719ccf8a4638c53d650d8f24c37484a98319029744469901738b",
     "lib/lsl/token/reconcile.mjs": "7fb707a4d19a04ac8c89007658c6add0a18753dc63bc24a2e8816c169885f508",
-    "lib/lsl/token/stop-adapter-registry.mjs": "e56b5b7dd7a0c9c165252e613d74148f7de14c520fa1fd35638bfa0d8a1f755e",
+    "lib/lsl/token/stop-adapter-registry.mjs": "77c61ec4afd191b96dacaa221c6559c2e9d02c11cc5877aac9db25b61fbd268d",
     "lib/lsl/token/task-id.mjs": "977782f67e45c0389d35d6bfa63ce305ae38e06c23c7f243202ab81dd40825d9",
     "lib/lsl/token/token-db.mjs": "e5c35b2f0eabd7924f60c10d24ef83acdf6632b35952a266055086993e1e22d3",
     "lib/measurement/context-turns-retention.mjs": "056e9ff69d572687515656d818f5defde47ec983bc17cf535595becab6b408a7",
@@ -119,7 +119,7 @@
     "lib/statusline/visible-cell-width.cjs": "ff6a0f08f5deb2320d710645450c902aee209ff772189b5067232fd66a600226",
     "lib/teams/config.cjs": "0cba623e569258faee7c75cab715e12afcba27a7a14b8729858f74743950c3b8",
     "mkdocs.yml": "15e53ce255fed6b4c0751470a1f87b0ea839ccfdeadb519ca275c67bf837af47",
-    "package.json": "7526357554a376a49fe87bc43a4b3a9be59fda5a76fe08d6de09675830ef53b5",
+    "package.json": "182182dd6ed07b2662bfb05a8eed4c41f57259b6539fcbc2e1e750ea8adc8c2d",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "b542db59a01a8e2895f089c81f099687bc84533a39b928e5a063e15ccf79bde3",
