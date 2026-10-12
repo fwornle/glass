@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "614987a14527007f42f07f2be2a68ae13f19c4be",
+      "sha": "bb7ae3302c8035d337b728b6f6cb64ea896ed48d",
       "dirty": false
     },
     "proxy": {
@@ -13,6 +13,7 @@
   },
   "manifest": "12ba22f4c84d131fac6c8720cbae0ac6441387f67e3b87afd7e2b79fb828e4e1",
   "files": {
+    ".gitguardian.yaml": "f6a1b65449858c0dd7d0f42d857fb452d27eb819793cef70a01ba224d6d412b5",
     ".github/workflows/ci.yml": "c3f08263c3a99b15e7eee54e056f75cc6b3272b3a732f572d4f95772ea12f8a5",
     ".github/workflows/docs.yml": "7d4d94b5f6ab30d96bcbabc9741fcc7e4f19eb03c03ec42ae094ffa193c12701",
     ".github/workflows/release.yml": "d888e1a185e7ef9cc61c1ccfe54ef68aac791f86c77b03f3f44cfbf80bb2f6f1",
@@ -74,7 +75,7 @@
     "docs/status-line.md": "cab92bfbbd6519ec35cd65e03ab0aa9ef31dc3c439648068f97053e6d5cc5a42",
     "docs/token-usage.md": "15c9e614fb28901f0ab19b09ba7512c63471f6e8b83c5bf906f3cd977850772f",
     "docs/troubleshooting.md": "8ee96aa96ec5df7b863650bd8e53fdf84ba95df2500618ab5d1860852c04d141",
-    "lib/agents/proxy-routing.mjs": "715ae2f50c1777420a6e0853c8fd152137f29cbc1d031d99894a6fd7bc737b03",
+    "lib/agents/proxy-routing.mjs": "c3fa9853deef61a7377795756edd778c6f0260f47fdd8528378218880b082188",
     "lib/attribution/repo-router.mjs": "68a1efb5c15a2a9341d153fc9468c0962453146981cc74ddaf455cd8a65aa1cf",
     "lib/experiments/timeline-read.mjs": "5b4737732cd1323aa2c478f03cdabf4e20547af7cef8eb85484a6a05ba91eddd",
     "lib/features/vendor/js-yaml.cjs": "c738b0020702aa631abd8de23a902a3079d99d3060e44166955cb51f570881c4",
