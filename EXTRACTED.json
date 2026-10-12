@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "559741168baa9e5d4cbcbe39e29ebc403ebdbf38",
+      "sha": "c29f024de5a252bfb5fbf2563bce29e3ae038a57",
       "dirty": false
     },
     "proxy": {
@@ -79,10 +79,10 @@
     "lib/attribution/repo-router.mjs": "68a1efb5c15a2a9341d153fc9468c0962453146981cc74ddaf455cd8a65aa1cf",
     "lib/experiments/timeline-read.mjs": "5b4737732cd1323aa2c478f03cdabf4e20547af7cef8eb85484a6a05ba91eddd",
     "lib/features/vendor/js-yaml.cjs": "c738b0020702aa631abd8de23a902a3079d99d3060e44166955cb51f570881c4",
-    "lib/glass/cli.mjs": "8ea3f433060433227715d15de768999eefa74b4490d440ffc632b6e305be305a",
+    "lib/glass/cli.mjs": "0b796c53dae497dada2ec0f7d6bec6f2585ecf75aa48dc06095da7b5ea44c501",
     "lib/glass/client.mjs": "8515158e8e6606e4c4dd4ea4410fc353110282e1c89d6d6c1b7f8ac52efa23fc",
     "lib/glass/coexist.mjs": "4daeee65cf43596dbf96e014f653248edd1f9701dfca74688e4f3521b37bac07",
-    "lib/glass/daemon.mjs": "9392d553e883e551afb5fbd14d9cc61d789b582c806e2c8915fdb4ca913a6485",
+    "lib/glass/daemon.mjs": "99df535440744c01e4bd33abe416965d1ba46deac3baa2d8db569849327af7f7",
     "lib/glass/egress.mjs": "7ef747eb2eb65c5bcade782657b81bbd753111a34a90d4c69e8b71e89d335c4a",
     "lib/glass/home.mjs": "4f94b34129d8a2eebecd6536301816e4aac32680e6cb16b9ce670e1dd9a9ab74",
     "lib/glass/network.mjs": "da97a57f63bb9bb3c6e9e77cc87634a9fd985c57233a78ab2f6c159aa867b0e0",
@@ -92,7 +92,7 @@
     "lib/glass/tmux.mjs": "8bce7a7fe28d7c32d14342a2e90434ff12652dbfad4618f2d0b1d3c45754ae6e",
     "lib/glass/ui-api.mjs": "cfe786dce4f526f04f5908dae47965d12b6358a5ae6ef423d4ecfec304bd3929",
     "lib/glass/update.mjs": "24fc4e17f7079ec432d8d900371f888ae2a62a9f0cdf0eaf59b64b05e4e24434",
-    "lib/glass/wiring.mjs": "17b28e392cdfa4c54ed68b5cd2194a04d684e59e349831362963e0ac9bb062dd",
+    "lib/glass/wiring.mjs": "040ef5d72b04400b2924fddead30fe07b200d9e5085af6c80200db35563825f6",
     "lib/lsl/adapters/claude-subagent-path.mjs": "1bc309a3f9b28a760c8c3af2a1f69cbbaa8d9fcf327d12275d8d405cc32a60df",
     "lib/lsl/adapters/index.mjs": "48d77734109f3b33dbb3100ce1312eef743bc23cfad2107302bfddb9b8998896",
     "lib/lsl/token/claude-token-rows.mjs": "a25c0f83ce0e8cff4b084b3b601df72674f897dd803d4ab38827add7009e7235",
@@ -119,7 +119,7 @@
     "lib/statusline/visible-cell-width.cjs": "ff6a0f08f5deb2320d710645450c902aee209ff772189b5067232fd66a600226",
     "lib/teams/config.cjs": "0cba623e569258faee7c75cab715e12afcba27a7a14b8729858f74743950c3b8",
     "mkdocs.yml": "15e53ce255fed6b4c0751470a1f87b0ea839ccfdeadb519ca275c67bf837af47",
-    "package.json": "f885d9615d3668e6761efc1f9cfa04d196986f288a8260af31edfa6442d3c269",
+    "package.json": "7526357554a376a49fe87bc43a4b3a9be59fda5a76fe08d6de09675830ef53b5",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "b542db59a01a8e2895f089c81f099687bc84533a39b928e5a063e15ccf79bde3",
@@ -140,7 +140,7 @@
     "proxy/proxy-bridge/usage-api.mjs": "6005d17571e6928e71f31dfa343d30d1922d5e18c5101795fe5ced26630a4ffc",
     "scripts/measurement-reconciler.mjs": "ad1c27f8542855bfed4c5f3dc0cbb1fe62ba9ae315c40cde57930f530807ae97",
     "tests/coexist.test.mjs": "10fb309bcb4e874333f92fbbdb1fe934015b399acddcaa76998cd39e1911c5ea",
-    "tests/daemon.test.mjs": "abed11ee264b561ac5f5bd243faca5b49fb16b0ebc893cc9542e6c71baae1ca6",
+    "tests/daemon.test.mjs": "a7a01c9d6f782b2e4ea15be9cf18e4006c0c17fba09c3224a1cc8e2d1b2660c3",
     "tests/install-check.mjs": "eb661257e7accb8df31215e3a83cdfdd9d1d5e83bbc294815261ecbcaaf9acbe",
     "tests/network.test.mjs": "6863bf1cd358d46d8114cf80f1a8b6b6bf04176a891e0eb49a0d5f12c3e31491",
     "tests/provenance.test.mjs": "2cd499bb23d6d2e7ac9f3628f370509971dc7be64a293b50c7a9051f85241916",
