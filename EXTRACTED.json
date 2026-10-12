@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "bb7ae3302c8035d337b728b6f6cb64ea896ed48d",
+      "sha": "d5f8af7246b185995d5bcffc40aebe3da0f8b3a1",
       "dirty": false
     },
     "proxy": {
@@ -119,7 +119,7 @@
     "lib/statusline/visible-cell-width.cjs": "ff6a0f08f5deb2320d710645450c902aee209ff772189b5067232fd66a600226",
     "lib/teams/config.cjs": "0cba623e569258faee7c75cab715e12afcba27a7a14b8729858f74743950c3b8",
     "mkdocs.yml": "15e53ce255fed6b4c0751470a1f87b0ea839ccfdeadb519ca275c67bf837af47",
-    "package.json": "1e9f0a1772d70c427604037cd0117a03145f9f6eda82a957141367fce1c35e1b",
+    "package.json": "287ee001c73d2617954fbf4727e07c6436224b61efc02d3e0c053de562b84e37",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "b542db59a01a8e2895f089c81f099687bc84533a39b928e5a063e15ccf79bde3",
