@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "d5f8af7246b185995d5bcffc40aebe3da0f8b3a1",
+      "sha": "36ee8ff445c813da50e4dd387d587f04b98624ac",
       "dirty": false
     },
     "proxy": {
@@ -21,7 +21,7 @@
     "LICENSE": "a3f1da6c00419f6121a588d4926b402d63a8b8ad1117c42fdc65648cdbb7881f",
     "README.md": "ab1d763b9fc34bbe1761a68ab570304e246fb539222d668ec8c431557cf6d4b4",
     "bin/glass.mjs": "46b6f2865bf9523761abe0c8773d94ddbdc575a228dff4215eedf7bfad9e3dcd",
-    "config/redaction/redaction-patterns.json": "56e1545da1991ac9f2c49a11679f3cc2a2ae5b36c62176fb47a023c67460e3e1",
+    "config/redaction/redaction-patterns.json": "ecb7af900c74b48e176aa2f5f13b33de2ba3bd0b6fc12cf0b4d348d098f56ac8",
     "docs/_tiers/architecture.deep.md": "473cc4111e6b45b862f1175bcac1d868dcc7a382aebf945c5c80ba1a03a83f91",
     "docs/_tiers/comparing-runs.deep.md": "3ed0ce91a25f992913cf4e51951696a55f8a429fb4348bfe883cabd4cd1b4e77",
     "docs/_tiers/context-window.deep.md": "c424c11fac5a2c2f58398fe633f97627aaf2c2d7f1da0232a6d43c84ad58e26b",
@@ -91,7 +91,7 @@
     "lib/glass/statusline.mjs": "c4712f7cc82ffdfcf85285f06f5655ee4112c174d9368bd2742da279a2fb5cc7",
     "lib/glass/tmux.mjs": "8bce7a7fe28d7c32d14342a2e90434ff12652dbfad4618f2d0b1d3c45754ae6e",
     "lib/glass/ui-api.mjs": "cfe786dce4f526f04f5908dae47965d12b6358a5ae6ef423d4ecfec304bd3929",
-    "lib/glass/update.mjs": "442cb683fee812b87b0fc624e831fd06917056b4bd1ec20d21497db29daf67b1",
+    "lib/glass/update.mjs": "24fc4e17f7079ec432d8d900371f888ae2a62a9f0cdf0eaf59b64b05e4e24434",
     "lib/glass/wiring.mjs": "58b5fe45647bf17ef68aa7a1f3cf1cfce45f19453dd494c8b37f0edb9b62be12",
     "lib/lsl/adapters/claude-subagent-path.mjs": "1bc309a3f9b28a760c8c3af2a1f69cbbaa8d9fcf327d12275d8d405cc32a60df",
     "lib/lsl/adapters/index.mjs": "48d77734109f3b33dbb3100ce1312eef743bc23cfad2107302bfddb9b8998896",
@@ -119,7 +119,7 @@
     "lib/statusline/visible-cell-width.cjs": "ff6a0f08f5deb2320d710645450c902aee209ff772189b5067232fd66a600226",
     "lib/teams/config.cjs": "0cba623e569258faee7c75cab715e12afcba27a7a14b8729858f74743950c3b8",
     "mkdocs.yml": "15e53ce255fed6b4c0751470a1f87b0ea839ccfdeadb519ca275c67bf837af47",
-    "package.json": "287ee001c73d2617954fbf4727e07c6436224b61efc02d3e0c053de562b84e37",
+    "package.json": "06641a28bf8d9cdae44eb07fde2333fd7578f9466158231a6344d968a0d8803c",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "b542db59a01a8e2895f089c81f099687bc84533a39b928e5a063e15ccf79bde3",
@@ -145,7 +145,7 @@
     "tests/network.test.mjs": "6863bf1cd358d46d8114cf80f1a8b6b6bf04176a891e0eb49a0d5f12c3e31491",
     "tests/provenance.test.mjs": "2cd499bb23d6d2e7ac9f3628f370509971dc7be64a293b50c7a9051f85241916",
     "tests/statusline.test.mjs": "a1679aec83ac23a6cdc51d8281d9706e0020f191a5d2d885ed9345e0dc985d57",
-    "tests/update.test.mjs": "04766edef6638a0a31ede4d4e4b3ea2e56bd6f882573467a2f3a5fb36e473fc2",
+    "tests/update.test.mjs": "90a3c1afe9925ee2bdb03ca4b93f8b01967a73ecb78386d48dde4fceeb16a754",
     "ui/assets/CostTab-Z_xBKH62.js": "f5088b33b0ec5465c4fe17c5ccc62c4b1f6b75621fcff6ce4d686522dcccdc84",
     "ui/assets/index-CahV9OfW.js": "ab63f3f8c95ee1b41a297f19fed64a65bc7e0d03d3ba801daeff375e2be5e603",
     "ui/assets/index-DqEYyeMA.css": "b271443159c26dbef7c27e12f196455908b06f52fdfea17048fb64c4395f512e",
