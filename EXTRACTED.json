@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "a81215f06e64377461b381aa3e1784039c65b641",
+      "sha": "e07cb83975c50f94b74a5e942ee14cc8ac09260e",
       "dirty": false
     },
     "proxy": {
@@ -77,7 +77,7 @@
     "docs/reference.md": "ae2303c74c6d3c4ad4d39a64f91358cf29a2b91d4502e4992015e24011ecee61",
     "docs/status-line.md": "e96ae88c40591e807b1c9b59c777230b4ff24ab8a7553fad397c052a5488ef9d",
     "docs/token-usage.md": "15c9e614fb28901f0ab19b09ba7512c63471f6e8b83c5bf906f3cd977850772f",
-    "docs/troubleshooting.md": "c102f5aa6c28c7e86a4fd340c450fa7e284cd68ef644c2d8c9d9d888dc24430a",
+    "docs/troubleshooting.md": "d4374b91bf5a1cbc2ba2d26f2fe2cd748d2824542ff7dbdbb3b04b094ccccfdf",
     "lib/agents/proxy-routing.mjs": "c3fa9853deef61a7377795756edd778c6f0260f47fdd8528378218880b082188",
     "lib/attribution/repo-router.mjs": "68a1efb5c15a2a9341d153fc9468c0962453146981cc74ddaf455cd8a65aa1cf",
     "lib/experiments/timeline-read.mjs": "5b4737732cd1323aa2c478f03cdabf4e20547af7cef8eb85484a6a05ba91eddd",
@@ -88,7 +88,7 @@
     "lib/glass/daemon.mjs": "faf408401a6972b22265236213603f7e2d19f5829ec1d05f0a76d287e0131d46",
     "lib/glass/egress.mjs": "bd9a78d0bdf98cd0550fb2042c8de7c6e7063adadc20c05e7676dd0debc334cc",
     "lib/glass/home.mjs": "4f94b34129d8a2eebecd6536301816e4aac32680e6cb16b9ce670e1dd9a9ab74",
-    "lib/glass/network.mjs": "eea9a95ca6ae666e229564eba2a4498ca1a6388523c49cd6c7199e32419e8c3f",
+    "lib/glass/network.mjs": "bc931192b37ce3b77766db1b8103f13e1719df3617110cf378603b6f330093db",
     "lib/glass/open-url.mjs": "99a1fd22cab941d53d8aae0c99f51eaac5d4824853b59f6785fc77f46b5d2066",
     "lib/glass/spawn.mjs": "8c22ac61f224041115c9212af72dcc7711ea309630b6521bf490591966e5d8af",
     "lib/glass/statusline.mjs": "84d932a999803dcce19c39e7560940bcecd2285e508a78f2eb01d835fb3a18c6",
@@ -109,7 +109,7 @@
     "lib/measurement/context-turns-retention.mjs": "056e9ff69d572687515656d818f5defde47ec983bc17cf535595becab6b408a7",
     "lib/measurement/foreground-sessions.mjs": "24c0616302cc485edda87bec0506d4f0fb2699f1e74b770c0d766538df0f2a19",
     "lib/network/location-hysteresis.mjs": "bc380bf8fc36c9a41a86db49d68bcbaecdf2a9351ee33295e66149c825337302",
-    "lib/network/location-probe.mjs": "a26d992cfb2fea22c4e3a622964f8337902643ea9819663aa6de3ae0422d55c2",
+    "lib/network/location-probe.mjs": "e35744958235cd2edec6907322f77fd906f71d5095d4eba7fd7b138365c60600",
     "lib/network/network-change-watcher.mjs": "963b18f27a9a276a9bbad5ada92d4f29c894b10830aece89ec2753d5d399e320",
     "lib/paths/data-home.cjs": "6a80f9f1f142c322e6abcae52b9d78ecba86e6055098dc4be84f683ce279c371",
     "lib/paths/index.mjs": "1d04dc77ffe39e4617b6f1501a71f43cc98d407da791625949ca281534f6ed0a",
@@ -122,7 +122,7 @@
     "lib/statusline/visible-cell-width.cjs": "ff6a0f08f5deb2320d710645450c902aee209ff772189b5067232fd66a600226",
     "lib/teams/config.cjs": "0cba623e569258faee7c75cab715e12afcba27a7a14b8729858f74743950c3b8",
     "mkdocs.yml": "15e53ce255fed6b4c0751470a1f87b0ea839ccfdeadb519ca275c67bf837af47",
-    "package.json": "96b8eb3bc120659fa7f826a047f2978d23c9592f05a59bada5d3b8eb33431298",
+    "package.json": "95a1bf7eac523e74f6cca6c8db325dbaf067632136a504cae2bd40bdad1c32c7",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "b542db59a01a8e2895f089c81f099687bc84533a39b928e5a063e15ccf79bde3",
@@ -145,7 +145,7 @@
     "tests/coexist.test.mjs": "10fb309bcb4e874333f92fbbdb1fe934015b399acddcaa76998cd39e1911c5ea",
     "tests/daemon.test.mjs": "ff75ea7e98c002930ded9b723fd05d94352ebc8f666b4fd82c4989fd51590621",
     "tests/install-check.mjs": "eb661257e7accb8df31215e3a83cdfdd9d1d5e83bbc294815261ecbcaaf9acbe",
-    "tests/network.test.mjs": "d19f86bd6ae1c09695bdc2bd263be1edeb877138dac9528e902e6416562a2061",
+    "tests/network.test.mjs": "87bd036b30fc692f15957271d5b50989615f2bdca1819d85675558d6d0862a38",
     "tests/provenance.test.mjs": "2cd499bb23d6d2e7ac9f3628f370509971dc7be64a293b50c7a9051f85241916",
     "tests/statusline.test.mjs": "c2cb899dff87a1c965a2d109913cb80a287ee75e43575cb6b24aeb3d66380c1f",
     "tests/update.test.mjs": "90a3c1afe9925ee2bdb03ca4b93f8b01967a73ecb78386d48dde4fceeb16a754",
