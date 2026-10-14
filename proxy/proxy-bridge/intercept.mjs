@@ -132,12 +132,14 @@ export function dial(upstream, host, port) {
  * @param {string} [o.noProxy]                hosts that bypass it (NO_PROXY syntax)
  * @param {(req, res, ctx: {host: string, binding: string}) => void} o.onRequest
  * @param {(msg: string) => void} [o.logErr]
- * @returns {{ caPath: string, close: () => void }}  close also destroys every open tunnel
+ * @returns {{ caPath: string, close: () => void, setUpstream: (o: {upstreamProxy?: string|null, noProxy?: string}) => void }}
+ *   close also destroys every open tunnel; setUpstream changes the egress proxy for tunnels opened after it
  */
 export function attachIntercept(server, { caDir, hosts, upstreamProxy = null, noProxy = '', onRequest, logErr = () => {} }) {
   const ca = loadOrCreateCa(caDir);
   const isIntercepted = hostMatcher(hosts);
-  const up = upstreamProxy ? new URL(upstreamProxy) : null;
+  let up = upstreamProxy ? new URL(upstreamProxy) : null;
+  let bypass = noProxy;
   const leaves = new Map();
   const leafFor = (host) => {
     if (!leaves.has(host)) {
@@ -164,7 +166,7 @@ export function attachIntercept(server, { caDir, hosts, upstreamProxy = null, no
   });
   decrypted.on('clientError', (err, s) => { logErr(`intercept client error: ${err.code || err.message}`); s.destroy(); });
 
-  const viaUpstream = (host) => (up && !shouldBypassProxy(`https://${host}`, noProxy) ? up : null);
+  const viaUpstream = (host) => (up && !shouldBypassProxy(`https://${host}`, bypass) ? up : null);
 
   // A CONNECT socket leaves the server's bookkeeping: closeAllConnections() skips
   // it, yet server.close() still waits for it. Track them so close() can end them.
@@ -211,6 +213,12 @@ export function attachIntercept(server, { caDir, hosts, upstreamProxy = null, no
       server.off('connect', onConnect);
       decrypted.close();
       for (const s of open) s.destroy();
+    },
+    // The daemon's proxy settings can change while it runs (glass adopts those
+    // of the newest session's shell). Tunnels already open keep their route.
+    setUpstream: ({ upstreamProxy: next = null, noProxy: nextBypass = '' } = {}) => {
+      up = next ? new URL(next) : null;
+      bypass = nextBypass;
     },
   };
 }
