@@ -401,7 +401,7 @@ export function flattenContentToText(content) {
 // The helpers above cover the INBOUND direction: an OpenAI-shaped request
 // arriving at the shim, and the envelope we hand back to it. These two cover the
 // OUTBOUND leg — the buffered POST completeOpenAICompatible() makes to a plain
-// OpenAI-compatible provider (openai, groq, qwen-local, and provider modules).
+// OpenAI-compatible provider (openai, groq, a self-hosted server, and provider modules).
 //
 // That leg used to build its request body from a fixed six-field list and read
 // back only `choices[0].message.content`, so tools[] was silently dropped and a

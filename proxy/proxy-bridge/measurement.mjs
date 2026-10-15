@@ -676,7 +676,7 @@ export function createMeasurement({ dataDir, tokenDb, redactRawBody, canonicalMo
      * bodies. `body` is the chat-shaped request (a Responses-API request converted
      * with responsesToChatBody). A no-op without a token DB or without usage.
      */
-    recordOpenAITap({ provider, wire, body, proc, agent, project, requestId, taskId, usage, latencyMs, captureRaw, upstream = '', callKind = '' }) {
+    recordOpenAITap({ provider, wire, body, proc, agent, project, requestId, taskId, usage, latencyMs, captureRaw, upstream = '', callKind = '', routing = null }) {
       const db = tokenDb();
       if (!db || !usage.sawUsage) return;
       const rawModel = usage.model || body?.model || 'unknown';
@@ -716,6 +716,8 @@ export function createMeasurement({ dataDir, tokenDb, redactRawBody, canonicalMo
           project,
           upstream,
           call_kind: callKind,
+          // An opt-in offload (offload.mjs) did decide: its route columns.
+          ...(routing || {}),
         });
         log(`openai ${wire} tap: ${proc} model=${model} in=${usage.input} out=${usage.output} task=${taskId || '(none)'} req=${requestId || '(none)'}`);
       } catch (err) {

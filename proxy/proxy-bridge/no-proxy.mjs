@@ -6,7 +6,7 @@
 // server.mjs installs an undici ProxyAgent as soon as HTTPS_PROXY is set and then
 // sends EVERY request through it. That was fine while every provider was on the
 // public internet. It stops being fine the moment a provider lives on the
-// corporate LAN: the on-prem Qwen cluster is reachable ONLY on
+// corporate LAN: a self-hosted model server there is reachable ONLY on
 // the corporate network — which is exactly the network on which HTTPS_PROXY is
 // set — so without a bypass every call to it would be tunnelled through
 // corp-proxy:8080 and fail.
