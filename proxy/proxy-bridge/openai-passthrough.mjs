@@ -10,6 +10,11 @@
 // login stay exactly what the agent configured. Used by glass's daemon for
 // traffic it intercepts (copilot, opencode's providers, pi's providers).
 //
+// One opt-in exception (offload.mjs): with `offload` given and switched on for
+// this agent, an easy chat call may be answered by the user's own endpoint
+// instead; whatever fails there before the first byte falls back to the forward
+// below, unchanged.
+//
 // The one change to the request: a streamed chat/completions call that did not
 // ask for usage gets stream_options.include_usage = true, because without it the
 // stream carries no usage at all. The client then sees one extra final chunk with
@@ -20,6 +25,7 @@ import { buildAnthropicForwardHeaders } from './anthropic-headers.mjs';
 import { forwardWithRetry, copyResponseHeaders, pipeAndTap, answeringProvider } from './anthropic-forward.mjs';
 import { createOpenAIUsageTap, tapCapturesRawBodies } from './measurement.mjs';
 import { responsesToChatBody } from './shim-tools.mjs';
+import { normalizeOffloadConfig, offloadRowFields } from './offload.mjs';
 
 /** 'chat' | 'responses' | null (a path this tap does not measure). */
 export function openAIWireOf(url) {
@@ -75,11 +81,12 @@ export async function forwardPlain(req, res, { fetch, upstreamBase, logErr = () 
  * @param {string} o.agent         the agent the call belongs to
  * @param {string} [o.taskId]      the run it is bound to ('' → unbound, no capture)
  * @param {string} [o.project]
+ * @param {{offloader: object, getConfig: Function}|null} [o.offload]  opt-in offload (offload.mjs)
  */
 export async function handleOpenAIPassthrough(req, res, {
   measurement, fetch, upstreamBase, provider, agent, taskId = '', project = '',
   attempts = Number(process.env.LLM_PROXY_FORWARD_ATTEMPTS || 3), backoffMs = [0, 300, 900],
-  logErr = () => {},
+  logErr = () => {}, offload = null,
 }) {
   const wire = openAIWireOf(req.url);
   if (req.method !== 'POST' || !wire) return forwardPlain(req, res, { fetch, upstreamBase, logErr });
@@ -99,6 +106,34 @@ export async function handleOpenAIPassthrough(req, res, {
   if (chatBody && taskId) measurement.captureOpenAIBreakdown({ oaBody: chatBody, agent, taskId });
 
   const startTime = Date.now();
+
+  // Opt-in offload. Only an agent the user switched on gets route columns at all;
+  // everyone else's rows stay exactly the passthrough's.
+  let routing = null;
+  const cfg = offload ? normalizeOffloadConfig(offload.getConfig()) : null;
+  if (cfg && cfg.enabled && cfg.agents[agent]) {
+    const decision = await offload.offloader.decide({ agent, wire, body: reqJson });
+    let outcome = null;
+    if (decision.offload) {
+      const tap = createOpenAIUsageTap({ wire, captureRaw });
+      outcome = await offload.offloader.serve({
+        res, body: reqJson, decision, onChunk: (v) => tap.sseChunk(v), onBody: (b) => tap.jsonBody(b),
+      });
+      if (outcome.served) {
+        if (chatBody) {
+          measurement.recordOpenAITap({
+            provider, wire, body: chatBody, proc, agent, project, requestId: `offload-${randomUUID()}`, taskId,
+            usage: tap.usage, latencyMs: Date.now() - startTime, captureRaw, upstream: cfg.target.url, callKind,
+            routing: offloadRowFields({ agent, cfg, decision, outcome, fromProvider: provider }),
+          });
+        }
+        return;
+      }
+      logErr(`offload to ${cfg.target.name} failed after ${outcome.ms} ms, forwarding: ${outcome.error}`);
+    }
+    routing = offloadRowFields({ agent, cfg, decision, outcome, fromProvider: provider });
+  }
+
   const { upstream, lastErr } = await forwardWithRetry(`${upstreamBase}${req.url}`, {
     method: 'POST', headers: buildAnthropicForwardHeaders(req.headers, null), body,
   }, { fetch, attempts, backoffMs, logErr, label: `openai ${wire}` });
@@ -124,7 +159,7 @@ export async function handleOpenAIPassthrough(req, res, {
       // that answered; the label the agent gave the router is not a provider.
       provider: answeringProvider(upstream, provider), wire, body: chatBody, proc, agent, project, requestId, taskId,
       usage: usageTap.usage, latencyMs: Date.now() - startTime, captureRaw,
-      upstream: upstreamBase, callKind,
+      upstream: upstreamBase, callKind, routing,
     });
   }
 }
