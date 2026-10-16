@@ -19,8 +19,13 @@ export const MODEL_CANONICAL_MAP = {
   'claude-sonnet-4.6':            'claude-sonnet-4.6',
   'claude sonnet 4.6':            'claude-sonnet-4.6',
   'claude-sonnet-4-20250514':     'claude-sonnet-4.6',
+  // Haiku 5.5 family. The floating `haiku` alias names the CURRENT generation,
+  // as `opus` does; explicit 4.5 spellings below keep their rows' history.
+  'haiku':                        'claude-haiku-5.5',
+  'claude-haiku-5-5':             'claude-haiku-5.5',
+  'claude-haiku-5.5':             'claude-haiku-5.5',
+  'claude haiku 5.5':             'claude-haiku-5.5',
   // Haiku 4.5 family
-  'haiku':                        'claude-haiku-4.5',
   'claude-haiku-4-5':             'claude-haiku-4.5',
   'claude-haiku-4.5':             'claude-haiku-4.5',
   'claude haiku 4.5':             'claude-haiku-4.5',
