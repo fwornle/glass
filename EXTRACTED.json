@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "56abb2deb08dd960de4df23f00c3fb77ce0cbf66",
+      "sha": "c586889abbd2aad575b2fed011ad839d2ec59fd6",
       "dirty": false
     },
     "proxy": {
@@ -11,7 +11,7 @@
       "dirty": false
     }
   },
-  "manifest": "e1467ac5ce6b9f693c0cecc2e9b025d710e3fbf99f863365421315f5d89d8f6d",
+  "manifest": "d2b9e5ad637856ab0ad842b0ddd6425bedaf932f0a0be4c68aae1afe3acce210",
   "files": {
     ".gitguardian.yaml": "a766a085a4ff9ddecfd1176b50616bd5a24e5b51506b4171d6d303193ce760cc",
     ".github/workflows/ci.yml": "c3f08263c3a99b15e7eee54e056f75cc6b3272b3a732f572d4f95772ea12f8a5",
@@ -38,7 +38,7 @@
     "docs/architecture.md": "c93dbe9a359182dda7126ce1c1aca8253cfcdfd83307bd4bc6a262350f0c545d",
     "docs/assets/header-decks.js": "4a9750e99062ab17df023638cddb9b62b97b43e98fb8b79f3de7d4dbe572fe11",
     "docs/assets/overview.css": "95f26e2656b619576f40c372df7955ebbae37f2007d78ebfb8f0e6f17c7f8361",
-    "docs/assets/overview.js": "7b49e618569838fd3f0203baff11b64d66812565b80edeefc9b31fdc43b7c505",
+    "docs/assets/overview.js": "70d33e57d842f734722aa93653b705edf8e1f0061c9953a395c423fff61bdb90",
     "docs/comparing-runs.md": "d993284949d356d1f959c6f8384f28da4350751ad78036f55b9fd32cdb03b473",
     "docs/connectivity.md": "e8df645882f9859d107e60781f68fc1ed2b2a2228edd6be0490e7539d78f26ee",
     "docs/context-window.md": "9e50526bb32ac5113ff91838fa3b920a448378e0aa3584612d88c837d1939ed3",
@@ -73,7 +73,7 @@
     "docs/index.md": "8bc6ad4179d5f487510e811e0b17f5b33ac76695bb5c8500fbf4ced6ccee8fbb",
     "docs/models.md": "72e2744c33ea7471cfad10097930e7c4d5136801c64cf016f40ea8aad507405f",
     "docs/offload.md": "2ffad37c5da331cea51bdce148cdd07a99c765c54d8bd8e4bed96008d0266347",
-    "docs/overview.md": "2955390127c7d74d33d4a73cec268d6b41b0d69ddef22bd4eedd092ea3eb79ea",
+    "docs/overview.md": "56c8ae2c0af352201d88157871fa27506dc92c49da845ff2d120b55c653fca9e",
     "docs/privacy.md": "2ea4e3137ed0469e51751ec24d0548a71ab88ff300a77a42b6277dc2dab72d4b",
     "docs/puml/_standard-style.puml": "c0d793f8dbcbf305650674089ee9df0e3298e136ea29d10bab588cdddbba5c8f",
     "docs/puml/glass-architecture.puml": "13deb60bf051f94f60fb0b0007d4f258202d2140bfdcf344815ad2b7c094c430",
@@ -94,7 +94,7 @@
     "lib/glass/cli.mjs": "ff7540fa961177b5191e950a9fcf3dcb7ce7698b68d997a1616a3d6761b1897d",
     "lib/glass/client.mjs": "8515158e8e6606e4c4dd4ea4410fc353110282e1c89d6d6c1b7f8ac52efa23fc",
     "lib/glass/coexist.mjs": "4daeee65cf43596dbf96e014f653248edd1f9701dfca74688e4f3521b37bac07",
-    "lib/glass/daemon.mjs": "f16034c7151b337afcaf2ed34550da5bd01ea2823197ab75266d1cc8886de68d",
+    "lib/glass/daemon.mjs": "14ba02a83bc443c3a1fea342c0bc6d0a16adb8493349f3f39d4c239b216d6e34",
     "lib/glass/egress.mjs": "8f420a831f17084ab0ef71a463be73ccde43c2843b91eaa1d13f013326fa0102",
     "lib/glass/home.mjs": "4f94b34129d8a2eebecd6536301816e4aac32680e6cb16b9ce670e1dd9a9ab74",
     "lib/glass/network.mjs": "b5db6632a293f9f608eed2cbc6789b35a367f96ef45e00738737a553307f1cd0",
@@ -133,7 +133,7 @@
     "lib/teams/config.cjs": "0cba623e569258faee7c75cab715e12afcba27a7a14b8729858f74743950c3b8",
     "mkdocs.yml": "4e8d3032a5aebda357676693ca6e5ecc1ad6637b06bd1f9b6614262bba95b8d0",
     "overrides/main.html": "58bef75c205f2ecf969addf151ae02b35b434c1a6b527dce12d153a9005fc42f",
-    "package.json": "cba51713699bdbc12d018a25f0d24636dc3660dad28cf6712af2a0434d8ec9dd",
+    "package.json": "9aad0eba93eba50184a150fc78261d8d6d23cb4bb318bda88558a80c3db31156",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "b542db59a01a8e2895f089c81f099687bc84533a39b928e5a063e15ccf79bde3",
@@ -157,19 +157,19 @@
     "proxy/proxy-bridge/usage-api.mjs": "6005d17571e6928e71f31dfa343d30d1922d5e18c5101795fe5ced26630a4ffc",
     "scripts/measurement-reconciler.mjs": "ad1c27f8542855bfed4c5f3dc0cbb1fe62ba9ae315c40cde57930f530807ae97",
     "tests/coexist.test.mjs": "10fb309bcb4e874333f92fbbdb1fe934015b399acddcaa76998cd39e1911c5ea",
-    "tests/daemon.test.mjs": "ae5318ebe1924bfee2e0f5ae1196e30791db085ed1afd3140ea16654f7685401",
+    "tests/daemon.test.mjs": "568b6687977dbb8f835e14eaa442bd21cbac40eab83bfca08a636558b521f4c5",
     "tests/install-check.mjs": "eb661257e7accb8df31215e3a83cdfdd9d1d5e83bbc294815261ecbcaaf9acbe",
     "tests/network.test.mjs": "87bd036b30fc692f15957271d5b50989615f2bdca1819d85675558d6d0862a38",
     "tests/provenance.test.mjs": "2cd499bb23d6d2e7ac9f3628f370509971dc7be64a293b50c7a9051f85241916",
     "tests/statusline.test.mjs": "8172f29d51de4e4647616314e2bdbd172e2c29a4f799cb83d7e493cb773ebe2b",
     "tests/update.test.mjs": "90a3c1afe9925ee2bdb03ca4b93f8b01967a73ecb78386d48dde4fceeb16a754",
+    "ui/assets/index-7Uhg2PVA.js": "25ad6892c26f265b63b0937d06d4efbd1619be9b3f5fdc0e94c5cd60064e58ad",
     "ui/assets/index-BSoO8n-X.css": "ef01d42214e7237140179eef320e028379c180c5cd4aaeccf75b0e36908f0a54",
-    "ui/assets/index-DhV3U3p3.js": "356539c5a7202f38acff2f47647d1e0fe020897ce35ffeaf2997198273f9f96e",
     "ui/assets/omitted-Itc_LisD.js": "13ae7fd3bce5cf57947eefa142c45a3d778c959d806be901312b0d629108a149",
     "ui/assets/vendor-charts-BqUKQC6_.js": "c5f49d94ae3e27cacc4a2a2f1ace34eebd3a164c4757fa2b4941708b3a3ee2dc",
     "ui/assets/vendor-icons-DVwfcjt7.js": "8eb0af4daeadeeedd9e3f1b86351a97756056e16db1bf716fe38f71f3f802d92",
     "ui/assets/vendor-react-BixgUiYW.js": "84207fbc9bd45aef633cc3d9e883f2fd4c0ae2c99df3f920d9ba14883a464cc6",
     "ui/assets/vendor-redux-XJVtE8Si.js": "0430373614e66c5e7250f6605a1abcae05c64dd9fa26ca4c1570fbd79aff8aaa",
-    "ui/index.html": "3b50b0bbf700bff52f7a52e2e8b89d872d8e9044621a3077c0d613fe5a56e9e8"
+    "ui/index.html": "6c9ad77ce6793f7a7159dfb36e09b5513e5c43448483706831774202acbb9a68"
   }
 }
