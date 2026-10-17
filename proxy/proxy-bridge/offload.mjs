@@ -34,7 +34,7 @@
 
 import { BAND_ORDER, classifyRequest, CLASSIFIER_RUBRIC } from './prompt-classifier.mjs';
 import { serializeRoutingTrail } from './routing-trail.mjs';
-import { toolMeta } from './context-turns.mjs';
+import { createTurnBandMemory, toolsInCurrentTurn, turnBandKey } from './turn-band.mjs';
 
 export const OFFLOAD_AGENTS = ['opencode', 'pi', 'copilot'];
 
@@ -176,10 +176,23 @@ export function targetVerdictFn({ fetch, cfg, key, timeoutMs = 4000 }) {
 /**
  * The offloader one daemon holds. getConfig() is read per call, so a change made
  * in the UI applies to the next call with no restart.
+ *
+ * ── A turn is decided once ───────────────────────────────────────────────────
+ * The band is judged at a turn's FIRST call, from the human's words, and held
+ * in `turnBands` (turn-band.mjs) for the rest of the turn. A call inside the
+ * tool loop never re-judges: if the first call was offloaded, the loop call
+ * inherits its band (bandSource 'turn') and stays on the target, where the
+ * conversation's KV cache already is; if the first call stayed on the provider,
+ * so does the loop. Every later gate — band, model, size, in-flight — still
+ * applies to the loop call, because those are facts about THIS call.
+ *
+ * Before this, every loop call was kept with `turn carries tool results`, so an
+ * offloaded turn moved to the cloud at its first tool result, after the target
+ * had paid the full prefill for it.
  */
-export function createOffloader({ fetch, getConfig, getKey = () => '', health, now = Date.now }) {
+export function createOffloader({ fetch, getConfig, getKey = () => '', health, now = Date.now, turnBands = createTurnBandMemory({ now }) }) {
   let inFlight = 0;
-  const counters = { offloaded: 0, fellBack: 0, classified: 0, downgraded: 0 };
+  const counters = { offloaded: 0, fellBack: 0, classified: 0, downgraded: 0, inherited: 0 };
 
   /**
    * @returns {Promise<{offload: boolean, reason: string, band: string, bandSource: string, model?: string, classifier?: string, estTokens?: number}>}
@@ -193,14 +206,39 @@ export function createOffloader({ fetch, getConfig, getKey = () => '', health, n
     if (!cfg.target.url) return keep('no endpoint configured');
     if (wire !== 'chat') return keep('Responses API call — only chat/completions is offloaded');
     if (!body || !Array.isArray(body.messages)) return keep('request not readable');
-    if (!health.usable(cfg)) return keep(`${cfg.target.name} not reachable`);
-    if (body.messages.some((m) => toolMeta(m))) return keep('turn carries tool results');
+
+    // The turn's first call records what it got, offloaded or kept, so its loop
+    // calls can follow it. A loop call records nothing: it did not decide.
+    const turnKey = turnBandKey(body.messages, agent);
+    const inLoop = toolsInCurrentTurn(body.messages);
+    const finish = (result) => {
+      if (!inLoop) {
+        turnBands.remember(turnKey, {
+          offloaded: result.offload, band: result.band, bandSource: result.bandSource, reason: result.reason,
+        });
+      }
+      return { ...result, turnKey };
+    };
+
+    if (!health.usable(cfg)) return finish(keep(`${cfg.target.name} not reachable`));
+
+    let turn = null;
+    if (inLoop) {
+      turn = turnBands.recall(turnKey);
+      if (!turn) return finish(keep('turn carries tool results — its first call was not seen'));
+      if (!turn.offloaded) return finish(keep(`turn carries tool results — its first call stayed on the provider (${turn.reason || 'kept'})`));
+    }
 
     const declared = callerBand(wire, body);
     let { band } = declared;
     let bandSource = declared.source;
     let classifier = '';
-    if (cfg.classifier) {
+    if (turn) {
+      // Inside the loop of an offloaded turn: its first call's band, unjudged.
+      band = turn.band;
+      bandSource = 'turn';
+      counters.inherited += 1;
+    } else if (cfg.classifier) {
       counters.classified += 1;
       const verdict = await classifyRequest({
         enabled: true,
@@ -214,13 +252,13 @@ export function createOffloader({ fetch, getConfig, getKey = () => '', health, n
       if (verdict.changed) { band = verdict.band; bandSource = 'classifier'; counters.downgraded += 1; }
     }
     const decided = { band, bandSource, classifier };
-    if (!cfg.bands.includes(band)) return keep(`band ${band} not offloaded`, decided);
+    if (!cfg.bands.includes(band)) return finish(keep(`band ${band} not offloaded`, decided));
     const model = cfg.target.models[band];
-    if (!model) return keep(`no ${cfg.target.name} model chosen for ${band}`, decided);
+    if (!model) return finish(keep(`no ${cfg.target.name} model chosen for ${band}`, decided));
     const estTokens = estimateInputTokens(body);
-    if (estTokens > cfg.maxInputTokens) return keep(`~${estTokens} input tokens > ${cfg.maxInputTokens}`, { ...decided, estTokens });
-    if (inFlight >= cfg.maxInFlight) return keep(`${cfg.target.name} busy (${inFlight} in flight)`, { ...decided, estTokens });
-    return { offload: true, reason: '', ...decided, model, estTokens };
+    if (estTokens > cfg.maxInputTokens) return finish(keep(`~${estTokens} input tokens > ${cfg.maxInputTokens}`, { ...decided, estTokens }));
+    if (inFlight >= cfg.maxInFlight) return finish(keep(`${cfg.target.name} busy (${inFlight} in flight)`, { ...decided, estTokens }));
+    return finish({ offload: true, reason: '', ...decided, model, estTokens });
   }
 
   /**
@@ -290,13 +328,22 @@ export function createOffloader({ fetch, getConfig, getKey = () => '', health, n
       try { reader?.cancel(); } catch { /* already closed */ }
       counters.fellBack += 1;
       const msg = ctl.signal.aborted ? String(ctl.signal.reason?.message || 'timeout') : String(err?.message || err);
+      // The call is going to the provider after all, so the rest of the turn
+      // follows it there rather than retrying a target that just failed and
+      // splitting the loop across two caches.
+      if (decision.turnKey) {
+        turnBands.remember(decision.turnKey, {
+          offloaded: false, band: decision.band, bandSource: decision.bandSource,
+          reason: `${cfg.target.name} failed: ${msg.slice(0, 120)}`,
+        });
+      }
       return { served: false, error: msg.slice(0, 200), ms: now() - t0 };
     } finally {
       inFlight -= 1;
     }
   }
 
-  return { decide, serve, counters, inFlight: () => inFlight };
+  return { decide, serve, counters, turnBands, inFlight: () => inFlight };
 }
 
 /** The routing columns for a call that went through decide(). */

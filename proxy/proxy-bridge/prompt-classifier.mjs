@@ -42,7 +42,7 @@
 // PURE — no env, no I/O, no clock, no logging. The stage-2 client that does I/O
 // is passed in as a function so this module stays testable on its own.
 
-import { toolMeta } from './context-turns.mjs';
+import { toolsInCurrentTurn } from './turn-band.mjs';
 
 /**
  * The rubric the `local-llm` classifier sends.
@@ -72,7 +72,7 @@ export const SKIP = Object.freeze({
   DISABLED: 'classifier disabled',
   NOT_FROM_CALLER: 'route declares a fixed band',
   ALREADY_LOWEST: 'declared band is already the lowest',
-  MID_LOOP: 'conversation already contains tool results',
+  MID_LOOP: 'turn is inside a tool loop',
   TOO_LARGE: 'request body is larger than the eligibility threshold',
   NO_USER_TEXT: 'no user message to classify',
   VETOED: 'cheap pre-filter says this is not trivial',
@@ -88,10 +88,23 @@ export const SKIP = Object.freeze({
  * `small`. Downgrading those is exactly the wrong call.
  *
  * A tools[] gate cannot separate them: pi and opencode send tools[] on every
- * turn including the first. The signal that does is whether any tool RESULT has
- * come back yet, which toolMeta() already computes for both wires — and it is
- * decisive on real traffic: 6,024 of 16,362 captured turns (37%) carry no tool
- * message, so this gate also removes 63% of the classifier's work for free.
+ * turn including the first. The signal that does is whether a tool message has
+ * come back IN THIS TURN, which toolsInCurrentTurn() (turn-band.mjs) computes
+ * for both wires.
+ *
+ * Scoped to the current turn, not the conversation. The gate used to ask
+ * whether any message of the conversation was a tool message — and since every
+ * agent re-sends the whole conversation, one file read in turn 1 made every
+ * later turn "mid-loop" for good. A fresh human prompt in a later turn is now
+ * judged on its own text. That is the same risk already accepted for a turn 2
+ * of a chat without tools ("yes, do it"), and stage 1 and the downgrade-only
+ * rule bound it the same way.
+ *
+ * A call that IS inside a loop is still never classified. It does not lose its
+ * turn's verdict either: the callers recall the band the turn's first call got
+ * (turn-band.mjs) and apply that, so a turn classified `small` stays `small`
+ * through its loop instead of jumping back to the declared band at the first
+ * tool result.
  *
  * @param {object} input
  * @param {string} input.bandSource   `complexitySource` from resolveRoute
@@ -115,9 +128,7 @@ export function classifierEligibility({ bandSource, declaredBand, messages, maxB
   if (declaredBand === BAND_ORDER[0]) return no(SKIP.ALREADY_LOWEST);
 
   const msgs = Array.isArray(messages) ? messages : [];
-  for (const m of msgs) {
-    if (toolMeta(m)) return no(SKIP.MID_LOOP);
-  }
+  if (toolsInCurrentTurn(msgs)) return no(SKIP.MID_LOOP);
 
   // A large body is both expensive to classify and unlikely to be trivial. Note
   // this counts USER content only — the agent's system prompt is 34KB on its own
