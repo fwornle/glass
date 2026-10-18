@@ -34,6 +34,28 @@
 // The memory is per process and lost on restart. That is the safe direction:
 // a loop call that finds no record is treated exactly as before this module
 // existed — kept on its provider.
+//
+// ── The same idea one level up: the session ─────────────────────────────────
+// Holding the band through a turn stops the flip INSIDE a task. Across turns a
+// session could still flip: turn 1 `small` runs locally, turn 2 `medium` goes
+// to the cloud, turn 3 `small` comes back to a local server that may have
+// evicted its cache meanwhile, and the cloud's cache for it goes cold in turn.
+// The rule, applied at each turn's FIRST call:
+//
+//   • a session that has been offloaded stays offloaded for later turns, as
+//     long as each turn is still judged at an offloaded band;
+//   • a later turn judged above it PROMOTES the session: that turn and every
+//     later one stay on the provider, unjudged (band source 'session');
+//   • a promoted session is never demoted again.
+//
+//   sessionTurn()          which session and which turn is this call?  PURE.
+//   sessionVerdict()       does the session's record decide this turn?  PURE.
+//   nextSessionRecord()    what does this turn leave in the record?  PURE.
+//   createTurnBandMemory() holds the records as well, with a longer TTL.
+//
+// A promotion applies only to turns AFTER the one that caused it, so a retry of
+// that same turn is judged afresh. With no record (restart, expiry) a turn is
+// judged on its own, as before: at most one flip per session.
 
 import { toolMeta } from './context-turns.mjs';
 import { turnIdentity } from './turn-identity.mjs';
@@ -103,6 +125,54 @@ export function toolsInCurrentTurn(messages) {
 export function turnBandKey(messages, agent = '') {
   const { conversation_key: key, turn_index: turn } = turnIdentity(messages, agent);
   return key && turn > 0 ? `${key}:${turn}` : '';
+}
+
+/**
+ * The session a call belongs to and the turn it is on.
+ *
+ * The session is the conversation key turnIdentity() derives, per agent; the
+ * turn is its human-prompt index. `sessionKey` is '' when there is nothing to
+ * key on, and an empty key is never stored or found.
+ *
+ * @param {Array} messages
+ * @param {string} [agent]
+ * @returns {{sessionKey: string, turn: number}}
+ */
+export function sessionTurn(messages, agent = '') {
+  const { conversation_key: key, turn_index: turn } = turnIdentity(messages, agent);
+  return key && turn > 0 ? { sessionKey: `${agent || '-'}:${key}`, turn } : { sessionKey: '', turn: 0 };
+}
+
+/**
+ * Does the session's record decide this turn before anything judges it?
+ *
+ * Only a promotion does, and only for a turn after the one that caused it.
+ *
+ * @param {object|undefined} record what nextSessionRecord() left
+ * @param {number} turn this call's turn index
+ * @returns {{promoted: true, band: string, since: number}|null}
+ */
+export function sessionVerdict(record, turn) {
+  if (!record || !record.promoted) return null;
+  if (!(turn > record.promotedAt)) return null;
+  return { promoted: true, band: record.band, since: record.promotedAt };
+}
+
+/**
+ * The record a turn's first call leaves for the turns after it.
+ *
+ * @param {object|undefined} record the session's record before this turn
+ * @param {object} turn
+ * @param {number} turn.turn       this turn's index
+ * @param {string} turn.band       the band it was judged at
+ * @param {boolean} turn.offloadable whether that band is one that is offloaded
+ * @returns {object|undefined} the new record, or undefined to leave it alone
+ */
+export function nextSessionRecord(record, { turn, band, offloadable }) {
+  if (record?.promoted) return undefined;
+  if (offloadable) return { offloaded: true, band, turn };
+  if (record?.offloaded) return { promoted: true, band, promotedAt: turn };
+  return undefined;
 }
 
 /**
