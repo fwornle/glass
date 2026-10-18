@@ -3,11 +3,11 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "3e5502d6c6041069749074c111ea3c46b5898c01",
+      "sha": "fd2f9832ae74a8093d1683f37e34880e632d3bb8",
       "dirty": false
     },
     "proxy": {
-      "sha": "fcb51cef9b503710c9e0f45eb78d2dab92321093",
+      "sha": "de46080964961e0a2c29e592092d9fb0835ddf9d",
       "dirty": false
     }
   },
@@ -134,7 +134,7 @@
     "lib/teams/config.cjs": "0cba623e569258faee7c75cab715e12afcba27a7a14b8729858f74743950c3b8",
     "mkdocs.yml": "4e8d3032a5aebda357676693ca6e5ecc1ad6637b06bd1f9b6614262bba95b8d0",
     "overrides/main.html": "58bef75c205f2ecf969addf151ae02b35b434c1a6b527dce12d153a9005fc42f",
-    "package.json": "00e31db66ae19221aa41b399d91685af6978668fb0b7e8280b6bd1f4969e6689",
+    "package.json": "91365ab576e0faa8a3363cc09c81640c504292d8377b933b3244554722be6505",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "b542db59a01a8e2895f089c81f099687bc84533a39b928e5a063e15ccf79bde3",
@@ -148,13 +148,13 @@
     "proxy/proxy-bridge/measurement.mjs": "8b67eb46e5b592eb32a13f62fb9c55adfda460db394452500c53c9fe07b38e64",
     "proxy/proxy-bridge/model-canonical.mjs": "cecffe2ae82b8faca557fecd4fc41378ac48450a220d48cad9b00e5b7deafa58",
     "proxy/proxy-bridge/no-proxy.mjs": "9f046217a50188971c42017cb21bb0991a43fcfc1f83537ce2615da033bf92e7",
-    "proxy/proxy-bridge/offload.mjs": "fdc296a3312bf051e2464fbcc8e17b3393f8e8f7bc8adbb29048254264af51fd",
+    "proxy/proxy-bridge/offload.mjs": "4d489b4b8905f565a175e9eda2cd4db42fc265122cd9a93497ba6609455b31d0",
     "proxy/proxy-bridge/openai-passthrough.mjs": "d5c845a5dc951a564afe5ab93e9491a02b81edcb6721c1e6ffde9521d60f18eb",
     "proxy/proxy-bridge/prompt-classifier.mjs": "9b9018319101deec7c371f0938002e3a949654d6a793c7418899468a965eabb5",
     "proxy/proxy-bridge/raw-bodies.mjs": "dc0a777780fad655611eb9729c55b2b4835215164ee08ff4059cbff0ce815008",
     "proxy/proxy-bridge/routing-trail.mjs": "c30f6d924ee015a3ab235b38e6fb9c1017db6731a67923762bd89c6906b0664a",
     "proxy/proxy-bridge/shim-tools.mjs": "e5e6692500f9a52fdbfba8c4baf94e0ac0cb77101dc93e9bee74fe1e3b80a107",
-    "proxy/proxy-bridge/turn-band.mjs": "cb46ced4a7177e3506b399b8e5615eda4182d3f96ac9057f40c836ae2c228c81",
+    "proxy/proxy-bridge/turn-band.mjs": "6f7a6e301266b5f428ccbe8203b71e6304f504756d43248bb84420d7eaa6dbef",
     "proxy/proxy-bridge/turn-identity.mjs": "9cdc1ce419f4bfc995cbf21d55b6376d957b2ea507fd544356a5d536666ca1da",
     "proxy/proxy-bridge/usage-api.mjs": "6005d17571e6928e71f31dfa343d30d1922d5e18c5101795fe5ced26630a4ffc",
     "scripts/measurement-reconciler.mjs": "ad1c27f8542855bfed4c5f3dc0cbb1fe62ba9ae315c40cde57930f530807ae97",
