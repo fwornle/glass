@@ -34,7 +34,9 @@
 
 import { BAND_ORDER, classifyRequest, CLASSIFIER_RUBRIC } from './prompt-classifier.mjs';
 import { serializeRoutingTrail } from './routing-trail.mjs';
-import { createTurnBandMemory, toolsInCurrentTurn, turnBandKey } from './turn-band.mjs';
+import {
+  createTurnBandMemory, nextSessionRecord, sessionTurn, sessionVerdict, toolsInCurrentTurn, turnBandKey,
+} from './turn-band.mjs';
 
 export const OFFLOAD_AGENTS = ['opencode', 'pi', 'copilot'];
 
@@ -189,10 +191,20 @@ export function targetVerdictFn({ fetch, cfg, key, timeoutMs = 4000 }) {
  * Before this, every loop call was kept with `turn carries tool results`, so an
  * offloaded turn moved to the cloud at its first tool result, after the target
  * had paid the full prefill for it.
+ *
+ * ── A session is promoted once ───────────────────────────────────────────────
+ * The same holds one level up, in `sessionBands`: once a session has had a turn
+ * at an offloaded band, a later turn judged above it promotes the session, and
+ * every turn after that stays on the provider without being judged (band
+ * source 'session'). The session stops alternating between two caches.
  */
-export function createOffloader({ fetch, getConfig, getKey = () => '', health, now = Date.now, turnBands = createTurnBandMemory({ now }) }) {
+export function createOffloader({
+  fetch, getConfig, getKey = () => '', health, now = Date.now,
+  turnBands = createTurnBandMemory({ now }),
+  sessionBands = createTurnBandMemory({ now, ttlMs: 2 * 60 * 60_000 }),
+}) {
   let inFlight = 0;
-  const counters = { offloaded: 0, fellBack: 0, classified: 0, downgraded: 0, inherited: 0 };
+  const counters = { offloaded: 0, fellBack: 0, classified: 0, downgraded: 0, inherited: 0, promoted: 0 };
 
   /**
    * @returns {Promise<{offload: boolean, reason: string, band: string, bandSource: string, model?: string, classifier?: string, estTokens?: number}>}
@@ -221,6 +233,16 @@ export function createOffloader({ fetch, getConfig, getKey = () => '', health, n
     };
 
     if (!health.usable(cfg)) return finish(keep(`${cfg.target.name} not reachable`));
+
+    // A turn's first call in a promoted session is not judged at all.
+    const { sessionKey, turn: turnIndex } = inLoop ? { sessionKey: '', turn: 0 } : sessionTurn(body.messages, agent);
+    const session = sessionKey ? sessionBands.recall(sessionKey) : undefined;
+    const promoted = sessionVerdict(session, turnIndex);
+    if (promoted) {
+      return finish(keep(`session promoted to the provider at turn ${promoted.since} (band ${promoted.band})`, {
+        band: promoted.band, bandSource: 'session',
+      }));
+    }
 
     let turn = null;
     if (inLoop) {
@@ -252,6 +274,13 @@ export function createOffloader({ fetch, getConfig, getKey = () => '', health, n
       if (verdict.changed) { band = verdict.band; bandSource = 'classifier'; counters.downgraded += 1; }
     }
     const decided = { band, bandSource, classifier };
+    if (sessionKey) {
+      const next = nextSessionRecord(session, { turn: turnIndex, band, offloadable: cfg.bands.includes(band) });
+      if (next) {
+        if (next.promoted) counters.promoted += 1;
+        sessionBands.remember(sessionKey, next);
+      }
+    }
     if (!cfg.bands.includes(band)) return finish(keep(`band ${band} not offloaded`, decided));
     const model = cfg.target.models[band];
     if (!model) return finish(keep(`no ${cfg.target.name} model chosen for ${band}`, decided));
@@ -343,7 +372,7 @@ export function createOffloader({ fetch, getConfig, getKey = () => '', health, n
     }
   }
 
-  return { decide, serve, counters, turnBands, inFlight: () => inFlight };
+  return { decide, serve, counters, turnBands, sessionBands, inFlight: () => inFlight };
 }
 
 /** The routing columns for a call that went through decide(). */
