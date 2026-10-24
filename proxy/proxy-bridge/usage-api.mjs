@@ -46,7 +46,10 @@ export function createUsageApi({ tokenDb, measurement }) {
         // size to the window so the timeline series stays under ~500 rows.
         const bucketRaw = url.searchParams.get('bucketMinutes');
         const bucketMinutes = bucketRaw ? parseInt(bucketRaw, 10) : undefined;
-        json(res, 200, getSummary(handle, { hours, bucketMinutes, scope: scopeOf(url) }));
+        // cells=1 adds the priceable bucket × process × provider × model table
+        // the dashboard's €/$ view needs; off by default (see SummaryCell).
+        const cells = url.searchParams.get('cells') === '1';
+        json(res, 200, getSummary(handle, { hours, bucketMinutes, scope: scopeOf(url), cells }));
       } catch (err) {
         json(res, 500, { error: err.message });
       }
