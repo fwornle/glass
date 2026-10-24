@@ -4,7 +4,7 @@
 // and the per-run context breakdown + context turns. Shared by server.mjs and
 // glass's daemon; neither routes nor forwards anything.
 
-import { getSummary, getRecent, getCost } from '../dist/token-usage.js';
+import { getSummary, getRecent, getCost, getAccounts, accountOf } from '../dist/token-usage.js';
 
 const json = (res, status, body) => {
   res.writeHead(status, { 'Content-Type': 'application/json' });
@@ -24,12 +24,55 @@ const scopeOf = (url) => {
 };
 
 /**
- * @param {{ tokenDb: () => object|null, measurement: object }} deps
- *   tokenDb returns the live handle (null while the DB is unavailable → 503)
+ * @param {{ tokenDb: () => object|null, measurement: object,
+ *           accounts?: { excluded: () => string[], setExcluded?: (list: string[]) => void } }} deps
+ *   tokenDb returns the live handle (null while the DB is unavailable → 503).
+ *   accounts is the host's saved "which accounts count" selection (coding: the
+ *   proxy's cost settings; glass: ~/.glass/cost.json). Without it nothing is
+ *   excluded and the selection is read-only.
  * @returns {(req, res) => boolean} serves a read and returns true, or returns false
  */
-export function createUsageApi({ tokenDb, measurement }) {
+export function createUsageApi({ tokenDb, measurement, accounts }) {
+  const savedExcluded = () => {
+    try { return (accounts?.excluded() ?? []).map(accountOf).filter(Boolean); } catch { return []; }
+  };
+  // The saved selection applies to every read by default, so every consumer —
+  // dashboard, status line, coordinator — sees the same filtered data without
+  // having to know the setting. `?exclude=a,b` overrides it for one request, and
+  // a bare `?exclude=` asks for everything.
+  const excludeOf = (url) => (url.searchParams.has('exclude')
+    ? url.searchParams.get('exclude').split(',').map((a) => accountOf(a)).filter(Boolean)
+    : savedExcluded());
+
   return function handleUsageRead(req, res) {
+    // The account selection: GET lists every account with rows (unfiltered, so a
+    // hidden one can be switched back on) and the excluded ones; PUT saves them.
+    if (at(req, '/api/token-usage/accounts')) {
+      const handle = tokenDb();
+      if (!handle?.db) { dbMissing(res); return true; }
+      const view = () => ({ accounts: getAccounts(handle), excluded: savedExcluded(), writable: Boolean(accounts?.setExcluded) });
+      if (req.method === 'GET') { json(res, 200, view()); return true; }
+      if (req.method === 'PUT') {
+        if (!accounts?.setExcluded) { json(res, 405, { error: 'this host has no writable account selection' }); return true; }
+        let body = '';
+        req.on('data', (c) => { body += c; });
+        req.on('end', () => {
+          try {
+            const list = JSON.parse(body || '{}').excluded;
+            if (!Array.isArray(list) || !list.every((a) => typeof a === 'string')) {
+              return json(res, 400, { error: 'body must be { "excluded": ["<account>", …] }' });
+            }
+            accounts.setExcluded([...new Set(list.map(accountOf).filter(Boolean))]);
+            json(res, 200, view());
+          } catch (err) {
+            json(res, 400, { error: err.message });
+          }
+        });
+        return true;
+      }
+      return false;
+    }
+
     if (req.method !== 'GET') return false;
 
     if (req.url?.startsWith('/api/token-usage/summary')) {
@@ -49,7 +92,7 @@ export function createUsageApi({ tokenDb, measurement }) {
         // cells=1 adds the priceable bucket × process × provider × model table
         // the dashboard's €/$ view needs; off by default (see SummaryCell).
         const cells = url.searchParams.get('cells') === '1';
-        json(res, 200, getSummary(handle, { hours, bucketMinutes, scope: scopeOf(url), cells }));
+        json(res, 200, getSummary(handle, { hours, bucketMinutes, scope: scopeOf(url), cells, exclude: excludeOf(url) }));
       } catch (err) {
         json(res, 500, { error: err.message });
       }
@@ -61,7 +104,7 @@ export function createUsageApi({ tokenDb, measurement }) {
       if (!handle?.db) { dbMissing(res); return true; }
       try {
         const url = new URL(req.url, 'http://localhost');
-        json(res, 200, getCost(handle, { months: parseInt(url.searchParams.get('months') || '6', 10) }));
+        json(res, 200, getCost(handle, { months: parseInt(url.searchParams.get('months') || '6', 10), exclude: excludeOf(url) }));
       } catch (err) {
         json(res, 500, { error: err.message });
       }
@@ -80,7 +123,7 @@ export function createUsageApi({ tokenDb, measurement }) {
         // adding a SQL-level filter; widening the limit covers the case where
         // a busier process dominates the global tail.
         const processFilter = url.searchParams.get('process');
-        const recent = getRecent(handle, { limit: processFilter ? Math.max(limit, 200) : limit, scope: scopeOf(url) });
+        const recent = getRecent(handle, { limit: processFilter ? Math.max(limit, 200) : limit, scope: scopeOf(url), exclude: excludeOf(url) });
         if (processFilter) recent.data = recent.data.filter((r) => r.process === processFilter).slice(0, limit);
         json(res, 200, recent);
       } catch (err) {
