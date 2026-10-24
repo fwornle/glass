@@ -22,6 +22,7 @@ import { buildAnthropicForwardHeaders } from './anthropic-headers.mjs';
 import { createAnthropicUsageTap, bindTapTaskId, tapCapturesRawBodies } from './measurement.mjs';
 import { canonicalizeModelName } from './model-canonical.mjs';
 import { sanitizeProject } from '../dist/token-usage.js';
+import { errorDetail } from './log-format.mjs';
 
 // Transient gateway failures (502/503/504) and network errors over the corporate
 // egress surface to the caller as a failed turn ("bad gateway"). Retry with
@@ -47,7 +48,7 @@ export async function forwardWithRetry(url, init, { fetch, attempts, backoffMs, 
     } catch (err) {
       lastErr = err;
       upstream = null;
-      logErr(`${label} forward attempt ${attempt + 1}/${attempts} network error: ${err?.message || err}`);
+      logErr(`${label} forward attempt ${attempt + 1}/${attempts} network error: ${errorDetail(err)}`);
       continue; // network-level failure — retry
     }
     if (GATEWAY_RETRY_STATUSES.has(upstream.status) && attempt < attempts - 1) {
@@ -101,7 +102,7 @@ export async function pipeAndTap(upstream, res, { isSse, onChunk, onBody, logErr
         onChunk(value);
       }
     } catch (err) {
-      logErr(`${label} stream error (non-fatal): ${err?.message || err}`);
+      logErr(`${label} stream error (non-fatal): ${errorDetail(err)}`);
     } finally {
       res.end();
     }
@@ -193,7 +194,7 @@ export async function handleAnthropicMessages(req, res, {
     method: 'POST', headers: fwdHeaders, body: rawBody,
   }, { fetch, attempts, backoffMs, logErr, label: '/v1/messages' });
   if (!upstream) {
-    logErr(`/v1/messages forward failed after ${attempts} attempts (non-fatal): ${lastErr?.message || lastErr}`);
+    logErr(`/v1/messages forward failed after ${attempts} attempts (non-fatal): ${errorDetail(lastErr)}`);
     res.writeHead(502, { 'content-type': 'application/json' });
     res.end(JSON.stringify({ type: 'error', error: { type: 'api_error', message: `proxy forward failed after ${attempts} attempts: ${lastErr?.message || lastErr}` } }));
     return;
