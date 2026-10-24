@@ -32,6 +32,7 @@ import tls from 'node:tls';
 import crypto from 'node:crypto';
 import forge from 'node-forge';
 import { shouldBypassProxy } from './no-proxy.mjs';
+import { errorDetail } from './log-format.mjs';
 
 const { pki, md } = forge;
 const CA_SUBJECT = 'glass local interception CA';
@@ -159,7 +160,7 @@ export function attachIntercept(server, { caDir, hosts, upstreamProxy = null, no
       return;
     }
     Promise.resolve(onRequest(req, res, { host, binding: req.socket.glassBinding || '' })).catch((err) => {
-      logErr(`intercept ${host}${req.url} failed: ${err?.message || err}`);
+      logErr(`intercept ${host}${req.url} failed: ${errorDetail(err)}`);
       if (!res.headersSent) res.writeHead(502);
       res.end();
     });
@@ -193,7 +194,7 @@ export function attachIntercept(server, { caDir, hosts, upstreamProxy = null, no
     }
     let sock;
     try { sock = await dial(viaUpstream(host), host, port); } catch (err) {
-      logErr(`tunnel ${host}: ${err.message}`);
+      logErr(`tunnel ${host}: ${errorDetail(err)}`);
       client.end('HTTP/1.1 502 Bad Gateway\r\n\r\n');
       return;
     }
