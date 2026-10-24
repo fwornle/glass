@@ -21,6 +21,8 @@ const home = fs.mkdtempSync(path.join(os.tmpdir(), 'glass-test-'));
 const { daemonEnv } = await import('../lib/glass/home.mjs');
 Object.assign(process.env, daemonEnv(home));
 for (const k of ['HTTPS_PROXY', 'https_proxy', 'HTTP_PROXY', 'http_proxy']) delete process.env[k];
+// Never this machine's coding install: the sources test points it at a DB of its own.
+process.env.GLASS_CODING_TOKEN_DB = path.join(home, 'no-coding', 'token-usage.db');
 const { startDaemon } = await import('../lib/glass/daemon.mjs');
 const { sessionEnv, withHeaders, opencodeRelayContent } = await import('../lib/glass/wiring.mjs');
 const { cmdQuote } = await import('../lib/glass/spawn.mjs');
@@ -405,6 +407,35 @@ test('offload settings: off by default; writes only from the UI; the key is stor
   }
 });
 
+test('sources: coding\'s figures join the usage reads where its DB is, switchable only from the UI', async () => {
+  assert.deepEqual((await api('GET', '/api/glass/sources')).body, { coding: { found: false, included: false, path: null } });
+  const { initTokenDb, resolveTokenDbPath } = await import('../proxy/dist/token-usage.js');
+  const dir = path.join(home, 'no-coding-data');
+  const c = initTokenDb(dir);
+  c.db.prepare(`INSERT INTO token_usage (id, timestamp, provider, model, process, input_tokens, total_tokens, user_hash, task_id)
+    VALUES (1, ?, 'gh-copilot', 'm', 'bg-coding-only', 5, 5, 'abc123', '')`).run(new Date().toISOString());
+  c.db.close();
+  process.env.GLASS_CODING_TOKEN_DB = resolveTokenDbPath(dir);
+  try {
+    assert.equal((await api('PUT', '/api/glass/sources', { coding: true })).status, 403, 'no x-glass-ui header');
+    assert.equal((await api('PUT', '/api/token-usage/accounts', { excluded: [] })).status, 403, 'the account selection has the same gate');
+    const on = await uiWrite('PUT', '/api/glass/sources', { coding: true });
+    assert.equal(on.status, 200);
+    assert.equal(on.body.coding.included, true);
+    assert.ok((await recent()).some((r) => r.process === 'bg-coding-only'), 'coding\'s row is read');
+    const off = await uiWrite('PUT', '/api/glass/sources', { coding: false });
+    assert.equal(off.body.coding.included, false);
+    assert.equal(JSON.parse(fs.readFileSync(path.join(home, 'cost.json'), 'utf8')).includeCoding, false);
+    assert.ok(!(await recent()).some((r) => r.process === 'bg-coding-only'), 'and left out again');
+    assert.equal((await uiWrite('PUT', '/api/glass/sources', { coding: 'yes' })).status, 400);
+    await uiWrite('PUT', '/api/glass/sources', { coding: true });
+    assert.equal('includeCoding' in JSON.parse(fs.readFileSync(path.join(home, 'cost.json'), 'utf8')), false, 'on is the default: no key');
+  } finally {
+    process.env.GLASS_CODING_TOKEN_DB = path.join(home, 'no-coding', 'token-usage.db');
+    await uiWrite('PUT', '/api/glass/sources', { coding: true }); // forget the test DB
+  }
+});
+
 test('offload: an easy intercepted copilot call is answered by the target; pi (left off) and a switch-off go upstream', async () => {
   const s = await open('copilot');
   const easy = { model: 'claude-haiku-4.5', messages: [{ role: 'user', content: 'capital of Portugal?' }] };
@@ -769,9 +800,11 @@ test('CLI: a reader that goes away (glass status | head) ends glass quietly', as
   assert.doesNotMatch(stderr, /EPIPE/);
 });
 
+// No coding health coordinator, as on CI: on a machine that runs coding one
+// answers on its default port and would hide output the CLI prints without it.
 function runCli(args, env) {
   return new Promise((resolve) => {
-    const child = spawn(process.execPath, [BIN, ...args], { env: { PATH: process.env.PATH, HOME: home, ...env } });
+    const child = spawn(process.execPath, [BIN, ...args], { env: { PATH: process.env.PATH, HOME: home, HEALTH_COORDINATOR_URL: 'http://127.0.0.1:9', ...env } });
     let stdout = ''; let stderr = '';
     child.stdout.on('data', (d) => { stdout += d; });
     child.stderr.on('data', (d) => { stderr += d; });
@@ -847,7 +880,7 @@ test('CLI: daemon unreachable → one warning, the agent runs unwired', { skip: 
   await new Promise((r) => squatter.close(r));
   assert.equal(run.code, 0);
   const lines = run.stderr.trim().split('\n').filter(Boolean);
-  assert.equal(lines.length, 1);
+  assert.equal(lines.length, 1, run.stderr);
   assert.match(lines[0], /daemon not reachable .* running claude unmeasured/);
   assert.equal(JSON.parse(run.stdout.trim()).base, null);
   fs.rmSync(cliHome, { recursive: true, force: true });

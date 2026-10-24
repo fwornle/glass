@@ -1234,13 +1234,54 @@ export function scopeClause(scope) {
         return { sql: ` AND (user_hash IS NULL OR user_hash NOT IN (${holes}))`, params: [...list] };
     return { sql: '', params: [] };
 }
+/**
+ * Account id ← every other spelling token_usage rows carry for it. Rows written
+ * before the account-id change still hold the old wire labels; an exclusion by
+ * account must drop those too, or "hide GitHub Copilot" leaves its `copilot`
+ * rows behind. Same table as the dashboard's PROVIDER_ALIASES (src/lib/providers.ts).
+ */
+export const ACCOUNT_ALIASES = {
+    'copilot': 'gh-copilot',
+    'github-copilot': 'gh-copilot',
+    'github': 'gh-copilot',
+    'claude-code': 'claude-code-max',
+    'anthropic': 'claude-code-max',
+    'max-subscription': 'claude-code-max',
+};
+/** The billed account a provider spelling belongs to (lower-cased). */
+export function accountOf(provider) {
+    const key = String(provider ?? '').trim().toLowerCase();
+    return ACCOUNT_ALIASES[key] ?? key;
+}
+/**
+ * SQL fragment + bindings dropping the rows of the excluded accounts — the
+ * operator's "which accounts count" selection. An account id expands to every
+ * spelling that maps to it. Empty / absent → no filter.
+ */
+export function accountClause(exclude) {
+    const accounts = new Set((exclude ?? []).map((a) => accountOf(a)).filter(Boolean));
+    if (!accounts.size)
+        return { sql: '', params: [] };
+    const spellings = new Set(accounts);
+    for (const [alias, account] of Object.entries(ACCOUNT_ALIASES))
+        if (accounts.has(account))
+            spellings.add(alias);
+    const list = [...spellings];
+    return { sql: ` AND LOWER(TRIM(COALESCE(provider, ''))) NOT IN (${list.map(() => '?').join(', ')})`, params: list };
+}
+/** Both view filters as one fragment: the fg/bg split, then the account selection. */
+function viewClause(scope, exclude) {
+    const split = scopeClause(scope);
+    const accounts = accountClause(exclude);
+    return { sql: split.sql + accounts.sql, params: [...split.params, ...accounts.params] };
+}
 export function getSummary(handle, opts = {}) {
     const hours = opts.hours ?? 24;
     // Foreground/background restriction, applied to EVERY aggregate below so the
     // headline, the breakdowns and the stacked series all describe the same set
     // of rows. A scope that reached only some of them would be worse than none.
     const scope = opts.scope ?? 'both';
-    const sc = scopeClause(scope);
+    const sc = viewClause(scope, opts.exclude);
     // For very wide windows (e.g. `hours=all` which is internally 10y) the
     // raw start would be far older than any real row — the zero-fill loop
     // would then emit thousands of empty buckets. Clamp to the earliest
@@ -1606,7 +1647,7 @@ export function getRecent(handle, opts = {}) {
     // the filtered set — filtering 500 mixed rows down in JS yields however many
     // happen to be foreground, which on a machine whose background services
     // outnumber turns ~10:1 is an arbitrarily short and misleading list.
-    const { sql, params } = scopeClause(scope);
+    const { sql, params } = viewClause(scope, opts.exclude);
     const data = handle.db.prepare(`SELECT * FROM token_usage WHERE 1=1${sql} ORDER BY timestamp DESC LIMIT ?`).all(...params, limit);
     return { data, scope };
 }
@@ -1626,6 +1667,7 @@ export function getCost(handle, opts = {}) {
     const now = opts.now ?? new Date();
     const cut = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - (months - 1), 1));
     const since = cut.toISOString();
+    const ac = accountClause(opts.exclude);
     const rows = handle.db.prepare(`
     SELECT
       substr(timestamp,1,7)                     AS month,
@@ -1644,10 +1686,10 @@ export function getCost(handle, opts = {}) {
       SUM(COALESCE(cache_write_tokens,0))       AS cache_write_tokens,
       SUM(CASE WHEN tokens_estimated=1 THEN 1 ELSE 0 END) AS estimated_calls
     FROM token_usage
-    WHERE timestamp >= ?
+    WHERE timestamp >= ?${ac.sql}
     GROUP BY month, provider, model, process, scope
     ORDER BY month DESC, input_tokens DESC
-  `).all(...FOREGROUND_USER_HASHES, since);
+  `).all(...FOREGROUND_USER_HASHES, since, ...ac.params);
     return { since, months, generatedAt: now.toISOString(), rows, local_providers: localProviders(handle) };
 }
 /**
@@ -1680,4 +1722,19 @@ export function backfillCanonicalModelNames(handle, canonicalizer) {
         }
     })(rows);
     return { scanned: rows.length, rewritten };
+}
+/**
+ * Every billed account with rows in the DB, canonical ids, for the account
+ * selection — read without any exclusion, so a hidden account stays listed and
+ * can be switched back on.
+ */
+export function getAccounts(handle) {
+    const rows = handle.db.prepare(`SELECT provider, COUNT(*) AS calls FROM token_usage GROUP BY provider`).all();
+    const byAccount = new Map();
+    for (const r of rows) {
+        const a = accountOf(r.provider);
+        if (a)
+            byAccount.set(a, (byAccount.get(a) ?? 0) + r.calls);
+    }
+    return [...byAccount].map(([account, calls]) => ({ account, calls })).sort((a, b) => b.calls - a.calls);
 }
