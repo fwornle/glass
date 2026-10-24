@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "4f838795175ab64a1b8d56f541a8231087c99959",
+      "sha": "5010c6a915fe57d7c55b3da75cc76bc2839781b6",
       "dirty": false
     },
     "proxy": {
@@ -99,7 +99,7 @@
     "lib/glass/coexist.mjs": "4daeee65cf43596dbf96e014f653248edd1f9701dfca74688e4f3521b37bac07",
     "lib/glass/combined.mjs": "aa0a50d220a0e11b7fab5a1f5c872825b3111c2a61510453b5919d0c01f1add2",
     "lib/glass/cost.mjs": "779ec586c3f6e7b452b51f74b4ac4fd979a8d41d068b290b5bd34414c2260648",
-    "lib/glass/daemon.mjs": "d7619b8ffecf801eff11041505022e5a2440e370f4af0544f8a2cc330b3f8d9d",
+    "lib/glass/daemon.mjs": "4619fad76157d3b16dd20d02df8af014364e2b384ed8753d4cd1cb3043babd29",
     "lib/glass/egress.mjs": "8f420a831f17084ab0ef71a463be73ccde43c2843b91eaa1d13f013326fa0102",
     "lib/glass/home.mjs": "4f94b34129d8a2eebecd6536301816e4aac32680e6cb16b9ce670e1dd9a9ab74",
     "lib/glass/network.mjs": "b5db6632a293f9f608eed2cbc6789b35a367f96ef45e00738737a553307f1cd0",
@@ -108,7 +108,7 @@
     "lib/glass/spawn.mjs": "8c22ac61f224041115c9212af72dcc7711ea309630b6521bf490591966e5d8af",
     "lib/glass/statusline.mjs": "b17ee554d2dfaf2ade8d5db92c2528f1e7188e862fd75a9fe7089122cf554ab8",
     "lib/glass/tmux.mjs": "9cd3e484062dd2b703cd7960c55560fb10c6369a91f136b2161017311ea5f745",
-    "lib/glass/ui-api.mjs": "dec37b35a8cf9edc8cb70f4fc6b3e122fa968b5b39378e6596170eab2e1211a6",
+    "lib/glass/ui-api.mjs": "7751adc6c5ce4d54f4b6a5e869ff6ae8fb43c0bbf5d97fb18f9b70f408f23859",
     "lib/glass/update.mjs": "24fc4e17f7079ec432d8d900371f888ae2a62a9f0cdf0eaf59b64b05e4e24434",
     "lib/glass/wiring.mjs": "040ef5d72b04400b2924fddead30fe07b200d9e5085af6c80200db35563825f6",
     "lib/lsl/adapters/claude-subagent-path.mjs": "1bc309a3f9b28a760c8c3af2a1f69cbbaa8d9fcf327d12275d8d405cc32a60df",
@@ -164,7 +164,7 @@
     "scripts/measurement-reconciler.mjs": "ad1c27f8542855bfed4c5f3dc0cbb1fe62ba9ae315c40cde57930f530807ae97",
     "tests/coexist.test.mjs": "10fb309bcb4e874333f92fbbdb1fe934015b399acddcaa76998cd39e1911c5ea",
     "tests/combined.test.mjs": "e54f9c5aff114b175f46f1aeaa80d0a4cf35eb7f09b92ea3fefd81f08a1f6515",
-    "tests/daemon.test.mjs": "bce7ff7b9746ea164173fe0a6cca974190ddc0460e65448efabb7d719b6c63d6",
+    "tests/daemon.test.mjs": "fedd9992f655842786b8695aafa7030b2e7349590ae201f83652570377fcca91",
     "tests/install-check.mjs": "eb661257e7accb8df31215e3a83cdfdd9d1d5e83bbc294815261ecbcaaf9acbe",
     "tests/network.test.mjs": "87bd036b30fc692f15957271d5b50989615f2bdca1819d85675558d6d0862a38",
     "tests/provenance.test.mjs": "2cd499bb23d6d2e7ac9f3628f370509971dc7be64a293b50c7a9051f85241916",
