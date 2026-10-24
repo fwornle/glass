@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "7050c6ed984589ea81ecee1ecf5cee879e6681c0",
+      "sha": "0fd2a814d6705ae44c60e9ada0a277a54008c0c4",
       "dirty": false
     },
     "proxy": {
@@ -137,7 +137,7 @@
     "lib/teams/config.cjs": "0cba623e569258faee7c75cab715e12afcba27a7a14b8729858f74743950c3b8",
     "mkdocs.yml": "78993ed44c86b6f1308a4ffb2a80e3ea49665f62dc9fcd10c820945f3317c62d",
     "overrides/main.html": "58bef75c205f2ecf969addf151ae02b35b434c1a6b527dce12d153a9005fc42f",
-    "package.json": "dea8eec98ed7f1056a194c17c847403623a13f8f931cb0aaf34c0d35c2665caa",
+    "package.json": "623d2d52a7d7a721509a29efc414f9ec253b7821fc516df9f89527ff04f159bf",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "6103a1b2c76cbdf5384080e2ae9ec3d3a6447fcbbe9509c59f6cd1a017e48010",
