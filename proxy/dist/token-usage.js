@@ -1532,6 +1532,33 @@ export function getSummary(handle, opts = {}) {
             row[k] = slot[k] || 0;
         by_provider_hour.push(row);
     }
+    // Opt-in: the priceable breakdown (see SummaryCell). Absent by default so the
+    // token view's payload — polled every 30s — does not grow by a table it never
+    // reads.
+    const cells = opts.cells
+        ? handle.db.prepare(`
+        SELECT (strftime('%s', timestamp) / ${bucketSeconds}) * ${bucketSeconds} AS bucket_sec,
+               process, provider, model,
+               COUNT(*) AS calls,
+               SUM(input_tokens)  AS input_tokens,
+               SUM(output_tokens) AS output_tokens,
+               SUM(cache_read_tokens)  AS cache_read_tokens,
+               SUM(cache_write_tokens) AS cache_write_tokens
+        FROM token_usage WHERE timestamp >= ?${sc.sql}
+        GROUP BY bucket_sec, process, provider, model
+        ORDER BY bucket_sec
+      `).all(since, ...sc.params).map((c) => ({
+            hour: new Date(Number(c.bucket_sec) * 1000).toISOString(),
+            process: String(c.process),
+            provider: String(c.provider),
+            model: String(c.model),
+            calls: Number(c.calls) || 0,
+            input_tokens: Number(c.input_tokens) || 0,
+            output_tokens: Number(c.output_tokens) || 0,
+            cache_read_tokens: Number(c.cache_read_tokens) || 0,
+            cache_write_tokens: Number(c.cache_write_tokens) || 0,
+        }))
+        : undefined;
     return {
         hours,
         bucket_minutes: bucketMinutes,
@@ -1545,7 +1572,23 @@ export function getSummary(handle, opts = {}) {
         avg_latency_ms: totals.avg_latency_ms,
         by_process, by_provider, by_model, by_provider_model, by_subscription, by_hour,
         process_keys, model_keys, provider_keys, by_process_hour, by_model_hour, by_provider_hour,
+        ...(cells ? { cells, local_providers: localProviders(handle) } : {}),
     };
+}
+/**
+ * Providers that have served an OFFLOADED call — the user's own hardware.
+ *
+ * A pricing read needs to know which accounts cost nothing per token, and the
+ * provider id cannot say: glass names the offload target after whatever the
+ * user typed (`team-qwen`, `lab-cluster`). `offloaded_from` is set on exactly
+ * the rows that target served, so it is the one signal that holds on every
+ * installation. Except: coding's router stamps it on a call that was offered to
+ * the offload chain and then served by the original provider after all (6.5K
+ * gh-copilot rows with offloaded_from = gh-copilot) — so a row only counts when
+ * someone else served it.
+ */
+export function localProviders(handle) {
+    return handle.db.prepare(`SELECT DISTINCT provider FROM token_usage WHERE offloaded_from != '' AND provider != offloaded_from`).all().map((r) => r.provider);
 }
 /**
  * Most-recent rows for the live activity feed. Capped at 500 to keep the
@@ -1605,7 +1648,7 @@ export function getCost(handle, opts = {}) {
     GROUP BY month, provider, model, process, scope
     ORDER BY month DESC, input_tokens DESC
   `).all(...FOREGROUND_USER_HASHES, since);
-    return { since, months, generatedAt: now.toISOString(), rows };
+    return { since, months, generatedAt: now.toISOString(), rows, local_providers: localProviders(handle) };
 }
 /**
  * Phase 36-06 one-shot backfill: walk all rows whose `model_raw` is NULL
