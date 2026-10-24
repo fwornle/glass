@@ -3,15 +3,15 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "acc98b1e8a84a29f02c99ed9beb13bd8387e58ca",
+      "sha": "3d396f5c596d99ed9f11c899a9b4d2701aceda61",
       "dirty": false
     },
     "proxy": {
-      "sha": "2954d680af415146c08ca63c7fccf71919fa93b8",
+      "sha": "38ba141d729a452c62995b2de327df337e75344e",
       "dirty": false
     }
   },
-  "manifest": "6c35bc05ef3021bb8d92b94cacc6c895f5fc2acf1d11c77347d3015dd19944f3",
+  "manifest": "d971db0923f3fa828d43c1a2c4a8c34adc8db968c4fafa349736c64036574591",
   "files": {
     ".gitguardian.yaml": "a766a085a4ff9ddecfd1176b50616bd5a24e5b51506b4171d6d303193ce760cc",
     ".github/workflows/ci.yml": "c3f08263c3a99b15e7eee54e056f75cc6b3272b3a732f572d4f95772ea12f8a5",
@@ -138,22 +138,23 @@
     "lib/teams/config.cjs": "0cba623e569258faee7c75cab715e12afcba27a7a14b8729858f74743950c3b8",
     "mkdocs.yml": "78993ed44c86b6f1308a4ffb2a80e3ea49665f62dc9fcd10c820945f3317c62d",
     "overrides/main.html": "58bef75c205f2ecf969addf151ae02b35b434c1a6b527dce12d153a9005fc42f",
-    "package.json": "577a94717e4003822169f714cf37e30e0807f44a42fc62ff028082e78d9ab595",
+    "package.json": "494e1dbaf21289cfacbfff69c5a4e1e6a58f1599104603bcf17d1fcbb112591b",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "1de0fa0ba1f42d32a40c52b5f4f5f69d97853a5011d9bdd8d54998bcff6b5fa4",
     "proxy/dist/usage-cache.js": "4faff1e1a7b20826f5a2cd1b67784797fd26987e0be07159d242da7ea063a003",
-    "proxy/proxy-bridge/anthropic-forward.mjs": "621d85a3606be5f9be4b8e25c149e29cc39867c919de46807d171b227ea98083",
+    "proxy/proxy-bridge/anthropic-forward.mjs": "7978a8c0491fa388d113a40ec216f5f3465327c9efb2399b0a22209f6c8a48a2",
     "proxy/proxy-bridge/anthropic-headers.mjs": "80324cd288c6d7ee89062fe1f9974b3c05ba903944f9bb1a74a2b264b857ebaa",
     "proxy/proxy-bridge/context-capture.mjs": "b07bcb8a498db26180b99e726657b66dfcb70538eb67b6a75f4613446daa46e9",
     "proxy/proxy-bridge/context-turns.mjs": "527f15080d15b9c1e539cdf9aba227238dcd0459d34ddb258248f5371e3d1745",
     "proxy/proxy-bridge/db-open.cjs": "1758e739d32485ec95a71371d06436cb0f54bab353b3df1e91decc414ca991ef",
-    "proxy/proxy-bridge/intercept.mjs": "26ea0279095cefab762821a2a61ffcea4dd0a723b47d2bf98f441a2011226135",
+    "proxy/proxy-bridge/intercept.mjs": "2dc2773c21986cfda5a221ef75dcf2a89136a434fdc6ae6c16c1c972f9d4929a",
+    "proxy/proxy-bridge/log-format.mjs": "38a400f263a7df48d61dc08212f601f8f34a375a02dfc9f739b7a1b89541c7b0",
     "proxy/proxy-bridge/measurement.mjs": "8b67eb46e5b592eb32a13f62fb9c55adfda460db394452500c53c9fe07b38e64",
     "proxy/proxy-bridge/model-canonical.mjs": "cecffe2ae82b8faca557fecd4fc41378ac48450a220d48cad9b00e5b7deafa58",
     "proxy/proxy-bridge/no-proxy.mjs": "9f046217a50188971c42017cb21bb0991a43fcfc1f83537ce2615da033bf92e7",
     "proxy/proxy-bridge/offload.mjs": "4d489b4b8905f565a175e9eda2cd4db42fc265122cd9a93497ba6609455b31d0",
-    "proxy/proxy-bridge/openai-passthrough.mjs": "d5c845a5dc951a564afe5ab93e9491a02b81edcb6721c1e6ffde9521d60f18eb",
+    "proxy/proxy-bridge/openai-passthrough.mjs": "ace028bca138cd55b219f42bde000248ad44cca1c6849a62608ff9ef216686fe",
     "proxy/proxy-bridge/prompt-classifier.mjs": "9b9018319101deec7c371f0938002e3a949654d6a793c7418899468a965eabb5",
     "proxy/proxy-bridge/raw-bodies.mjs": "dc0a777780fad655611eb9729c55b2b4835215164ee08ff4059cbff0ce815008",
     "proxy/proxy-bridge/routing-trail.mjs": "c30f6d924ee015a3ab235b38e6fb9c1017db6731a67923762bd89c6906b0664a",

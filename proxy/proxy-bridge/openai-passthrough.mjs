@@ -26,6 +26,7 @@ import { forwardWithRetry, copyResponseHeaders, pipeAndTap, answeringProvider } 
 import { createOpenAIUsageTap, tapCapturesRawBodies } from './measurement.mjs';
 import { responsesToChatBody } from './shim-tools.mjs';
 import { normalizeOffloadConfig, offloadRowFields } from './offload.mjs';
+import { errorDetail } from './log-format.mjs';
 
 /** 'chat' | 'responses' | null (a path this tap does not measure). */
 export function openAIWireOf(url) {
@@ -138,7 +139,7 @@ export async function handleOpenAIPassthrough(req, res, {
     method: 'POST', headers: buildAnthropicForwardHeaders(req.headers, null), body,
   }, { fetch, attempts, backoffMs, logErr, label: `openai ${wire}` });
   if (!upstream) {
-    logErr(`openai ${wire} forward failed after ${attempts} attempts (non-fatal): ${lastErr?.message || lastErr}`);
+    logErr(`openai ${wire} forward failed after ${attempts} attempts (non-fatal): ${errorDetail(lastErr)}`);
     res.writeHead(502, { 'content-type': 'application/json' });
     res.end(JSON.stringify({ error: { type: 'api_error', message: `proxy forward failed after ${attempts} attempts: ${lastErr?.message || lastErr}` } }));
     return;
