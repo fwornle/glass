@@ -1661,6 +1661,10 @@ export function getRecent(handle, opts = {}) {
  * months = how many calendar months back to include (clamped to 1..36). The
  * cutoff is the first day of the month (months-1) back, in UTC (timestamps are
  * ISO-8601 UTC; month bucketing is substr(timestamp,1,7) = 'YYYY-MM').
+ *
+ * byDay adds a `day` (YYYY-MM-DD) to the grouping: a billing rule can change on
+ * any date (a discount from the 15th, an FX for a quarter), and a month-sized
+ * row cannot be split across it. The rows are still one per month when absent.
  */
 export function getCost(handle, opts = {}) {
     const months = Math.min(36, Math.max(1, opts.months ?? 6));
@@ -1668,9 +1672,11 @@ export function getCost(handle, opts = {}) {
     const cut = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - (months - 1), 1));
     const since = cut.toISOString();
     const ac = accountClause(opts.exclude);
+    const day = opts.byDay ? 'substr(timestamp,1,10) AS day,' : '';
     const rows = handle.db.prepare(`
     SELECT
       substr(timestamp,1,7)                     AS month,
+      ${day}
       provider,
       model,
       process,
@@ -1687,7 +1693,7 @@ export function getCost(handle, opts = {}) {
       SUM(CASE WHEN tokens_estimated=1 THEN 1 ELSE 0 END) AS estimated_calls
     FROM token_usage
     WHERE timestamp >= ?${ac.sql}
-    GROUP BY month, provider, model, process, scope
+    GROUP BY month, ${opts.byDay ? 'day, ' : ''}provider, model, process, scope
     ORDER BY month DESC, input_tokens DESC
   `).all(...FOREGROUND_USER_HASHES, since, ...ac.params);
     return { since, months, generatedAt: now.toISOString(), rows, local_providers: localProviders(handle) };
