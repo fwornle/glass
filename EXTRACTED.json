@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "e4db4e324585335295ff81aab2f282ddb81932a3",
+      "sha": "97890a231fd38d3c1c55e4f0a631ae5bd0b4d307",
       "dirty": false
     },
     "proxy": {
@@ -100,7 +100,7 @@
     "lib/glass/client.mjs": "8515158e8e6606e4c4dd4ea4410fc353110282e1c89d6d6c1b7f8ac52efa23fc",
     "lib/glass/coexist.mjs": "4daeee65cf43596dbf96e014f653248edd1f9701dfca74688e4f3521b37bac07",
     "lib/glass/combined.mjs": "aa0a50d220a0e11b7fab5a1f5c872825b3111c2a61510453b5919d0c01f1add2",
-    "lib/glass/copilot-quota.mjs": "7c9028496a1769fdffd7f8ee9324a2b7e5473b159d2aecc915cf0dd079fd8abd",
+    "lib/glass/copilot-quota.mjs": "7c5bef68bcd499fddd47ae006abacc3f76613e9d48d974432f28311e2c87ccc6",
     "lib/glass/cost.mjs": "779ec586c3f6e7b452b51f74b4ac4fd979a8d41d068b290b5bd34414c2260648",
     "lib/glass/daemon.mjs": "412de05b1142356e851f519fe19e1c37f9a6b6905facb48d970b6848506ca82f",
     "lib/glass/egress.mjs": "0481059daecce5e8b27e8d8d5873e540c953e73f963a9771bb8752a87817923d",
@@ -169,7 +169,7 @@
     "scripts/measurement-reconciler.mjs": "ad1c27f8542855bfed4c5f3dc0cbb1fe62ba9ae315c40cde57930f530807ae97",
     "tests/coexist.test.mjs": "10fb309bcb4e874333f92fbbdb1fe934015b399acddcaa76998cd39e1911c5ea",
     "tests/combined.test.mjs": "e54f9c5aff114b175f46f1aeaa80d0a4cf35eb7f09b92ea3fefd81f08a1f6515",
-    "tests/copilot-quota.test.mjs": "2d662cae3a9e8f7c9532db2a1269096c915dfd910531b5b969c19722229f846f",
+    "tests/copilot-quota.test.mjs": "0600ff34631c74a9cfcd87b6ae12385a8eda5b93e4b9e684c5ab226504d3bd99",
     "tests/daemon.test.mjs": "fedd9992f655842786b8695aafa7030b2e7349590ae201f83652570377fcca91",
     "tests/install-check.mjs": "eb661257e7accb8df31215e3a83cdfdd9d1d5e83bbc294815261ecbcaaf9acbe",
     "tests/network.test.mjs": "617afd2859fab1f80c9061960d28a74352445f220a8434f6780e1fbf931dc637",
