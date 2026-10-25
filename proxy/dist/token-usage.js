@@ -1218,7 +1218,7 @@ function defaultBucketMinutes(hours) {
  * Add a new agent's adapter hash HERE when one is introduced; nothing else
  * needs to change.
  */
-export const FOREGROUND_USER_HASHES = ['cladpt', 'opnadt', 'opcadt', 'copadt', 'piadpt'];
+export const FOREGROUND_USER_HASHES = ['cladpt', 'opnadt', 'opcadt', 'copadt', 'piadpt', 'vscadt'];
 /**
  * SQL fragment + bindings restricting a query to one side of the split.
  *
