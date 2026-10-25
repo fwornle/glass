@@ -104,7 +104,7 @@ export function createUsageApi({ tokenDb, measurement, accounts }) {
       if (!handle?.db) { dbMissing(res); return true; }
       try {
         const url = new URL(req.url, 'http://localhost');
-        json(res, 200, getCost(handle, { months: parseInt(url.searchParams.get('months') || '6', 10), exclude: excludeOf(url) }));
+        json(res, 200, getCost(handle, { months: parseInt(url.searchParams.get('months') || '6', 10), exclude: excludeOf(url), byDay: url.searchParams.get('by') === 'day' }));
       } catch (err) {
         json(res, 500, { error: err.message });
       }
