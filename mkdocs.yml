@@ -9,6 +9,8 @@ docs_dir: docs
 extra_css:
   - assets/overview.css
 extra_javascript:
+  # The right-hand contents list follows the open tier tab (Quick / Deep Dive).
+  - assets/tabbed-toc.js
   - assets/overview.js
   - assets/header-decks.js
 
@@ -101,7 +103,7 @@ nav:
 extra:
   # Presentations, opened from icon buttons in the header (overrides/main.html).
   decks:
-    - title: glass overview — eleven slides
+    - title: glass overview
       link: overview/
       icon: material/presentation
     - title: Connectivity — every path, and how it recovers
