@@ -138,6 +138,10 @@ export function createTrial(dir, spec, now = new Date()) {
     mode,
     incumbent: { provider: spec.incumbent.provider, complexity: spec.incumbent.complexity, model: spec.incumbent.model },
     candidates: list.map((c) => ({ provider: c.provider, complexity: c.complexity, model: c.model })),
+    // For readers from before candidate lists (glass ≤ 0.1.53, coding's dashboard
+    // before 06882880): they read `candidate.model` and crashed without it. They
+    // show the first candidate; candidatesOf() reads `candidates` whenever present.
+    candidate: { provider: list[0].provider, complexity: list[0].complexity, model: list[0].model },
     samplePct: num(spec.samplePct, TRIAL_DEFAULTS.samplePct, 0.01, 1),
     days,
     maxSamples: Math.round(num(spec.maxSamples, TRIAL_DEFAULTS.maxSamples, 1, 1000)),

@@ -7,7 +7,7 @@
       "dirty": false
     },
     "proxy": {
-      "sha": "7de0e51dfa7ca52863b22adf2aa1c5d3cda040e2",
+      "sha": "79b5e0f6b35eb38685afe742a052282fdc0d8bb7",
       "dirty": false
     }
   },
@@ -158,7 +158,7 @@
     "proxy/proxy-bridge/log-format.mjs": "38a400f263a7df48d61dc08212f601f8f34a375a02dfc9f739b7a1b89541c7b0",
     "proxy/proxy-bridge/measurement.mjs": "8b67eb46e5b592eb32a13f62fb9c55adfda460db394452500c53c9fe07b38e64",
     "proxy/proxy-bridge/model-canonical.mjs": "cecffe2ae82b8faca557fecd4fc41378ac48450a220d48cad9b00e5b7deafa58",
-    "proxy/proxy-bridge/model-trials.mjs": "3027fe8b4eaaa7b1e18b3c7b0ec6f11156b902707fc12f68bfff4994f84c5b5e",
+    "proxy/proxy-bridge/model-trials.mjs": "b0bad08b93171c3f8bfac34f2fe631ca96011fa878e0b77cf5336fbd0b1708df",
     "proxy/proxy-bridge/no-proxy.mjs": "9f046217a50188971c42017cb21bb0991a43fcfc1f83537ce2615da033bf92e7",
     "proxy/proxy-bridge/offload.mjs": "4d489b4b8905f565a175e9eda2cd4db42fc265122cd9a93497ba6609455b31d0",
     "proxy/proxy-bridge/openai-passthrough.mjs": "ace028bca138cd55b219f42bde000248ad44cca1c6849a62608ff9ef216686fe",
