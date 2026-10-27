@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "5571cbfa977922bd0907273b5f3082da6f3b16e4",
+      "sha": "5b2bcd3ea4da9f4730517cfe67168fc35276cacd",
       "dirty": false
     },
     "proxy": {
@@ -104,7 +104,7 @@
     "lib/glass/combined.mjs": "77069ce8443ef7d22ac00cb1b91f3f40f0b249df84fa49786154871a3df89d0e",
     "lib/glass/copilot-quota.mjs": "d09aad330f18d4571124484a908caf7f875b6ab79e3c176de3e097b69ecfeb3d",
     "lib/glass/cost.mjs": "e9332dd6c1f4dcaedd7b07a31e08333cc0dff524eb717a8e7877395bb830a574",
-    "lib/glass/daemon.mjs": "080f69bb91e63dd2ddb428518bb869da7c36f97928cd6388d136a6c258decbbd",
+    "lib/glass/daemon.mjs": "8aab7645d63536d9bee85a5749dd9dd0ce9c7d008413c7635e2af056efa29764",
     "lib/glass/egress.mjs": "0481059daecce5e8b27e8d8d5873e540c953e73f963a9771bb8752a87817923d",
     "lib/glass/home.mjs": "4f94b34129d8a2eebecd6536301816e4aac32680e6cb16b9ce670e1dd9a9ab74",
     "lib/glass/network.mjs": "be5b2ad30e9a511b536bbf0a016732149fb14fc351467dc40c483790a1c5b6fc",
