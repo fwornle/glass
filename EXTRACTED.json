@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "5b2bcd3ea4da9f4730517cfe67168fc35276cacd",
+      "sha": "7d0bbd1d20b9e4f732e29f8fcb8196fd49ddcf34",
       "dirty": false
     },
     "proxy": {
@@ -104,7 +104,7 @@
     "lib/glass/combined.mjs": "77069ce8443ef7d22ac00cb1b91f3f40f0b249df84fa49786154871a3df89d0e",
     "lib/glass/copilot-quota.mjs": "d09aad330f18d4571124484a908caf7f875b6ab79e3c176de3e097b69ecfeb3d",
     "lib/glass/cost.mjs": "e9332dd6c1f4dcaedd7b07a31e08333cc0dff524eb717a8e7877395bb830a574",
-    "lib/glass/daemon.mjs": "8aab7645d63536d9bee85a5749dd9dd0ce9c7d008413c7635e2af056efa29764",
+    "lib/glass/daemon.mjs": "91e0dc22ed92f615bad76e4c73637f1486c62c41376870411af90c0108ad99f2",
     "lib/glass/egress.mjs": "0481059daecce5e8b27e8d8d5873e540c953e73f963a9771bb8752a87817923d",
     "lib/glass/home.mjs": "4f94b34129d8a2eebecd6536301816e4aac32680e6cb16b9ce670e1dd9a9ab74",
     "lib/glass/network.mjs": "be5b2ad30e9a511b536bbf0a016732149fb14fc351467dc40c483790a1c5b6fc",
@@ -144,7 +144,7 @@
     "lib/teams/config.cjs": "0cba623e569258faee7c75cab715e12afcba27a7a14b8729858f74743950c3b8",
     "mkdocs.yml": "c5059ed1cf8f055e72187d065fceece13ebc557023bc13a75154b60ff30c0765",
     "overrides/main.html": "58bef75c205f2ecf969addf151ae02b35b434c1a6b527dce12d153a9005fc42f",
-    "package.json": "da78eb97d04f9604edc5b4a903ffa575e08043c9c6955111d75c5e3207d5cb4d",
+    "package.json": "59f693cb688daf8c6f7a9a4ce0cc3d4b99a43bce1d764a511038d8f572fde971",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "de8adbe242bbb8016aed718ca082c597a48098c42e25dd00ef480d76d1936251",
@@ -173,7 +173,7 @@
     "tests/coexist.test.mjs": "10fb309bcb4e874333f92fbbdb1fe934015b399acddcaa76998cd39e1911c5ea",
     "tests/combined.test.mjs": "81de30fb3e9e3a576a470347da78ac4f6bc9cc21cab0ea39ac82599d73a4f237",
     "tests/copilot-quota.test.mjs": "cd62b24972fb4252c7f00010776885cc141b7ca561df60b73d39abaa7dbe441c",
-    "tests/daemon.test.mjs": "ce22e97a436d81dfdbf1afc99e7bde557c69c9628b2cb19da00551abdcae50f4",
+    "tests/daemon.test.mjs": "92476444f725d2c96461ed81f161a5c9833e22b076044cb783a39449700bfddf",
     "tests/install-check.mjs": "eb661257e7accb8df31215e3a83cdfdd9d1d5e83bbc294815261ecbcaaf9acbe",
     "tests/network.test.mjs": "617afd2859fab1f80c9061960d28a74352445f220a8434f6780e1fbf931dc637",
     "tests/provenance.test.mjs": "2cd499bb23d6d2e7ac9f3628f370509971dc7be64a293b50c7a9051f85241916",
@@ -188,6 +188,6 @@
     "ui/assets/vendor-icons-D_OCph_Q.js": "a73f7ba841eb90cd2330d1a9c1df25e4bca235a6656aa66d404e9c6f6ca37985",
     "ui/assets/vendor-react-BixgUiYW.js": "84207fbc9bd45aef633cc3d9e883f2fd4c0ae2c99df3f920d9ba14883a464cc6",
     "ui/assets/vendor-redux-XJVtE8Si.js": "0430373614e66c5e7250f6605a1abcae05c64dd9fa26ca4c1570fbd79aff8aaa",
-    "ui/index.html": "afc459d494f25489d58570abd87ec962d70517fec9171c927d23f72369b81b4b"
+    "ui/index.html": "dae2855819bf0a5d522f6dfd2284513347c675e2f32daab4c7b8ce36712f877d"
   }
 }
