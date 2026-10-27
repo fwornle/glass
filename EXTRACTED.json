@@ -3,15 +3,15 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "9e8834d95dc847dbc16cbbeac0b6a41474c224af",
+      "sha": "5b2bcd3ea4da9f4730517cfe67168fc35276cacd",
       "dirty": false
     },
     "proxy": {
-      "sha": "0474c296504092f7d7af82e398974c0a47e2ed24",
+      "sha": "7de0e51dfa7ca52863b22adf2aa1c5d3cda040e2",
       "dirty": false
     }
   },
-  "manifest": "8984719fccf32b98ccbd981fa01a6c17c99068e5559c7d2dd1360eeea25d3765",
+  "manifest": "2ef87bd7b14eff7facb5da45488695f582d8f82e134ce2a7374ea4fcdd43a776",
   "files": {
     ".gitguardian.yaml": "a766a085a4ff9ddecfd1176b50616bd5a24e5b51506b4171d6d303193ce760cc",
     ".github/workflows/ci.yml": "c3f08263c3a99b15e7eee54e056f75cc6b3272b3a732f572d4f95772ea12f8a5",
@@ -34,7 +34,7 @@
     "docs/_tiers/privacy.deep.md": "36c8fd37aa58fe0322615dba26476d794d29c33cafbf2a3958a0e68586ad3bdd",
     "docs/_tiers/reference.deep.md": "f891092415a7c4ff74e815b7fd34eb68bc15b8c07f12a5ce39fb4807440aae74",
     "docs/_tiers/status-line.deep.md": "1a6642376f93ff7e5b90d656c88ff665fb6f9f6126d9bb372f98cba9563ec3e0",
-    "docs/_tiers/token-usage.deep.md": "b80276cd6c8b91f9270a8daa7e3a5af4923926a1461e510e5cf7ce2562abb6e8",
+    "docs/_tiers/token-usage.deep.md": "c1cfbdf9bcdd63e8909baf41da2a8656bc4502ad617c627c4ca541ef40bb18bc",
     "docs/_tiers/troubleshooting.deep.md": "0d8829d9a41ebfe4a36391de422b726fb47d1291d65160543dc9fbb7954b0abf",
     "docs/architecture.md": "c93dbe9a359182dda7126ce1c1aca8253cfcdfd83307bd4bc6a262350f0c545d",
     "docs/assets/header-decks.js": "4a9750e99062ab17df023638cddb9b62b97b43e98fb8b79f3de7d4dbe572fe11",
@@ -104,7 +104,7 @@
     "lib/glass/combined.mjs": "77069ce8443ef7d22ac00cb1b91f3f40f0b249df84fa49786154871a3df89d0e",
     "lib/glass/copilot-quota.mjs": "d09aad330f18d4571124484a908caf7f875b6ab79e3c176de3e097b69ecfeb3d",
     "lib/glass/cost.mjs": "e9332dd6c1f4dcaedd7b07a31e08333cc0dff524eb717a8e7877395bb830a574",
-    "lib/glass/daemon.mjs": "6be850eac9bc4d8fd5a76b349f4994a28ba770ea5034e7bed27a8e66dc5999fb",
+    "lib/glass/daemon.mjs": "8aab7645d63536d9bee85a5749dd9dd0ce9c7d008413c7635e2af056efa29764",
     "lib/glass/egress.mjs": "0481059daecce5e8b27e8d8d5873e540c953e73f963a9771bb8752a87817923d",
     "lib/glass/home.mjs": "4f94b34129d8a2eebecd6536301816e4aac32680e6cb16b9ce670e1dd9a9ab74",
     "lib/glass/network.mjs": "be5b2ad30e9a511b536bbf0a016732149fb14fc351467dc40c483790a1c5b6fc",
@@ -144,7 +144,7 @@
     "lib/teams/config.cjs": "0cba623e569258faee7c75cab715e12afcba27a7a14b8729858f74743950c3b8",
     "mkdocs.yml": "c5059ed1cf8f055e72187d065fceece13ebc557023bc13a75154b60ff30c0765",
     "overrides/main.html": "58bef75c205f2ecf969addf151ae02b35b434c1a6b527dce12d153a9005fc42f",
-    "package.json": "c321d828216e05399b60cea255333e9fe9577f2fa4b364461dee9dd5bc065531",
+    "package.json": "da78eb97d04f9604edc5b4a903ffa575e08043c9c6955111d75c5e3207d5cb4d",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "de8adbe242bbb8016aed718ca082c597a48098c42e25dd00ef480d76d1936251",
@@ -158,7 +158,7 @@
     "proxy/proxy-bridge/log-format.mjs": "38a400f263a7df48d61dc08212f601f8f34a375a02dfc9f739b7a1b89541c7b0",
     "proxy/proxy-bridge/measurement.mjs": "8b67eb46e5b592eb32a13f62fb9c55adfda460db394452500c53c9fe07b38e64",
     "proxy/proxy-bridge/model-canonical.mjs": "cecffe2ae82b8faca557fecd4fc41378ac48450a220d48cad9b00e5b7deafa58",
-    "proxy/proxy-bridge/model-trials.mjs": "94f3a48e27661721ace2953fcfd41e947df682b071df04ee4407822f053c63ef",
+    "proxy/proxy-bridge/model-trials.mjs": "3027fe8b4eaaa7b1e18b3c7b0ec6f11156b902707fc12f68bfff4994f84c5b5e",
     "proxy/proxy-bridge/no-proxy.mjs": "9f046217a50188971c42017cb21bb0991a43fcfc1f83537ce2615da033bf92e7",
     "proxy/proxy-bridge/offload.mjs": "4d489b4b8905f565a175e9eda2cd4db42fc265122cd9a93497ba6609455b31d0",
     "proxy/proxy-bridge/openai-passthrough.mjs": "ace028bca138cd55b219f42bde000248ad44cca1c6849a62608ff9ef216686fe",
@@ -179,15 +179,15 @@
     "tests/provenance.test.mjs": "2cd499bb23d6d2e7ac9f3628f370509971dc7be64a293b50c7a9051f85241916",
     "tests/statusline.test.mjs": "576998f1da95524a655af8a4eb0f6a7605dd987fff72e6262ceda980fe68b1ed",
     "tests/update.test.mjs": "90a3c1afe9925ee2bdb03ca4b93f8b01967a73ecb78386d48dde4fceeb16a754",
-    "ui/assets/CostTab-lApNNXCQ.js": "052a67d7ce79291fc16a748242f90db78b48b0ec6dab2e6f56bd8ea2b098a9da",
-    "ui/assets/TrialsTab-BcqOUq9e.js": "6d77a8ccfecddbb9cb66f06caa8d305804c6ce594fcccd00dd40eadba8f17ef7",
-    "ui/assets/index-C4bKI80Z.js": "cbde341dc4775a9b8a7058ea2d6bdd66758c4a5c0615da0d4db718df25670daa",
-    "ui/assets/index-DlM3n3UA.css": "7da8952bab31e635dc4303afff998676b6fbf2b8f8c0a9ccf54afd54429357d2",
+    "ui/assets/CostTab-CIWQ8A8s.js": "fd65798766de8de9bc0429007a7b4ff451750734a0b2f37e6ccd96d06ba0cbc6",
+    "ui/assets/TrialsTab-Ti2B1S_d.js": "fe7396dbd70af00cd7891d57019642225e1a8d78b4598b6c2fc0576785397da0",
+    "ui/assets/index-C1OaMpyG.js": "f3ea5ad112fea028943e754d4e2c07bdbd90b6b28368930617fee6e8b849bd28",
+    "ui/assets/index-Q4Ctcrwk.css": "cd8c8c45eb507255844e29dc05c6626a213394f28a1b639fb9b31bc5b5884259",
     "ui/assets/omitted-Be0_Qxkl.js": "166d9bf3626149b25a8a52b6c7c123fd5da132c215f410ae6a2d86e0781fa4a3",
     "ui/assets/vendor-charts-BqUKQC6_.js": "c5f49d94ae3e27cacc4a2a2f1ace34eebd3a164c4757fa2b4941708b3a3ee2dc",
-    "ui/assets/vendor-icons-D-44e-D1.js": "6a2508439fc869df9fe187499b3b990a6f07725e3fa1fb89f3a9349fe8d71ef9",
+    "ui/assets/vendor-icons-D_OCph_Q.js": "a73f7ba841eb90cd2330d1a9c1df25e4bca235a6656aa66d404e9c6f6ca37985",
     "ui/assets/vendor-react-BixgUiYW.js": "84207fbc9bd45aef633cc3d9e883f2fd4c0ae2c99df3f920d9ba14883a464cc6",
     "ui/assets/vendor-redux-XJVtE8Si.js": "0430373614e66c5e7250f6605a1abcae05c64dd9fa26ca4c1570fbd79aff8aaa",
-    "ui/index.html": "01a45c2a9087a23ef1ce118b624fba1e24fa111f41cdc045247509930e850e63"
+    "ui/index.html": "afc459d494f25489d58570abd87ec962d70517fec9171c927d23f72369b81b4b"
   }
 }
