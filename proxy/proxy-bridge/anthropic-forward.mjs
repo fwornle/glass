@@ -136,6 +136,7 @@ export async function handleAnthropicMessages(req, res, {
   bindTaskId = bindTapTaskId, agent: agentOverride = '', provider = '', subscription = 'max-oauth-passthrough',
   attempts = Number(process.env.LLM_PROXY_FORWARD_ATTEMPTS || 3), backoffMs = [0, 300, 900],
   logErr = () => {},
+  onTurn = null,
 }) {
   const v1Path = (req.url || '').split('?')[0];
   const isCompletion = v1Path === '/v1/messages'; // exclude count_tokens
@@ -160,6 +161,15 @@ export async function handleAnthropicMessages(req, res, {
   // The repo the agent was launched in (the launcher sends it). '' when
   // absent or malformed — a missing project is a rollup gap, never a 4xx.
   const project = sanitizeProject(req.headers['x-project']);
+  // The daemon's job-class tagger (job-class.mjs) sees each completion request;
+  // it returns at once and labels the turn in the background. Utility calls
+  // (no tools at all: title and topic requests) and sub-agents carry no job of
+  // their own. Glass passes no onTurn.
+  if (onTurn && isCompletion) {
+    try {
+      onTurn({ messages: reqJson?.messages, agent, project, kind: isSubagent ? 'subagent' : toolNames.length ? 'main' : 'utility' });
+    } catch { /* a label is never worth a request */ }
+  }
 
   let route = null;
   if (routeGuard) {
