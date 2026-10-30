@@ -7,7 +7,7 @@
       "dirty": false
     },
     "proxy": {
-      "sha": "15b6ef4c8a4fb27d9e5f1c318230dd0537654224",
+      "sha": "eef8ad56eb77bb95348bb90fdbde6aea4b502f05",
       "dirty": false
     }
   },
@@ -166,7 +166,7 @@
     "proxy/proxy-bridge/db-open.cjs": "1758e739d32485ec95a71371d06436cb0f54bab353b3df1e91decc414ca991ef",
     "proxy/proxy-bridge/intercept.mjs": "2dc2773c21986cfda5a221ef75dcf2a89136a434fdc6ae6c16c1c972f9d4929a",
     "proxy/proxy-bridge/job-class-api.mjs": "61c634f41a36aab479ae3ebb95cc705b346ed807db58047436a6765bafa1d03e",
-    "proxy/proxy-bridge/job-class.mjs": "e58aeca339dd0189426333117b56e030187ffa5daf62629d50b2ee6bf8720701",
+    "proxy/proxy-bridge/job-class.mjs": "55b1fc8cdd38e1ed500afaf4a1b509f99091f56a30d004f99d032f0a3885cf06",
     "proxy/proxy-bridge/log-format.mjs": "38a400f263a7df48d61dc08212f601f8f34a375a02dfc9f739b7a1b89541c7b0",
     "proxy/proxy-bridge/measurement.mjs": "8b67eb46e5b592eb32a13f62fb9c55adfda460db394452500c53c9fe07b38e64",
     "proxy/proxy-bridge/model-canonical.mjs": "cecffe2ae82b8faca557fecd4fc41378ac48450a220d48cad9b00e5b7deafa58",

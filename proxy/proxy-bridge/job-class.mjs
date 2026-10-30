@@ -72,6 +72,7 @@
 // Never throws into a request: every failure is a counter and a log line.
 
 import fs from 'node:fs';
+import path from 'node:path';
 import { parse as parseYaml } from 'yaml';
 import { turnIdentity } from './turn-identity.mjs';
 import { toolsInCurrentTurn } from './turn-band.mjs';
@@ -191,7 +192,9 @@ export function loadTaxonomy(file) {
   for (const c of classes) if (c.group && !groupIds.has(String(c.group))) throw new Error(`${file}: class ${c.id} names undeclared group ${c.group}`);
   const version = raw.version ?? 0;
   // A team's package names itself; coding's config/job-classes.yaml is named by its file.
-  const name = typeof raw.name === 'string' && raw.name ? raw.name : file.split('/').pop().replace(/\.ya?ml$/, '');
+  // basename on either separator: on Windows the path has backslashes, and the
+  // whole path became the name (and part of a file name) — glass on Windows.
+  const name = typeof raw.name === 'string' && raw.name ? raw.name : path.win32.basename(file).replace(/\.ya?ml$/, '');
   const retired = new Map((Array.isArray(raw.retired) ? raw.retired : []).map((r) => [String(r?.id || ''), String(r?.mergedInto || '')]));
   for (const [rid, into] of retired) if (!rid || !into || ids.includes(rid)) throw new Error(`${file}: retired entries need an id that is no current class and a mergedInto`);
   return { name, version, tag: `${name}-v${version}`, classes, ids: new Set(ids), none: String(raw.none || ''), precedence, prompt: raw.prompt, groups, retired };
