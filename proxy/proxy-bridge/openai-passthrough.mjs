@@ -83,11 +83,13 @@ export async function forwardPlain(req, res, { fetch, upstreamBase, logErr = () 
  * @param {string} [o.taskId]      the run it is bound to ('' → unbound, no capture)
  * @param {string} [o.project]
  * @param {{offloader: object, getConfig: Function}|null} [o.offload]  opt-in offload (offload.mjs)
+ * @param {Function|null} [o.onTurn]  the job-class tagger's observe (job-class.mjs); it returns
+ *   at once and labels in the background. glass passes it only when labelling is on.
  */
 export async function handleOpenAIPassthrough(req, res, {
   measurement, fetch, upstreamBase, provider, agent, taskId = '', project = '',
   attempts = Number(process.env.LLM_PROXY_FORWARD_ATTEMPTS || 3), backoffMs = [0, 300, 900],
-  logErr = () => {}, offload = null,
+  logErr = () => {}, offload = null, onTurn = null,
 }) {
   const wire = openAIWireOf(req.url);
   if (req.method !== 'POST' || !wire) return forwardPlain(req, res, { fetch, upstreamBase, logErr });
@@ -105,6 +107,13 @@ export async function handleOpenAIPassthrough(req, res, {
   const callKind = reqJson ? (Array.isArray(reqJson.tools) && reqJson.tools.length ? 'main' : 'side') : '';
 
   if (chatBody && taskId) measurement.captureOpenAIBreakdown({ oaBody: chatBody, agent, taskId });
+  // A call with tools is a turn of the agent's loop; one without is a utility
+  // call (a title, a summary), which carries no job of its own.
+  if (onTurn && chatBody) {
+    try {
+      onTurn({ messages: chatBody.messages, agent, project, kind: callKind === 'main' ? 'main' : 'utility', headers: req.headers, taskId });
+    } catch { /* a label is never worth a request */ }
+  }
 
   const startTime = Date.now();
 

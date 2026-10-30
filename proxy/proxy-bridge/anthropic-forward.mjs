@@ -164,10 +164,15 @@ export async function handleAnthropicMessages(req, res, {
   // The daemon's job-class tagger (job-class.mjs) sees each completion request;
   // it returns at once and labels the turn in the background. Utility calls
   // (no tools at all: title and topic requests) and sub-agents carry no job of
-  // their own. Glass passes no onTurn.
+  // their own, nor does an automated run: the tagger reads that from the
+  // headers. This module imports nothing of the tagger's: glass bundles it and
+  // passes no onTurn.
   if (onTurn && isCompletion) {
     try {
-      onTurn({ messages: reqJson?.messages, agent, project, kind: isSubagent ? 'subagent' : toolNames.length ? 'main' : 'utility' });
+      onTurn({
+        messages: reqJson?.messages, agent, project, kind: isSubagent ? 'subagent' : toolNames.length ? 'main' : 'utility',
+        headers: req.headers,
+      });
     } catch { /* a label is never worth a request */ }
   }
 

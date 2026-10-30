@@ -80,6 +80,11 @@ and names the first that does the job as well. The tab lists each trial's verdic
 model's standing, the pairs side by side and what each answer missed. glass shows them read-only; they are started and accepted in coding's
 dashboard, where accepting one switches the job's model.
 
+**Classes** shows what kind of job each turn was (fix, build, ship, status, explain, …),
+once you switch labelling on: a cheap model of your own Copilot account labels every turn
+and a strong one re-checks a share. The tab has the switch, the gate per class, the taxonomy
+as a tree or a map, and the tokens per class. See [Job Classes](job-classes.md).
+
 ### How cost is calculated
 
 GitHub bills Copilot in AI credits ($0.01 each) per model and per token kind. glass
