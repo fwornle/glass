@@ -69,6 +69,11 @@
 // slice: the redactor has wedged a process on unbounded input. A redaction that
 // fails blocks the content, and a blocked turn is skipped, not sent.
 //
+// ── Kept for replay ──────────────────────────────────────────────────────────
+// A turn labelled with a class in `replay.keep` is also recorded, redacted, so a
+// replay can re-run it with a cheaper model (turn-record.mjs): every agent's
+// turns, from the one place they all pass through.
+//
 // Never throws into a request: every failure is a counter and a log line.
 
 import fs from 'node:fs';
@@ -77,6 +82,7 @@ import { parse as parseYaml } from 'yaml';
 import { turnIdentity } from './turn-identity.mjs';
 import { toolsInCurrentTurn } from './turn-band.mjs';
 import { toolMeta } from './context-turns.mjs';
+import { createTurnRecorder, turnStart } from './turn-record.mjs';
 
 /** Harness text that arrives as a user message but is nobody's job (mirrors the measurement's NOISE). */
 const NOISE = [
@@ -139,20 +145,23 @@ function cleanMessage(m) {
  * of them that is not harness text is the person's.
  */
 export function cleanTurnText(messages) {
+  return turnPrompt(messages).text;
+}
+
+/** The person's message of this turn and its cleaned text (cleanTurnText), or {message: null, text: ''}. */
+export function turnPrompt(messages) {
   try {
     const msgs = Array.isArray(messages) ? messages : [];
     // Back to the agent's last REPLY: its tool calls belong to this turn's loop.
-    let start = msgs.length;
-    while (start > 0 && !(msgs[start - 1]?.role === 'assistant' && !toolMeta(msgs[start - 1]))) start -= 1;
-    for (let i = start; i < msgs.length; i += 1) {
+    for (let i = turnStart(msgs); i < msgs.length; i += 1) {
       const m = msgs[i];
       if (m?.role !== 'user' || toolMeta(m)) continue;
       const t = cleanMessage(m);
-      if (t) return t;
+      if (t) return { message: m, text: t };
     }
-    return '';
+    return { message: null, text: '' };
   } catch {
-    return '';
+    return { message: null, text: '' };
   }
 }
 
@@ -211,6 +220,45 @@ export function resolveClass(tax, id) {
 export function versionTags(tax) {
   const v = Number.isInteger(tax.version) && tax.version >= 0 && tax.version < 1000 ? tax.version : null;
   return v === null ? [tax.tag] : Array.from({ length: v + 1 }, (_, k) => `${tax.name}-v${k}`);
+}
+
+/** The P1 gate: the teacher agrees with ≥ 90 % of a class's labels, over ≥ 20 checked turns. */
+export const GATE = Object.freeze({ precision: 0.9, minChecked: 20, days: 90 });
+
+/** A class's gate verdict from its teacher-checked turns. */
+export function gateVerdict({ sampled = 0, agree = 0 } = {}, gate = GATE) {
+  if (sampled < gate.minChecked) return 'collecting';
+  return agree / sampled >= gate.precision ? 'passes' : 'below';
+}
+
+/**
+ * Per class, how often the teacher (on its sampled turns) gave the label the
+ * turn got: that label's live precision. Labels of every version of `tax` (or,
+ * without one, every label as stored), merged classes resolved to the class
+ * that holds them now. The one count the summary API, the dashboard's gate and
+ * the routing floor (class-floor.mjs) all read.
+ *
+ * @param {{db: object, tax?: object|null, since: string}} o
+ * @returns {{byClass: Map<string, {sampled: number, agree: number}>, sampled: number, agree: number}}
+ */
+export function classAgreement({ db, tax = null, since }) {
+  const tags = tax ? versionTags(tax) : [];
+  const where = tags.length ? `AND taxonomy IN (${tags.map(() => '?').join(',')})` : '';
+  const resolve = (c) => (tax ? resolveClass(tax, c) : c);
+  const byClass = new Map();
+  const all = { sampled: 0, agree: 0 };
+  for (const r of db.prepare(`
+    SELECT job_class AS jobClass, teacher_class AS teacherClass, COUNT(*) AS n
+    FROM turn_job_class WHERE teacher_class != '' AND labelled_at >= ? ${where}
+    GROUP BY job_class, teacher_class`).all(since, ...tags)) {
+    const cls = resolve(r.jobClass);
+    const same = cls === resolve(r.teacherClass);
+    const p = byClass.get(cls) || { sampled: 0, agree: 0 };
+    p.sampled += r.n; if (same) p.agree += r.n;
+    byClass.set(cls, p);
+    all.sampled += r.n; if (same) all.agree += r.n;
+  }
+  return { byClass, ...all };
 }
 
 /** The classification request for `text` under `tax`, rendered as the measurement renders it. */
@@ -361,18 +409,26 @@ export const TURN_JOB_CLASS_DDL = `
 /**
  * @param {{
  *   getConfig: () => ({enabled: boolean, taxonomyPath: string, bindingsPath?: string, studentProcess: string,
- *     teacherProcess: string, teacherSamplePct: number, maxInFlight: number} | null),
+ *     teacherProcess: string, teacherSamplePct: number, maxInFlight: number,
+ *     replay?: {dir: string, keep: string[], captureScript?: string}} | null),
  *   complete: (body: object) => Promise<{content: string, provider?: string, model?: string, latencyMs?: number}>,
  *   db: object|null,          // better-sqlite3 handle (token DB), or null to keep labels in memory only
  *   redact?: (s: string) => string, // applied to the prompt before any model sees it
  *   log?: (msg: string) => void, logErr?: (msg: string) => void,
  *   random?: () => number, now?: () => Date,
+ *   startCapture?: Function,  // spawn, replaced in tests (turn-record.mjs)
  * }} deps
  */
-export function createJobClassTagger({ getConfig, complete, db, redact = null, log = () => {}, logErr = () => {}, random = Math.random, now = () => new Date() }) {
+export function createJobClassTagger({ getConfig, complete, db, redact = null, log = () => {}, logErr = () => {}, random = Math.random, now = () => new Date(), startCapture }) {
   const stats = { observed: 0, labelled: 0, teacherSampled: 0, skipped: {}, dropped: 0, failed: 0, invalid: 0, inFlight: 0 };
+  // Turns of the classes a replay re-runs (turn-record.mjs), decided by the label.
+  const recorder = createTurnRecorder({ redact, log, logErr, now, ...(startCapture ? { start: startCapture } : {}) });
   const seen = new Map(); // turn key → true; insertion-ordered, trimmed as an LRU
   const SEEN_MAX = 5000;
+  // turn key → the class it was labelled with, for the later calls of that turn
+  // (class-floor.mjs). Bounded like `seen`; a turn outlives its label by minutes.
+  const turnClasses = new Map();
+  const gates = new Map(); // taxonomy tag → {at, byClass}; the gate moves slowly
   const loaded = new Map(); // taxonomy file → {tax, mtime, error}
   let bindings = { path: '', mtime: 0, doc: null, error: '' };
   let insert = null;
@@ -478,10 +534,14 @@ export function createJobClassTagger({ getConfig, complete, db, redact = null, l
       };
       if (insert) insert.run(row);
       stats.labelled += 1;
+      turnClasses.set(key, { jobClass: resolveClass(t, student.label), tag: t.tag, file: meta.file || '' });
+      if (turnClasses.size > SEEN_MAX) turnClasses.delete(turnClasses.keys().next().value);
+      recorder.settle(cfg.replay, key, { jobClass: student.label, taxonomy: t.tag });
       log(`job-class: ${meta.agent || '-'} turn ${id.turn_index} → ${student.label}${teacher.label ? ` (teacher ${teacher.label})` : ''}`);
     } catch (err) {
       stats.failed += 1;
       seen.delete(key); // a later call of the same turn may try again
+      recorder.drop(key);
       logErr(`job-class: student failed (${err?.message || err})`);
     } finally {
       stats.inFlight -= 1;
@@ -502,9 +562,11 @@ export function createJobClassTagger({ getConfig, complete, db, redact = null, l
       const id = turnIdentity(messages, agent);
       if (!id.conversation_key || !(id.turn_index > 0)) return skip('no-turn');
       if (toolsInCurrentTurn(messages)) return skip('mid-loop');
+      // A turn's first call carries the reply that ended the one before it.
+      recorder.answer({ id, messages });
       const key = `${id.conversation_key}:${id.turn_index}`;
       if (seen.has(key)) return skip('seen');
-      const text = cleanTurnText(messages);
+      const { message, text } = turnPrompt(messages);
       // Not marked seen when there is nothing to label: a request the agent
       // makes between turns (Claude Code's next-prompt suggestion) carries the
       // NEXT turn's identity, and marking it hid the person's real prompt at
@@ -519,7 +581,8 @@ export function createJobClassTagger({ getConfig, complete, db, redact = null, l
       if (!file) return skip('taxonomy-conflict');
       const t = taxonomy(file);
       if (!t) return skip('no-taxonomy');
-      label(key, id, { agent, project }, t, safe, cfg);
+      recorder.begin(cfg.replay, key, { id, agent, project, messages, message });
+      label(key, id, { agent, project, file }, t, safe, cfg);
     } catch (err) {
       stats.failed += 1;
       logErr(`job-class: observe failed (${err?.message || err})`);
@@ -533,13 +596,37 @@ export function createJobClassTagger({ getConfig, complete, db, redact = null, l
     return all.find((e) => e.tag === tag)?.tax || null;
   }
 
+  /**
+   * Each class's gate verdict under a taxonomy, from its teacher-checked turns
+   * (classAgreement). Recounted at most every `ttlMs`; {} without a DB.
+   * @returns {Record<string, {sampled: number, agree: number, verdict: string}>}
+   */
+  function gate(tag, { ttlMs = 5 * 60_000 } = {}) {
+    const tax = taxonomyByTag(tag);
+    if (!db || !tax) return {};
+    const hit = gates.get(tax.tag);
+    if (hit && now().getTime() - hit.at < ttlMs) return hit.byClass;
+    const since = new Date(now().getTime() - GATE.days * 86_400_000).toISOString();
+    const byClass = {};
+    try {
+      for (const [cls, p] of classAgreement({ db, tax, since }).byClass) byClass[cls] = { ...p, verdict: gateVerdict(p) };
+    } catch (err) {
+      logErr(`job-class: gate unreadable (${err?.message || err})`);
+    }
+    gates.set(tax.tag, { at: now().getTime(), byClass });
+    return byClass;
+  }
+
   return {
     observe,
+    /** The class a turn was labelled with, once its label is in; null before. */
+    turnClass: (key) => turnClasses.get(key) || null,
+    gate,
     taxonomy: taxonomyByTag,
     taxonomies: () => taxonomies().map(({ tax: _tax, ...e }) => e),
     stats: () => {
       const all = taxonomies();
-      return { ...stats, skipped: { ...stats.skipped }, taxonomy: all[0]?.tag || null, taxonomyError: all[0] && !all[0].tax ? all[0].error : null,
+      return { ...stats, skipped: { ...stats.skipped }, replay: recorder.stats(), taxonomy: all[0]?.tag || null, taxonomyError: all[0] && !all[0].tax ? all[0].error : null,
         taxonomies: all.map(({ tax: _tax, ...e }) => e), conflicts: bindings.doc?.conflicts || [] };
     },
   };
