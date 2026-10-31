@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "f2ab7125f7fa67e512487ffc3b64d550e1616a62",
+      "sha": "9d07c9ff25782fb282960e51e847ac99c5555acf",
       "dirty": false
     },
     "proxy": {
@@ -24,7 +24,7 @@
     "bin/glass.mjs": "46b6f2865bf9523761abe0c8773d94ddbdc575a228dff4215eedf7bfad9e3dcd",
     "config/job-classes.yaml": "6381143a74b36460b1ca9c89f16a8af93869c3687b7c73595352c7c4049ef3c6",
     "config/redaction/redaction-patterns.json": "ecb7af900c74b48e176aa2f5f13b33de2ba3bd0b6fc12cf0b4d348d098f56ac8",
-    "docs/_tiers/architecture.deep.md": "f4c06099ee1f1c126b14d679453267a3027a31c4c6766f01aeac14abd501b59b",
+    "docs/_tiers/architecture.deep.md": "2c9725cca0093c3aa815641815cd20fb262b45f242f4a29529300775460ec596",
     "docs/_tiers/comparing-runs.deep.md": "3ed0ce91a25f992913cf4e51951696a55f8a429fb4348bfe883cabd4cd1b4e77",
     "docs/_tiers/context-window.deep.md": "c424c11fac5a2c2f58398fe633f97627aaf2c2d7f1da0232a6d43c84ad58e26b",
     "docs/_tiers/development.deep.md": "ae1a48bf98dee066d1452891b9189d681ea6629679dbd735080e7ae3b684a4dc",
@@ -37,7 +37,7 @@
     "docs/_tiers/reference.deep.md": "065e5734d84538116e67066d500e6e97ab5af1f819cfde976eaa6201425f27de",
     "docs/_tiers/status-line.deep.md": "1a6642376f93ff7e5b90d656c88ff665fb6f9f6126d9bb372f98cba9563ec3e0",
     "docs/_tiers/token-usage.deep.md": "7d5b483385effbd7d63debe180d5b07d48476512ebbab0a6d01c1a73d11f8900",
-    "docs/_tiers/troubleshooting.deep.md": "3d76030a22fc112c0add1e6686d648a52c6947c3af8abe4bb324956c8d822a22",
+    "docs/_tiers/troubleshooting.deep.md": "d993228d4abe35ea0d34f47f99d2aa8bd7f233cdefa4154c7a4e404f7aa90b5a",
     "docs/architecture.md": "52619aeca9b44bdf520867169e55e69f9b4daf48c73ed71e78688139b538cf93",
     "docs/assets/header-decks.js": "4a9750e99062ab17df023638cddb9b62b97b43e98fb8b79f3de7d4dbe572fe11",
     "docs/assets/overview.css": "67599b26fcb82c3e8f8a60b4d372fcd4f041ceb4b4a2d4657887c1ff766cb625",
@@ -97,7 +97,7 @@
     "docs/reference.md": "f9bf572443979643facf7e6ec099546230b05467e0dbbc4a6ede70fbad14a39f",
     "docs/status-line.md": "b1cfd9f973581e5cb762fcd71c1c570cd4eb08c3de49c0577827c798bfa01177",
     "docs/token-usage.md": "e5c917a6dbf5c3ea4d9d0f6e609d5ad3516e8372c5273a2978d3212ed481ed05",
-    "docs/troubleshooting.md": "8a9d54318fe240dd742e67e48bf9e56aa568e1aba6253f1d497f458876aa6854",
+    "docs/troubleshooting.md": "0ddd85634c6b907142071273599e50409e92531e50305902d34569c2fba7bbb8",
     "lib/attribution/repo-router.mjs": "84e75fa2cfd8028c43fd50956dcbfb44006081838f09718d395bf6c6d8b94192",
     "lib/cost/billing-rules.mjs": "f262b9b2f0d4ebd7e17a0227b6c130eb3278f2901dc9196290209bf8cdaf7636",
     "lib/cost/copilot-pricing.mjs": "9459a0a9609ef0dc001386d7126c7b48e1084efaa5da1c149b98ffacd5d88d97",
@@ -156,7 +156,7 @@
     "lib/teams/config.cjs": "724aae3dfeb3246aec20679a71566a9406c99d06afbb8f99c51ad026f5b6a5a0",
     "mkdocs.yml": "8a6413ad8bd2e2e3da981820902a451f3a8883450968a7477ef0997c36a79c0a",
     "overrides/main.html": "58bef75c205f2ecf969addf151ae02b35b434c1a6b527dce12d153a9005fc42f",
-    "package.json": "9384a757098ded9c87a4743637e707e18abba8419a14f299691ef6c901268f8e",
+    "package.json": "ecb844ce2b609aa8ef20f13e956239e15fd01b1ce0cfe3f3324e39e9c68943b6",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "de8adbe242bbb8016aed718ca082c597a48098c42e25dd00ef480d76d1936251",
