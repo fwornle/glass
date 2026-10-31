@@ -4,7 +4,7 @@
  * and /api/job-classes/coverage (the coverage map). One implementation for the
  * proxy (server.mjs) and glass's daemon, which serve the same dashboard tab.
  */
-import { jobClassCoverage, resolveClass, versionTags } from './job-class.mjs';
+import { classAgreement, jobClassCoverage, resolveClass, versionTags } from './job-class.mjs';
 
 const NOT_MINE = Symbol('not a job-class read');
 
@@ -18,12 +18,13 @@ const NOT_MINE = Symbol('not a job-class read');
  * @param {string} o.referenceDir where the measurement writes `<scope>/reference-<tag>.jsonl`
  * @param {Function} o.config     () => the tagger's config, for the counters' "enabled"
  * @param {Function} o.sinceBootMs
+ * @param {object} [o.floor]      createClassFloor(...): its counters, as `routing` (not in glass)
  */
 export function handleJobClassRead(req, res, o) {
   return serve(req, res, o) !== NOT_MINE;
 }
 
-function serve(req, res, { tagger, db, referenceDir, config, sinceBootMs }) {
+function serve(req, res, { tagger, db, referenceDir, config, sinceBootMs, floor = null }) {
 // Job classes (job-class.mjs): the tagger's counters, and tokens by class.
 // `summary` joins turn_job_class to token_usage on the turn identity, so a
 // class's tokens are every call of the turns labelled with it.
@@ -31,7 +32,8 @@ if (req.method === 'GET' && (req.url === '/api/job-classes' || req.url?.startsWi
   let cfg = null;
   try { cfg = config(); } catch { /* reported as enabled:false */ }
   res.writeHead(200, { 'Content-Type': 'application/json' });
-  return res.end(JSON.stringify({ enabled: cfg?.enabled === true, config: cfg, sinceBootMs: sinceBootMs(), ...tagger.stats() }));
+  return res.end(JSON.stringify({ enabled: cfg?.enabled === true, config: cfg, sinceBootMs: sinceBootMs(), ...tagger.stats(),
+    ...(floor ? { routing: floor.stats() } : {}) }));
 }
 // How the taxonomy covers each project's prompts: the live labels and the
 // offline reference set (coding scripts/measure-job-classes.mjs writes it into
@@ -89,19 +91,8 @@ if (req.method === 'GET' && req.url?.startsWith('/api/job-classes/summary')) {
     // Per class, how often the teacher (on its sampled turns) gave the label
     // the student did: the student's live precision for that class. A separate
     // query, because the join above multiplies each turn by its calls.
-    const pc = new Map();
-    const agreement = { sampled: 0, agree: 0 };
-    for (const r of db.prepare(`
-      SELECT job_class AS jobClass, teacher_class AS teacherClass, COUNT(*) AS n
-      FROM turn_job_class WHERE teacher_class != '' AND labelled_at >= ? ${whereJ}
-      GROUP BY job_class, teacher_class`).all(since, ...tags)) {
-      const cls = resolve(r.jobClass);
-      const same = cls === resolve(r.teacherClass);
-      const p = pc.get(cls) || { sampled: 0, agree: 0 };
-      p.sampled += r.n; if (same) p.agree += r.n;
-      pc.set(cls, p);
-      agreement.sampled += r.n; if (same) agreement.agree += r.n;
-    }
+    const { byClass: pc, sampled, agree } = classAgreement({ db, tax, since });
+    const agreement = { sampled, agree };
     for (const r of byClass) { r.teacherSampled = pc.get(r.jobClass)?.sampled || 0; r.teacherAgree = pc.get(r.jobClass)?.agree || 0; }
     const recent = q.get('recent') ? db.prepare(`
       SELECT conversation_key AS conversationKey, turn_index AS turnIndex, agent, project, job_class AS jobClass,

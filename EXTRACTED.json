@@ -3,15 +3,15 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "fc7fc46aa2422e60437f7573b0d04afbf57bb47b",
+      "sha": "99715feb4e0729b9aa83fbfba8dadae45c5a8b53",
       "dirty": false
     },
     "proxy": {
-      "sha": "ff2a939d015e30ea3e5f79c4800f541207f60f9d",
+      "sha": "4b5c810dd72880eeb1983171463fac779c156ade",
       "dirty": false
     }
   },
-  "manifest": "29b434188f61a2aa81f2859ec64027f1251ca1107cea087c1c189a17a426825f",
+  "manifest": "720b45e593b6ec352db3b02e3236dcc2f0dbf1e98d7249b092abd5675cd4a0b4",
   "files": {
     ".gitguardian.yaml": "a766a085a4ff9ddecfd1176b50616bd5a24e5b51506b4171d6d303193ce760cc",
     ".github/workflows/ci.yml": "c3f08263c3a99b15e7eee54e056f75cc6b3272b3a732f572d4f95772ea12f8a5",
@@ -156,7 +156,7 @@
     "lib/teams/config.cjs": "724aae3dfeb3246aec20679a71566a9406c99d06afbb8f99c51ad026f5b6a5a0",
     "mkdocs.yml": "8a6413ad8bd2e2e3da981820902a451f3a8883450968a7477ef0997c36a79c0a",
     "overrides/main.html": "58bef75c205f2ecf969addf151ae02b35b434c1a6b527dce12d153a9005fc42f",
-    "package.json": "094f70f7a286d67e355ce4640799b11d4895d7cd83b0da6f6a965acf4c2672b7",
+    "package.json": "85eaa83ea158c22861cb65c68b7db43bdd865785265d2bb864e3e11c75fb026f",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "de8adbe242bbb8016aed718ca082c597a48098c42e25dd00ef480d76d1936251",
@@ -167,8 +167,8 @@
     "proxy/proxy-bridge/context-turns.mjs": "527f15080d15b9c1e539cdf9aba227238dcd0459d34ddb258248f5371e3d1745",
     "proxy/proxy-bridge/db-open.cjs": "1758e739d32485ec95a71371d06436cb0f54bab353b3df1e91decc414ca991ef",
     "proxy/proxy-bridge/intercept.mjs": "2dc2773c21986cfda5a221ef75dcf2a89136a434fdc6ae6c16c1c972f9d4929a",
-    "proxy/proxy-bridge/job-class-api.mjs": "61c634f41a36aab479ae3ebb95cc705b346ed807db58047436a6765bafa1d03e",
-    "proxy/proxy-bridge/job-class.mjs": "55b1fc8cdd38e1ed500afaf4a1b509f99091f56a30d004f99d032f0a3885cf06",
+    "proxy/proxy-bridge/job-class-api.mjs": "68ecd18e554fe64c8b8c102b72f5e945a24bc03e60d1e7e2ca31495f1514f13a",
+    "proxy/proxy-bridge/job-class.mjs": "eb6fcd02c80749203062d6ff71d45701589508a3c52f503b9f762817cdac77a8",
     "proxy/proxy-bridge/log-format.mjs": "38a400f263a7df48d61dc08212f601f8f34a375a02dfc9f739b7a1b89541c7b0",
     "proxy/proxy-bridge/measurement.mjs": "8b67eb46e5b592eb32a13f62fb9c55adfda460db394452500c53c9fe07b38e64",
     "proxy/proxy-bridge/model-canonical.mjs": "cecffe2ae82b8faca557fecd4fc41378ac48450a220d48cad9b00e5b7deafa58",
@@ -182,6 +182,7 @@
     "proxy/proxy-bridge/shim-tools.mjs": "e5e6692500f9a52fdbfba8c4baf94e0ac0cb77101dc93e9bee74fe1e3b80a107",
     "proxy/proxy-bridge/turn-band.mjs": "6f7a6e301266b5f428ccbe8203b71e6304f504756d43248bb84420d7eaa6dbef",
     "proxy/proxy-bridge/turn-identity.mjs": "9cdc1ce419f4bfc995cbf21d55b6376d957b2ea507fd544356a5d536666ca1da",
+    "proxy/proxy-bridge/turn-record.mjs": "0819dd28c27cdb302c7cb22e6fdf12f39b87034082458988134fcc80fbecd047",
     "proxy/proxy-bridge/usage-api.mjs": "62a73df7af8f02433e4cf4a3fa370ca557ad6bcb6253dd38b80b1b550b1e60f0",
     "scripts/measurement-reconciler.mjs": "ad1c27f8542855bfed4c5f3dc0cbb1fe62ba9ae315c40cde57930f530807ae97",
     "tests/coexist.test.mjs": "11c0f6dfb77bf4214ecbbcb0f7323e9f48d9737f3962c51558d18d46f3ee956a",
