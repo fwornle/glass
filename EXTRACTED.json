@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "d7407146b1baa20ddd14bbe21ca76d0ddf54f8d2",
+      "sha": "823a03249d2f944e97a2d5d378b2955ae5f3cad3",
       "dirty": false
     },
     "proxy": {
@@ -136,7 +136,7 @@
     "lib/job-classes/prompts.mjs": "18e5a1a5b49e103bcc5d4cee1cb25b11ba126f6d89b4c36889a0b8c2c658fdc7",
     "lib/lsl/adapters/claude-subagent-path.mjs": "1bc309a3f9b28a760c8c3af2a1f69cbbaa8d9fcf327d12275d8d405cc32a60df",
     "lib/lsl/adapters/index.mjs": "48d77734109f3b33dbb3100ce1312eef743bc23cfad2107302bfddb9b8998896",
-    "lib/lsl/token/claude-token-rows.mjs": "a25c0f83ce0e8cff4b084b3b601df72674f897dd803d4ab38827add7009e7235",
+    "lib/lsl/token/claude-token-rows.mjs": "8c3af7aa3ffa84edabe2e673d8f35c344361fd8129004a1d1e8a395b2c7ae477",
     "lib/lsl/token/copilot-token-rows.mjs": "12b7bbdd076450119d76857b5dca59f10988a7085ff19ad7f3c9916280f3ba84",
     "lib/lsl/token/opencode-token-rows.mjs": "34dc7f54350c95bc9478646684cb68058e3d56ab162ca85028a3083baf935994",
     "lib/lsl/token/project-of.mjs": "0ff51fa9e962719ccf8a4638c53d650d8f24c37484a98319029744469901738b",
@@ -163,7 +163,7 @@
     "lib/teams/config.cjs": "724aae3dfeb3246aec20679a71566a9406c99d06afbb8f99c51ad026f5b6a5a0",
     "mkdocs.yml": "2c0a1691cb9f1555c694cdfc537c127b3d85cac29cd80f1a533aa270e65afe71",
     "overrides/main.html": "58bef75c205f2ecf969addf151ae02b35b434c1a6b527dce12d153a9005fc42f",
-    "package.json": "b87bce240422630da42e1b9f449de3380b0855de403054182bfe5c2d6331b8d9",
+    "package.json": "eb0654cae207b6c056786e1ed65a9bb2b3dbdb9abee26721e8ea65fdc6936336",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "de8adbe242bbb8016aed718ca082c597a48098c42e25dd00ef480d76d1936251",
