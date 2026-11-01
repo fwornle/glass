@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "44cac4be1ea85b60df91bbc7974b56df821f8812",
+      "sha": "a8227fd320996e1c452103f7004e821735b1c216",
       "dirty": false
     },
     "proxy": {
@@ -72,7 +72,7 @@
     "docs/images/ui-job-classes-team.png": "b0ef408c3093275385023d1a4c05489f4e2b6ce6d0ff47ffa34606e0aafdda56",
     "docs/images/ui-job-classes-tree.png": "f2e01ef8b2d4b455a28063ab9277db7a48f69cda6480a22cfbea985db9d3474b",
     "docs/images/ui-job-classes-try.png": "d99e2e70ef3de0677c83836c1632a71d3bc2db727911c3d4a6a1f55e00f6d6c0",
-    "docs/images/ui-models-flow-offload.png": "289478670a68694527574a36f28113527f505463ae0e91862c0ee0a98bde3ea2",
+    "docs/images/ui-models-flow-offload.png": "60d8d7e2676849a519d03b090728123c3e852cf088c2ee5fd71a3a6f38cb69ca",
     "docs/images/ui-models-flow.png": "aed2d4c3d6ad4a4135cc7b2a0e39b6beac27d8d86cdac2ae892178dada9e3553",
     "docs/images/ui-models.png": "5bc796db9e0b583710a141191073d0a01caf88de3b3c6655d4a60fac811bd33f",
     "docs/images/ui-offload-dialog.png": "212cf85c47bfc1f406943f18dc3bf923b33395c15a983a6c85a886779790923d",
@@ -90,7 +90,7 @@
     "docs/job-classes-overview.md": "1b57761b3d83733c2d5aead1c2dcaf1433ddab0584a89f19a86e5d5dc4ca28e3",
     "docs/job-classes.md": "3b5d97e314f802749679a69c85ea5ef98c1217379875a588856a15a33c2feba7",
     "docs/models.md": "18ac39af30c87dde5fb4f28ff0d443fd9770a32629c2d33a7a8a34d260bdfbd9",
-    "docs/offload.md": "2ffad37c5da331cea51bdce148cdd07a99c765c54d8bd8e4bed96008d0266347",
+    "docs/offload.md": "c43f6ce73bdbf88618879aa595918a088db137d0e8c421d58d9056645bd40104",
     "docs/overview.md": "4737955a6f97efb499fe534ed8b5221ba1fc11256a5ded10dd01a9b5bcd09d6a",
     "docs/privacy.md": "1c1afb5ed34edd01478a9f6271458238d88f90d24c329c426a1eea94f2d28536",
     "docs/puml/_standard-style.puml": "c0d793f8dbcbf305650674089ee9df0e3298e136ea29d10bab588cdddbba5c8f",
@@ -167,7 +167,7 @@
     "lib/teams/config.cjs": "724aae3dfeb3246aec20679a71566a9406c99d06afbb8f99c51ad026f5b6a5a0",
     "mkdocs.yml": "6b3cd0732379661554ee9ef2c0a500d464923b7f62dfb95dfb605d9e38595568",
     "overrides/main.html": "58bef75c205f2ecf969addf151ae02b35b434c1a6b527dce12d153a9005fc42f",
-    "package.json": "cc82b0d40961cf0430bc31f81a8dd71a85c2c99cb648ae2434f2f6d6e24db1db",
+    "package.json": "cc434e28f70793bea202d711852188283ad3d8e963565a4c89a73bd0521f4382",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "de8adbe242bbb8016aed718ca082c597a48098c42e25dd00ef480d76d1936251",
@@ -206,16 +206,16 @@
     "tests/provenance.test.mjs": "2cd499bb23d6d2e7ac9f3628f370509971dc7be64a293b50c7a9051f85241916",
     "tests/statusline.test.mjs": "b88e8b559a889dc2d64544f4c4d4f10419e6fb799e8c24b5c567521cc70f5ab4",
     "tests/update.test.mjs": "90a3c1afe9925ee2bdb03ca4b93f8b01967a73ecb78386d48dde4fceeb16a754",
-    "ui/assets/CostTab-BqEFp9EL.js": "271fc1f988536c9eef28c4ce7012ab5646275c0bd32ae940403bced63bc7d574",
-    "ui/assets/JobClassesTab-DsR41__k.js": "082f7bb5c1112fc407094f7dd321db100422279367cdbfa0fe332ebc1d18785b",
-    "ui/assets/TrialsTab-B7a13WQ8.js": "768fdc879e66341cba0bb15f83bb5124c29908923d0bf0e50065f5ca4396e4de",
+    "ui/assets/CostTab-rPh2YJla.js": "0fdbfb7cbbaf4d8021249a5c9554e7ece2402874976bbfe4141a4f3fe0fe6ea8",
+    "ui/assets/JobClassesTab-B5fKBZqZ.js": "c9c1701d691c8e693c89a38aa9de0762b5c41a8b03d9019164059403f00a4362",
+    "ui/assets/TrialsTab-COLx88Cg.js": "0db954405e23d6a75ee854ff193dd2f75212f3d1879294ed525007288955086d",
     "ui/assets/index-CTrDsGjo.css": "654568cc3b9b792ef3a0c4046125589312c5a1918fbd40741699a2f5409c7a03",
-    "ui/assets/index-pJPGCuFq.js": "d802ac98fcadd832b234d1ba8fac40e1a5bacd188e0ee833a3ee0ff2e5cc36aa",
+    "ui/assets/index-D163XaVV.js": "70478e63ceeca1f749f9675164de72d61f7b5bf222bb2b4c2cd2f42222cd2189",
     "ui/assets/omitted-Be0_Qxkl.js": "166d9bf3626149b25a8a52b6c7c123fd5da132c215f410ae6a2d86e0781fa4a3",
     "ui/assets/vendor-charts-BqUKQC6_.js": "c5f49d94ae3e27cacc4a2a2f1ace34eebd3a164c4757fa2b4941708b3a3ee2dc",
     "ui/assets/vendor-icons-BkXw8NkE.js": "26ab9952a6dfbc4b7bed1747be5d6ca80884213a457d3cc40d138f72393149e9",
     "ui/assets/vendor-react-BixgUiYW.js": "84207fbc9bd45aef633cc3d9e883f2fd4c0ae2c99df3f920d9ba14883a464cc6",
     "ui/assets/vendor-redux-XJVtE8Si.js": "0430373614e66c5e7250f6605a1abcae05c64dd9fa26ca4c1570fbd79aff8aaa",
-    "ui/index.html": "06581863af478dd87db40715ea6d75d471b5517194ee4909e147727e77e77296"
+    "ui/index.html": "fbe24063d88951149955939c7a6ed9f1f523b337f9508858471b7ee73e1de578"
   }
 }
