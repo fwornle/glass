@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "afe9c75cb881aba7ff752705759a699833933515",
+      "sha": "74b4f5a47083f9280d28e217bc7d9e49fd104202",
       "dirty": false
     },
     "proxy": {
@@ -11,7 +11,7 @@
       "dirty": false
     }
   },
-  "manifest": "720b45e593b6ec352db3b02e3236dcc2f0dbf1e98d7249b092abd5675cd4a0b4",
+  "manifest": "2101941233e8ed6f5084d73807c5ca56edf21c8c7f3d78712fd1005486ea07f5",
   "files": {
     ".gitguardian.yaml": "a766a085a4ff9ddecfd1176b50616bd5a24e5b51506b4171d6d303193ce760cc",
     ".github/workflows/ci.yml": "c3f08263c3a99b15e7eee54e056f75cc6b3272b3a732f572d4f95772ea12f8a5",
@@ -31,7 +31,7 @@
     "docs/_tiers/getting-started.deep.md": "50ca12cabe6f7ea3c6e26e2c6fbdf4ebdc6bc8a6dc4be759963b15ae773fe9fd",
     "docs/_tiers/index.deep.md": "22414c7eb8610a54a6d37c8f0e089eda2a07e3e6bee96414ae860d4482c295ed",
     "docs/_tiers/job-classes.deep.md": "c8c3bfb3b10c825e98c8b6b3934674ae0b7f906532650afb3093c43b32a7c032",
-    "docs/_tiers/models.deep.md": "c36ff6e3ee6f4575e1dac1a3bf94cf732e3c3f9d35ff703ef59863843637a4b5",
+    "docs/_tiers/models.deep.md": "f030abb316f8963dedde4c6a367f38f1ffb4cbeaf27fcc89fafe6c28b963ce9f",
     "docs/_tiers/offload.deep.md": "6fd7736749489e3f989b17f019a51e4d30f03dd18ba0fc4c79951062423132c1",
     "docs/_tiers/privacy.deep.md": "7f4de706f77a83390b6e20518a16eae193b76df7a7d4a424c5d6981fad3e63c9",
     "docs/_tiers/reference.deep.md": "065e5734d84538116e67066d500e6e97ab5af1f819cfde976eaa6201425f27de",
@@ -72,11 +72,13 @@
     "docs/images/ui-job-classes-team.png": "b0ef408c3093275385023d1a4c05489f4e2b6ce6d0ff47ffa34606e0aafdda56",
     "docs/images/ui-job-classes-tree.png": "f2e01ef8b2d4b455a28063ab9277db7a48f69cda6480a22cfbea985db9d3474b",
     "docs/images/ui-job-classes-try.png": "d99e2e70ef3de0677c83836c1632a71d3bc2db727911c3d4a6a1f55e00f6d6c0",
+    "docs/images/ui-models-flow-anthropic.png": "ad26ed6159252a39f8a16c81d261bec99308015ead6b6af44ac31f2e4dbc5d02",
+    "docs/images/ui-models-flow-endpoint-card.png": "40faafaf280425cf0799730b248c962e14d149bbdb31892df6a07440f4914f1f",
     "docs/images/ui-models-flow-offload.png": "60d8d7e2676849a519d03b090728123c3e852cf088c2ee5fd71a3a6f38cb69ca",
-    "docs/images/ui-models-flow.png": "aed2d4c3d6ad4a4135cc7b2a0e39b6beac27d8d86cdac2ae892178dada9e3553",
+    "docs/images/ui-models-flow.png": "6637e5589befdc4073a56ca5d7b20b7ceca60d8cc361cb209702fbd80660cb90",
     "docs/images/ui-models.png": "5bc796db9e0b583710a141191073d0a01caf88de3b3c6655d4a60fac811bd33f",
     "docs/images/ui-offload-dialog.png": "212cf85c47bfc1f406943f18dc3bf923b33395c15a983a6c85a886779790923d",
-    "docs/images/ui-session-models.png": "bb4503f0a5c088b6b76c28d088b7dfa3e5d0fc9c52e4ff01fde3513faab638d2",
+    "docs/images/ui-session-models.png": "335db119cfcf26a4a1e1dc1a388958f85a883200d4013cb65d69ddc138cac71a",
     "docs/images/ui-session-timeline.png": "031e0749a6a6f928d0ba344fef05b1c8b32b6d67f353da49bb6802d81b6c7fc0",
     "docs/images/ui-sessions-one-task.png": "34e8d347d322dd1ffae8cbb0a16f9f845743a64e23fc8da6ade69f44459ec20c",
     "docs/images/ui-sessions.png": "60e1acf006c1ae56f721a2cbc081f5984206c80f2c282f5a264714ced5f61412",
@@ -89,9 +91,9 @@
     "docs/index.md": "ad7afe63cf25578ecf684f8a5f4164165dfedc3fad3ccdb6bed00ff338c0afaa",
     "docs/job-classes-overview.md": "1b57761b3d83733c2d5aead1c2dcaf1433ddab0584a89f19a86e5d5dc4ca28e3",
     "docs/job-classes.md": "3b5d97e314f802749679a69c85ea5ef98c1217379875a588856a15a33c2feba7",
-    "docs/models.md": "18ac39af30c87dde5fb4f28ff0d443fd9770a32629c2d33a7a8a34d260bdfbd9",
+    "docs/models.md": "052cdb1859851266dc99771cfd48b73babff810e429d36e1c0ae3f049cc8cc17",
     "docs/offload.md": "c43f6ce73bdbf88618879aa595918a088db137d0e8c421d58d9056645bd40104",
-    "docs/overview.md": "4737955a6f97efb499fe534ed8b5221ba1fc11256a5ded10dd01a9b5bcd09d6a",
+    "docs/overview.md": "2a53482b7c6453fb1477965432758abc99221de8923d8379df70a054c759b46b",
     "docs/privacy.md": "1c1afb5ed34edd01478a9f6271458238d88f90d24c329c426a1eea94f2d28536",
     "docs/puml/_standard-style.puml": "c0d793f8dbcbf305650674089ee9df0e3298e136ea29d10bab588cdddbba5c8f",
     "docs/puml/glass-architecture.puml": "13deb60bf051f94f60fb0b0007d4f258202d2140bfdcf344815ad2b7c094c430",
@@ -167,7 +169,7 @@
     "lib/teams/config.cjs": "724aae3dfeb3246aec20679a71566a9406c99d06afbb8f99c51ad026f5b6a5a0",
     "mkdocs.yml": "6b3cd0732379661554ee9ef2c0a500d464923b7f62dfb95dfb605d9e38595568",
     "overrides/main.html": "58bef75c205f2ecf969addf151ae02b35b434c1a6b527dce12d153a9005fc42f",
-    "package.json": "557601c84b6b6c48fe74a77bf6447435ef610565996385adf7b114d55c8436a4",
+    "package.json": "163f56343c4c95a2cf2c23151937f720899205d5119157c7ccac8eede38efacf",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "de8adbe242bbb8016aed718ca082c597a48098c42e25dd00ef480d76d1936251",
