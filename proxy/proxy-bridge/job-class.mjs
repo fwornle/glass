@@ -409,7 +409,7 @@ export const TURN_JOB_CLASS_DDL = `
 /**
  * @param {{
  *   getConfig: () => ({enabled: boolean, taxonomyPath: string, bindingsPath?: string, studentProcess: string,
- *     teacherProcess: string, teacherSamplePct: number, maxInFlight: number,
+ *     teacherProcess: string, teacherSamplePct: number, teacherSampleByClass?: Record<string, number>, maxInFlight: number,
  *     replay?: {dir: string, keep: string[], captureScript?: string}} | null),
  *   complete: (body: object) => Promise<{content: string, provider?: string, model?: string, latencyMs?: number}>,
  *   db: object|null,          // better-sqlite3 handle (token DB), or null to keep labels in memory only
@@ -520,7 +520,10 @@ export function createJobClassTagger({ getConfig, complete, db, redact = null, l
       const student = await ask(cfg.studentProcess, t, text);
       if (student.label === 'invalid') stats.invalid += 1;
       let teacher = { label: '', model: '' };
-      if (random() < cfg.teacherSamplePct) {
+      // A class's own share (teacherSampleByClass) overrides the default, so a
+      // class that is meant to reach its gate is checked more often.
+      const share = cfg.teacherSampleByClass?.[resolveClass(t, student.label)] ?? cfg.teacherSamplePct;
+      if (random() < share) {
         stats.teacherSampled += 1;
         try { teacher = await ask(cfg.teacherProcess, t, text); } catch (err) { logErr(`job-class: teacher failed (${err?.message || err})`); }
       }

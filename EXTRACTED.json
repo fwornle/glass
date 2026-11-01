@@ -3,11 +3,11 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "99715feb4e0729b9aa83fbfba8dadae45c5a8b53",
+      "sha": "0840ce736129d5f2b7c0635b3bb4263140fc72ac",
       "dirty": false
     },
     "proxy": {
-      "sha": "4b5c810dd72880eeb1983171463fac779c156ade",
+      "sha": "6d8a85bb0834da4a47abe9944015829e82363ea3",
       "dirty": false
     }
   },
@@ -31,7 +31,7 @@
     "docs/_tiers/getting-started.deep.md": "50ca12cabe6f7ea3c6e26e2c6fbdf4ebdc6bc8a6dc4be759963b15ae773fe9fd",
     "docs/_tiers/index.deep.md": "22414c7eb8610a54a6d37c8f0e089eda2a07e3e6bee96414ae860d4482c295ed",
     "docs/_tiers/job-classes.deep.md": "2eeb698c4d0f2a24aec8c9c4a7a5be9b3274d411bef7b939b0a98599b5a1dd81",
-    "docs/_tiers/models.deep.md": "546ae607367ccd2a8332fc278035722ce31ef391291362bd0f4f0946fb17627e",
+    "docs/_tiers/models.deep.md": "afd3512725505ad0dfc47076b89c7e22a64ddf3bf80bd808b12864c855817908",
     "docs/_tiers/offload.deep.md": "6fd7736749489e3f989b17f019a51e4d30f03dd18ba0fc4c79951062423132c1",
     "docs/_tiers/privacy.deep.md": "7f4de706f77a83390b6e20518a16eae193b76df7a7d4a424c5d6981fad3e63c9",
     "docs/_tiers/reference.deep.md": "065e5734d84538116e67066d500e6e97ab5af1f819cfde976eaa6201425f27de",
@@ -121,7 +121,7 @@
     "lib/glass/spawn.mjs": "8c22ac61f224041115c9212af72dcc7711ea309630b6521bf490591966e5d8af",
     "lib/glass/statusline.mjs": "6353c86e647724ac4795767c63577731e7a6e8f706c2f402de08a2e130f6ecec",
     "lib/glass/tmux.mjs": "9cd3e484062dd2b703cd7960c55560fb10c6369a91f136b2161017311ea5f745",
-    "lib/glass/ui-api.mjs": "7751adc6c5ce4d54f4b6a5e869ff6ae8fb43c0bbf5d97fb18f9b70f408f23859",
+    "lib/glass/ui-api.mjs": "ce12a836df6cb174d88895e5560a288ef00607049d3b001ca400ac8ef4ae2256",
     "lib/glass/update.mjs": "24fc4e17f7079ec432d8d900371f888ae2a62a9f0cdf0eaf59b64b05e4e24434",
     "lib/glass/wiring.mjs": "eb61d323b6154d0c0873a4601f1a070bd4c4544aae146f7e4cc20ded3cbe9647",
     "lib/job-classes/measure.mjs": "5e1ea45c177af3514561464bc7416cb7ce8c78f9c6e0fb670975e61330bcc2bb",
@@ -156,7 +156,7 @@
     "lib/teams/config.cjs": "724aae3dfeb3246aec20679a71566a9406c99d06afbb8f99c51ad026f5b6a5a0",
     "mkdocs.yml": "8a6413ad8bd2e2e3da981820902a451f3a8883450968a7477ef0997c36a79c0a",
     "overrides/main.html": "58bef75c205f2ecf969addf151ae02b35b434c1a6b527dce12d153a9005fc42f",
-    "package.json": "85eaa83ea158c22861cb65c68b7db43bdd865785265d2bb864e3e11c75fb026f",
+    "package.json": "829fe7a3cf03a1b4e65cbf44dd48373f48803b5332c68c8c7f05cb8e331d3881",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "de8adbe242bbb8016aed718ca082c597a48098c42e25dd00ef480d76d1936251",
@@ -168,7 +168,7 @@
     "proxy/proxy-bridge/db-open.cjs": "1758e739d32485ec95a71371d06436cb0f54bab353b3df1e91decc414ca991ef",
     "proxy/proxy-bridge/intercept.mjs": "2dc2773c21986cfda5a221ef75dcf2a89136a434fdc6ae6c16c1c972f9d4929a",
     "proxy/proxy-bridge/job-class-api.mjs": "68ecd18e554fe64c8b8c102b72f5e945a24bc03e60d1e7e2ca31495f1514f13a",
-    "proxy/proxy-bridge/job-class.mjs": "eb6fcd02c80749203062d6ff71d45701589508a3c52f503b9f762817cdac77a8",
+    "proxy/proxy-bridge/job-class.mjs": "4bff0ede3308639810690e3f3af033a3fa9608a7eefb88e2739a1842a54defba",
     "proxy/proxy-bridge/log-format.mjs": "38a400f263a7df48d61dc08212f601f8f34a375a02dfc9f739b7a1b89541c7b0",
     "proxy/proxy-bridge/measurement.mjs": "8b67eb46e5b592eb32a13f62fb9c55adfda460db394452500c53c9fe07b38e64",
     "proxy/proxy-bridge/model-canonical.mjs": "cecffe2ae82b8faca557fecd4fc41378ac48450a220d48cad9b00e5b7deafa58",
@@ -186,7 +186,7 @@
     "proxy/proxy-bridge/usage-api.mjs": "62a73df7af8f02433e4cf4a3fa370ca557ad6bcb6253dd38b80b1b550b1e60f0",
     "scripts/measurement-reconciler.mjs": "ad1c27f8542855bfed4c5f3dc0cbb1fe62ba9ae315c40cde57930f530807ae97",
     "tests/coexist.test.mjs": "11c0f6dfb77bf4214ecbbcb0f7323e9f48d9737f3962c51558d18d46f3ee956a",
-    "tests/combined.test.mjs": "81de30fb3e9e3a576a470347da78ac4f6bc9cc21cab0ea39ac82599d73a4f237",
+    "tests/combined.test.mjs": "7ccfdda8eb33d2cccdd50518375dc3ab8e230707368cbc505a5318da6e9cb613",
     "tests/copilot-quota.test.mjs": "cd62b24972fb4252c7f00010776885cc141b7ca561df60b73d39abaa7dbe441c",
     "tests/daemon.test.mjs": "37a15737cc449fa895de778eb061bf825e76ba223b9308bcb595f2333b2cc98c",
     "tests/install-check.mjs": "47a7027261e69fd4544b57d554650c617b55b8a25e7b147e414a0163faa99630",
@@ -195,16 +195,16 @@
     "tests/provenance.test.mjs": "2cd499bb23d6d2e7ac9f3628f370509971dc7be64a293b50c7a9051f85241916",
     "tests/statusline.test.mjs": "576998f1da95524a655af8a4eb0f6a7605dd987fff72e6262ceda980fe68b1ed",
     "tests/update.test.mjs": "90a3c1afe9925ee2bdb03ca4b93f8b01967a73ecb78386d48dde4fceeb16a754",
-    "ui/assets/CostTab-Cq2JWpyE.js": "c8b1cbe9f0f913336794daca5d3f71dd6c7c16b808cc6293a46539e24424a82f",
-    "ui/assets/JobClassesTab-CcIdv152.js": "c5563de6a80126e10b1ce6aa7c156877b2833b58bf661414cd0cc61d06612503",
-    "ui/assets/TrialsTab-Bbmu9YBI.js": "b293d12bcee36d2badde325a4e1e9b046c9f9682538370425381a54b106bb401",
+    "ui/assets/CostTab-BrbwQ9Pq.js": "0bafd3e007107f762f7857d901f20ae9ef8da0ba52aa5ab906caf5b0aae396aa",
+    "ui/assets/JobClassesTab-DFKIdzMw.js": "1e30596cb3ef90ebeecb58dd5cca6678968c6cc4ad740e1b3fc74351f6c10d57",
+    "ui/assets/TrialsTab-DTz5Fs2P.js": "5baba2e88a282d441c55c0fe72657e4649c46fd835fd1f287e1b9fea0c2adae4",
+    "ui/assets/index-CPLYU3UD.js": "2cb68468421701127385aa37d1184a9b12c61a8a046eb712ebd9fa0d769e8e7f",
     "ui/assets/index-CTrDsGjo.css": "654568cc3b9b792ef3a0c4046125589312c5a1918fbd40741699a2f5409c7a03",
-    "ui/assets/index-DDFevIgB.js": "21b2e5904081d6757e2ce2f8041faaab67082b965075cbf59d9fd91de77c4f35",
     "ui/assets/omitted-Be0_Qxkl.js": "166d9bf3626149b25a8a52b6c7c123fd5da132c215f410ae6a2d86e0781fa4a3",
     "ui/assets/vendor-charts-BqUKQC6_.js": "c5f49d94ae3e27cacc4a2a2f1ace34eebd3a164c4757fa2b4941708b3a3ee2dc",
     "ui/assets/vendor-icons-BkXw8NkE.js": "26ab9952a6dfbc4b7bed1747be5d6ca80884213a457d3cc40d138f72393149e9",
     "ui/assets/vendor-react-BixgUiYW.js": "84207fbc9bd45aef633cc3d9e883f2fd4c0ae2c99df3f920d9ba14883a464cc6",
     "ui/assets/vendor-redux-XJVtE8Si.js": "0430373614e66c5e7250f6605a1abcae05c64dd9fa26ca4c1570fbd79aff8aaa",
-    "ui/index.html": "95f460c6557071ce3c27fd5ceea455b0a0b10e8e42547f01ee0ecdf850888ff3"
+    "ui/index.html": "69b3444fc0937b96eca48d79ea7260560ef49caac49c254b0c6db3937a194186"
   }
 }
