@@ -18,6 +18,7 @@
 // egress) and glass's daemon (base URL and intercepted traffic: no routing, the
 // agent's own credentials, upstream = the real host). Both inject what differs.
 
+import zlib from 'node:zlib';
 import { buildAnthropicForwardHeaders } from './anthropic-headers.mjs';
 import { createAnthropicUsageTap, bindTapTaskId, tapCapturesRawBodies } from './measurement.mjs';
 import { canonicalizeModelName } from './model-canonical.mjs';
@@ -61,6 +62,38 @@ export async function forwardWithRetry(url, init, { fetch, attempts, backoffMs, 
     break; // success or a non-retryable status — forward it as-is
   }
   return { upstream, lastErr };
+}
+
+// A decoded request body larger than this is not parsed (it is still forwarded).
+const MAX_DECODED_BODY_BYTES = 64 * 1024 * 1024;
+
+/** The request body as sent, byte for byte — it is forwarded unchanged. */
+export async function readRequestBody(req) {
+  const chunks = [];
+  for await (const chunk of req) chunks.push(Buffer.from(chunk));
+  return Buffer.concat(chunks);
+}
+
+/**
+ * The request body as JSON, or null. Copilot CLI sends its model calls with
+ * `content-encoding: zstd`; gzip and deflate are decoded too. Brotli is not: its
+ * decoder is the attack surface of CVE-2026-111497, and no agent sends it, so a br
+ * body is forwarded unmeasured. The tap reads the decoded copy only: what goes
+ * upstream stays the agent's original bytes.
+ */
+export function parseRequestJson(raw, contentEncoding = '') {
+  const enc = String(contentEncoding || '').trim().toLowerCase();
+  const opts = { maxOutputLength: MAX_DECODED_BODY_BYTES };
+  let buf = raw;
+  try {
+    if (enc === 'zstd' && typeof zlib.zstdDecompressSync === 'function') buf = zlib.zstdDecompressSync(raw, opts);
+    else if (enc === 'gzip' || enc === 'x-gzip') buf = zlib.gunzipSync(raw, opts);
+    else if (enc === 'deflate') buf = zlib.inflateSync(raw, opts);
+    else if (enc && enc !== 'identity') return null;
+    return JSON.parse(buf.toString('utf8'));
+  } catch {
+    return null;
+  }
 }
 
 /** Upstream response headers minus the ones the re-framed response must not carry. */
@@ -140,11 +173,9 @@ export async function handleAnthropicMessages(req, res, {
 }) {
   const v1Path = (req.url || '').split('?')[0];
   const isCompletion = v1Path === '/v1/messages'; // exclude count_tokens
-  // Buffer the request body (JSON) — needed to both forward and inspect.
-  let rawBody = '';
-  for await (const chunk of req) rawBody += chunk;
-  let reqJson = null;
-  try { reqJson = JSON.parse(rawBody); } catch { /* forward as-is */ }
+  // Buffer the request body — forwarded as the original bytes, inspected decoded.
+  const rawBody = await readRequestBody(req);
+  const reqJson = parseRequestJson(rawBody, req.headers['content-encoding']);
   const model = canonicalizeModelName(reqJson?.model) || reqJson?.model || 'unknown';
   // main vs sub-agent (ATTR-04 parity): a sub-agent's request carries a
   // RESTRICTED toolset with no spawner tool; the main session has 'Agent'/'Task'.
