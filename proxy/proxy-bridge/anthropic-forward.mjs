@@ -34,10 +34,35 @@ const GATEWAY_RETRY_STATUSES = new Set([502, 503, 504]);
 const DROPPED_RESPONSE_HEADERS = new Set(['content-encoding', 'content-length', 'transfer-encoding', 'connection']);
 
 /**
+ * The upstream URL for an incoming request target, or null when the target is not
+ * a path on that upstream. `${base}${req.url}` alone lets the request pick the
+ * host: `@evil.example/x` makes the base's host the userinfo, and `//evil.example`
+ * or an absolute-form target names another host outright — the agent's
+ * credentials would follow (CWE-918).
+ */
+export function upstreamUrl(base, reqUrl) {
+  const target = String(reqUrl || '');
+  if (!target.startsWith('/') || target.startsWith('//')) return null;
+  try {
+    const origin = new URL(base).origin;
+    const url = new URL(`${base}${target}`);
+    return url.origin === origin ? url.href : null;
+  } catch {
+    return null;
+  }
+}
+
+/**
  * fetch with the gateway retry. Returns the upstream Response, or null after the
- * last attempt failed (lastErr then says why).
+ * last attempt failed (lastErr then says why). A null `url` (upstreamUrl refused
+ * the target) is never fetched.
  */
 export async function forwardWithRetry(url, init, { fetch, attempts, backoffMs, logErr, label }) {
+  if (!url) {
+    const lastErr = new Error('refused: the request target is not a path on the upstream');
+    logErr(`${label} ${lastErr.message}`);
+    return { upstream: null, lastErr };
+  }
   let upstream = null;
   let lastErr;
   for (let attempt = 0; attempt < attempts; attempt++) {
@@ -236,7 +261,7 @@ export async function handleAnthropicMessages(req, res, {
   const fwdHeaders = buildAnthropicForwardHeaders(req.headers, getToken);
 
   const startTime = Date.now();
-  const { upstream, lastErr } = await forwardWithRetry(`${upstreamBase}${req.url}`, {
+  const { upstream, lastErr } = await forwardWithRetry(upstreamUrl(upstreamBase, req.url), {
     method: 'POST', headers: fwdHeaders, body: rawBody,
   }, { fetch, attempts, backoffMs, logErr, label: '/v1/messages' });
   if (!upstream) {

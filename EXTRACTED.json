@@ -3,11 +3,11 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "6c5e01688e22b8c5213eb1c58d30e482d201a88f",
+      "sha": "069f54025748a91d87a64594921bd5a00914732b",
       "dirty": false
     },
     "proxy": {
-      "sha": "d6d9535622d41adedc48c6649c2e22fc0a72c254",
+      "sha": "08b61e8b785b2e6bb904e6da7fb56fb7b42da703",
       "dirty": false
     }
   },
@@ -133,7 +133,7 @@
     "lib/glass/pi-relay-extension.mjs": "ed8b47a64b63533bc071afc5ca25ea99433aee6168bbd63a9600070eaddde33c",
     "lib/glass/spawn.mjs": "8c22ac61f224041115c9212af72dcc7711ea309630b6521bf490591966e5d8af",
     "lib/glass/statusline.mjs": "6353c86e647724ac4795767c63577731e7a6e8f706c2f402de08a2e130f6ecec",
-    "lib/glass/tmux.mjs": "84bc7b0af61ca9e25790060238eab82eb26bdcb00884b83a79210c1be7ec9fb3",
+    "lib/glass/tmux.mjs": "58de395f27385a91b9011631970f8539b78976147ca58393f34bc065c7bd2b69",
     "lib/glass/ui-api.mjs": "ce12a836df6cb174d88895e5560a288ef00607049d3b001ca400ac8ef4ae2256",
     "lib/glass/update.mjs": "24fc4e17f7079ec432d8d900371f888ae2a62a9f0cdf0eaf59b64b05e4e24434",
     "lib/glass/wiring.mjs": "eb61d323b6154d0c0873a4601f1a070bd4c4544aae146f7e4cc20ded3cbe9647",
@@ -175,7 +175,7 @@
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "de8adbe242bbb8016aed718ca082c597a48098c42e25dd00ef480d76d1936251",
     "proxy/dist/usage-cache.js": "4faff1e1a7b20826f5a2cd1b67784797fd26987e0be07159d242da7ea063a003",
-    "proxy/proxy-bridge/anthropic-forward.mjs": "5ff4a5de025fe4d5b503b2b6d885f5fd1b4593c9b19f39c608c1d3cfb431fcb9",
+    "proxy/proxy-bridge/anthropic-forward.mjs": "eb4809398019c9e13a91382a9dccb00e4add38ca72f740b9e9085a31a25b84a8",
     "proxy/proxy-bridge/anthropic-headers.mjs": "80324cd288c6d7ee89062fe1f9974b3c05ba903944f9bb1a74a2b264b857ebaa",
     "proxy/proxy-bridge/context-capture.mjs": "b07bcb8a498db26180b99e726657b66dfcb70538eb67b6a75f4613446daa46e9",
     "proxy/proxy-bridge/context-turns.mjs": "527f15080d15b9c1e539cdf9aba227238dcd0459d34ddb258248f5371e3d1745",
@@ -189,7 +189,7 @@
     "proxy/proxy-bridge/model-trials.mjs": "b0bad08b93171c3f8bfac34f2fe631ca96011fa878e0b77cf5336fbd0b1708df",
     "proxy/proxy-bridge/no-proxy.mjs": "9f046217a50188971c42017cb21bb0991a43fcfc1f83537ce2615da033bf92e7",
     "proxy/proxy-bridge/offload.mjs": "4d489b4b8905f565a175e9eda2cd4db42fc265122cd9a93497ba6609455b31d0",
-    "proxy/proxy-bridge/openai-passthrough.mjs": "0c189c2137c2925f5ffb8bcee9b2080135016a3fff622b120670ffc169f34502",
+    "proxy/proxy-bridge/openai-passthrough.mjs": "288f1070f8be4a17d62f0a8b42b5a689286f7d72b6ae26d18588299b15a76385",
     "proxy/proxy-bridge/prompt-classifier.mjs": "9b9018319101deec7c371f0938002e3a949654d6a793c7418899468a965eabb5",
     "proxy/proxy-bridge/raw-bodies.mjs": "dc0a777780fad655611eb9729c55b2b4835215164ee08ff4059cbff0ce815008",
     "proxy/proxy-bridge/routing-trail.mjs": "c30f6d924ee015a3ab235b38e6fb9c1017db6731a67923762bd89c6906b0664a",

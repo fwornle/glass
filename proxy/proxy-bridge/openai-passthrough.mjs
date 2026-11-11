@@ -23,7 +23,7 @@
 import { randomUUID } from 'node:crypto';
 import { buildAnthropicForwardHeaders } from './anthropic-headers.mjs';
 import {
-  forwardWithRetry, copyResponseHeaders, pipeAndTap, answeringProvider, readRequestBody, parseRequestJson,
+  forwardWithRetry, upstreamUrl, copyResponseHeaders, pipeAndTap, answeringProvider, readRequestBody, parseRequestJson,
 } from './anthropic-forward.mjs';
 import { createOpenAIUsageTap, tapCapturesRawBodies } from './measurement.mjs';
 import { responsesToChatBody } from './shim-tools.mjs';
@@ -54,7 +54,7 @@ export function withUsageRequested(wire, rawBody, reqJson) {
  */
 export async function forwardPlain(req, res, { fetch, upstreamBase, logErr = () => {} }) {
   const body = ['GET', 'HEAD'].includes(req.method) ? undefined : await readRequestBody(req);
-  const { upstream, lastErr } = await forwardWithRetry(`${upstreamBase}${req.url}`, {
+  const { upstream, lastErr } = await forwardWithRetry(upstreamUrl(upstreamBase, req.url), {
     method: req.method, headers: buildAnthropicForwardHeaders(req.headers, null), body,
   }, { fetch, attempts: 1, backoffMs: [0], logErr, label: 'forward' });
   if (!upstream) {
@@ -142,7 +142,7 @@ export async function handleOpenAIPassthrough(req, res, {
     routing = offloadRowFields({ agent, cfg, decision, outcome, fromProvider: provider });
   }
 
-  const { upstream, lastErr } = await forwardWithRetry(`${upstreamBase}${req.url}`, {
+  const { upstream, lastErr } = await forwardWithRetry(upstreamUrl(upstreamBase, req.url), {
     method: 'POST', headers: fwdHeaders, body,
   }, { fetch, attempts, backoffMs, logErr, label: `openai ${wire}` });
   if (!upstream) {
