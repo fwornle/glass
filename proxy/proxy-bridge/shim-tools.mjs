@@ -356,10 +356,31 @@ export function mergeCopilotChoices(data) {
   const merged = choices.flatMap((c) => (
     Array.isArray(c?.message?.tool_calls) ? c.message.tool_calls : []
   ));
+  // A filter verdict on ANY choice is the one that matters; else the first reason given.
+  const reasons = choices.map((c) => c?.finish_reason).filter(Boolean);
   return {
     content,
     toolCalls: merged.length > 0 ? merged.map((tc, i) => ({ index: i, ...tc })) : undefined,
+    finishReason: reasons.includes('content_filter') ? 'content_filter' : (reasons[0] ?? null),
   };
+}
+
+/**
+ * Throw CONTENT_FILTERED when the provider's content filter stopped a reply
+ * before it said anything. The upstream answers 200 with finish_reason
+ * 'content_filter', empty content and 0 output tokens; passed on as-is, the
+ * caller gets an ordinary-looking empty "stop" — an agent that silently does
+ * nothing, with no hint why (seen with gh-copilot claude-opus-5 on security-
+ * testing prompts, 2026-11-08). A filtered reply that DID produce text or tool
+ * calls is passed on: the caller has something to act on.
+ *
+ * @param {{content?: string, toolCalls?: unknown[], finishReason?: string|null}} result
+ * @param {string} label e.g. 'gh-copilot claude-opus-5'
+ */
+export function assertNotFiltered(result, label) {
+  if (result?.finishReason !== 'content_filter') return;
+  if ((result.content || '').length > 0 || (result.toolCalls?.length ?? 0) > 0) return;
+  throw new Error(`CONTENT_FILTERED: ${label} — the provider's content filter blocked this reply (finish_reason content_filter, no output)`);
 }
 
 /**

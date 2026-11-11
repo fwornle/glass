@@ -22,7 +22,9 @@
 
 import { randomUUID } from 'node:crypto';
 import { buildAnthropicForwardHeaders } from './anthropic-headers.mjs';
-import { forwardWithRetry, copyResponseHeaders, pipeAndTap, answeringProvider } from './anthropic-forward.mjs';
+import {
+  forwardWithRetry, upstreamUrl, copyResponseHeaders, pipeAndTap, answeringProvider, readRequestBody, parseRequestJson,
+} from './anthropic-forward.mjs';
 import { createOpenAIUsageTap, tapCapturesRawBodies } from './measurement.mjs';
 import { responsesToChatBody } from './shim-tools.mjs';
 import { normalizeOffloadConfig, offloadRowFields } from './offload.mjs';
@@ -46,19 +48,13 @@ export function withUsageRequested(wire, rawBody, reqJson) {
   return JSON.stringify({ ...reqJson, stream_options: { ...(reqJson.stream_options || {}), include_usage: true } });
 }
 
-async function readBody(req) {
-  const chunks = [];
-  for await (const chunk of req) chunks.push(Buffer.from(chunk));
-  return Buffer.concat(chunks);
-}
-
 /**
  * Forward any request to upstreamBase unchanged, with no tap (the catalogue,
  * token exchange and telemetry calls an intercepted agent also makes).
  */
 export async function forwardPlain(req, res, { fetch, upstreamBase, logErr = () => {} }) {
-  const body = ['GET', 'HEAD'].includes(req.method) ? undefined : await readBody(req);
-  const { upstream, lastErr } = await forwardWithRetry(`${upstreamBase}${req.url}`, {
+  const body = ['GET', 'HEAD'].includes(req.method) ? undefined : await readRequestBody(req);
+  const { upstream, lastErr } = await forwardWithRetry(upstreamUrl(upstreamBase, req.url), {
     method: req.method, headers: buildAnthropicForwardHeaders(req.headers, null), body,
   }, { fetch, attempts: 1, backoffMs: [0], logErr, label: 'forward' });
   if (!upstream) {
@@ -94,10 +90,12 @@ export async function handleOpenAIPassthrough(req, res, {
   const wire = openAIWireOf(req.url);
   if (req.method !== 'POST' || !wire) return forwardPlain(req, res, { fetch, upstreamBase, logErr });
 
-  const raw = await readBody(req);
-  let reqJson = null;
-  try { reqJson = JSON.parse(raw.toString('utf8')); } catch { /* forward as-is */ }
+  const raw = await readRequestBody(req);
+  const reqJson = parseRequestJson(raw, req.headers['content-encoding']);
   const body = withUsageRequested(wire, raw, reqJson);
+  const fwdHeaders = buildAnthropicForwardHeaders(req.headers, null);
+  // A rewritten body is plain JSON, whatever encoding the original came in.
+  if (body !== raw) for (const k of Object.keys(fwdHeaders)) if (k.toLowerCase() === 'content-encoding') delete fwdHeaders[k];
   // The context capture reads the chat shape; a Responses request is converted.
   const chatBody = reqJson ? (wire === 'responses' ? responsesToChatBody(reqJson) : reqJson) : null;
   const captureRaw = tapCapturesRawBodies(taskId);
@@ -144,8 +142,8 @@ export async function handleOpenAIPassthrough(req, res, {
     routing = offloadRowFields({ agent, cfg, decision, outcome, fromProvider: provider });
   }
 
-  const { upstream, lastErr } = await forwardWithRetry(`${upstreamBase}${req.url}`, {
-    method: 'POST', headers: buildAnthropicForwardHeaders(req.headers, null), body,
+  const { upstream, lastErr } = await forwardWithRetry(upstreamUrl(upstreamBase, req.url), {
+    method: 'POST', headers: fwdHeaders, body,
   }, { fetch, attempts, backoffMs, logErr, label: `openai ${wire}` });
   if (!upstream) {
     logErr(`openai ${wire} forward failed after ${attempts} attempts (non-fatal): ${errorDetail(lastErr)}`);
