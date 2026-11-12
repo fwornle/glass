@@ -204,6 +204,11 @@ export function loadTaxonomy(file) {
   // basename on either separator: on Windows the path has backslashes, and the
   // whole path became the name (and part of a file name) — glass on Windows.
   const name = typeof raw.name === 'string' && raw.name ? raw.name : path.win32.basename(file).replace(/\.ya?ml$/, '');
+  // The tag becomes part of file names, and a team package comes from a URL:
+  // its name and version must be plain words, never a path (CWE-22).
+  const word = /^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$/;
+  if (!word.test(name)) throw new Error(`${file}: name must be letters, digits, '.', '_' or '-'`);
+  if (!word.test(String(version))) throw new Error(`${file}: version must be letters, digits, '.', '_' or '-'`);
   const retired = new Map((Array.isArray(raw.retired) ? raw.retired : []).map((r) => [String(r?.id || ''), String(r?.mergedInto || '')]));
   for (const [rid, into] of retired) if (!rid || !into || ids.includes(rid)) throw new Error(`${file}: retired entries need an id that is no current class and a mergedInto`);
   return { name, version, tag: `${name}-v${version}`, classes, ids: new Set(ids), none: String(raw.none || ''), precedence, prompt: raw.prompt, groups, retired };
