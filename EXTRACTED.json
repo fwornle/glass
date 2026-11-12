@@ -3,11 +3,11 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "afa79cf99704d3dd7175adbd1c43fc633ecafbdd",
+      "sha": "f699f5fb5c04eab8340bdd6d9da6e0dc9b7dcc05",
       "dirty": false
     },
     "proxy": {
-      "sha": "08b61e8b785b2e6bb904e6da7fb56fb7b42da703",
+      "sha": "a492d60d2b2c0244dec6247c5793f317766a65ad",
       "dirty": false
     }
   },
@@ -122,7 +122,7 @@
     "lib/glass/combined.mjs": "77069ce8443ef7d22ac00cb1b91f3f40f0b249df84fa49786154871a3df89d0e",
     "lib/glass/copilot-quota.mjs": "d09aad330f18d4571124484a908caf7f875b6ab79e3c176de3e097b69ecfeb3d",
     "lib/glass/cost.mjs": "e9332dd6c1f4dcaedd7b07a31e08333cc0dff524eb717a8e7877395bb830a574",
-    "lib/glass/daemon.mjs": "6f260c78f2c214ef6873fdd6c55823193ef9842b339bdb6591a19c04e624c149",
+    "lib/glass/daemon.mjs": "ad8c77b6a74aa50bb1f6a1e6648cecce900c6ec5718664e363a5c699a749c40b",
     "lib/glass/egress.mjs": "c7e54a074c71890429bce2898ba1a287bb13194dc489d3ac0bd4f6a56aa4f25f",
     "lib/glass/home.mjs": "4f94b34129d8a2eebecd6536301816e4aac32680e6cb16b9ce670e1dd9a9ab74",
     "lib/glass/job-classes-cli.mjs": "45f1e9c3d0059086114c5ead50c6f8d2db6eef9cd1df248dbaf6026e740eef9a",
@@ -170,7 +170,7 @@
     "lib/teams/config.cjs": "724aae3dfeb3246aec20679a71566a9406c99d06afbb8f99c51ad026f5b6a5a0",
     "mkdocs.yml": "6b3cd0732379661554ee9ef2c0a500d464923b7f62dfb95dfb605d9e38595568",
     "overrides/main.html": "58bef75c205f2ecf969addf151ae02b35b434c1a6b527dce12d153a9005fc42f",
-    "package.json": "0be9d6b867035f67d497de125f38543fe0af03934fbd849e2f00cfd7fe1ba7ea",
+    "package.json": "deb146361d854e631367867f63dfb5a6aa85e83bcded549f66adf6a6330ceec4",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "de8adbe242bbb8016aed718ca082c597a48098c42e25dd00ef480d76d1936251",
@@ -182,7 +182,7 @@
     "proxy/proxy-bridge/db-open.cjs": "1758e739d32485ec95a71371d06436cb0f54bab353b3df1e91decc414ca991ef",
     "proxy/proxy-bridge/intercept.mjs": "2dc2773c21986cfda5a221ef75dcf2a89136a434fdc6ae6c16c1c972f9d4929a",
     "proxy/proxy-bridge/job-class-api.mjs": "68ecd18e554fe64c8b8c102b72f5e945a24bc03e60d1e7e2ca31495f1514f13a",
-    "proxy/proxy-bridge/job-class.mjs": "4bff0ede3308639810690e3f3af033a3fa9608a7eefb88e2739a1842a54defba",
+    "proxy/proxy-bridge/job-class.mjs": "70ba701e8d497ee2dc854e6aa9ff32679136bd01f89ed8c804c5e07e3f1cf7c4",
     "proxy/proxy-bridge/log-format.mjs": "38a400f263a7df48d61dc08212f601f8f34a375a02dfc9f739b7a1b89541c7b0",
     "proxy/proxy-bridge/measurement.mjs": "8b67eb46e5b592eb32a13f62fb9c55adfda460db394452500c53c9fe07b38e64",
     "proxy/proxy-bridge/model-canonical.mjs": "cecffe2ae82b8faca557fecd4fc41378ac48450a220d48cad9b00e5b7deafa58",
@@ -202,7 +202,7 @@
     "tests/coexist.test.mjs": "11c0f6dfb77bf4214ecbbcb0f7323e9f48d9737f3962c51558d18d46f3ee956a",
     "tests/combined.test.mjs": "7ccfdda8eb33d2cccdd50518375dc3ab8e230707368cbc505a5318da6e9cb613",
     "tests/copilot-quota.test.mjs": "cd62b24972fb4252c7f00010776885cc141b7ca561df60b73d39abaa7dbe441c",
-    "tests/daemon.test.mjs": "37a15737cc449fa895de778eb061bf825e76ba223b9308bcb595f2333b2cc98c",
+    "tests/daemon.test.mjs": "d6727b00a0c344fa5276c7837fa95edc76974b97ad1f1252e478077123aafcfa",
     "tests/install-check.mjs": "47a7027261e69fd4544b57d554650c617b55b8a25e7b147e414a0163faa99630",
     "tests/job-classes.test.mjs": "cd64fce50101549ee52b43353a3ebfe7101335ccdad19f44bfe6bd1bd07a348d",
     "tests/network.test.mjs": "86ccf81c267ed708c3c576b89353a95acb6d5e0ed8e15e03a01199f05e654601",
