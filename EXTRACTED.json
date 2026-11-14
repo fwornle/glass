@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "f08c94502cd992a22b3e17f0a18f662f3471ba20",
+      "sha": "bdd827de81d97dcc320c06fc9544bf901cb72434",
       "dirty": false
     },
     "proxy": {
@@ -116,7 +116,7 @@
     "lib/cost/copilot-pricing.mjs": "9459a0a9609ef0dc001386d7126c7b48e1084efaa5da1c149b98ffacd5d88d97",
     "lib/experiments/timeline-read.mjs": "5b4737732cd1323aa2c478f03cdabf4e20547af7cef8eb85484a6a05ba91eddd",
     "lib/features/vendor/js-yaml.cjs": "c738b0020702aa631abd8de23a902a3079d99d3060e44166955cb51f570881c4",
-    "lib/glass/cli.mjs": "7157217e67fec0207a30c60cb85247a4127403e2209c3b0783409602540c2e2c",
+    "lib/glass/cli.mjs": "678d3e3231039f9a972947ee17767539813cee644112de846a1c45c2506a35e3",
     "lib/glass/client.mjs": "36cb784d4b55cdff379cbffffb86b9a53e0d1a9706564abc8ee78f4b03a1a75c",
     "lib/glass/coexist.mjs": "2cd042fd8f47c03fe1657033f57cfe91932f1270274ccdcbe1ef2508a6088748",
     "lib/glass/combined.mjs": "77069ce8443ef7d22ac00cb1b91f3f40f0b249df84fa49786154871a3df89d0e",
@@ -131,11 +131,11 @@
     "lib/glass/offload-store.mjs": "fc77dbe1e812a4e066b184caf8e030560ac34bf82db5b526a158834f3f7ebbf2",
     "lib/glass/open-url.mjs": "8045ef1dc766e395849189636d0b79d5ff90831fc4da6aeefb1493a33bdbcdd2",
     "lib/glass/pi-relay-extension.mjs": "ed8b47a64b63533bc071afc5ca25ea99433aee6168bbd63a9600070eaddde33c",
-    "lib/glass/spawn.mjs": "8c22ac61f224041115c9212af72dcc7711ea309630b6521bf490591966e5d8af",
+    "lib/glass/spawn.mjs": "b2e693517272ea9281face311935d2c03683b9288a17860eab7cceda483016f5",
     "lib/glass/statusline.mjs": "b34b05d06b2e0d61deda505f27f2e5d7a0b9dab8e9c17616875a9b69ab6c8380",
     "lib/glass/tmux.mjs": "58de395f27385a91b9011631970f8539b78976147ca58393f34bc065c7bd2b69",
     "lib/glass/ui-api.mjs": "ce12a836df6cb174d88895e5560a288ef00607049d3b001ca400ac8ef4ae2256",
-    "lib/glass/update.mjs": "7a9cb7fa91afb304efffdc880203de7e62eb9d0629fa7cb99df98accadd50e58",
+    "lib/glass/update.mjs": "931293c6bf1f9997fb73dbefda11bc3a5b05ce1ca451018ac65fc067fa391f01",
     "lib/glass/wiring.mjs": "eb61d323b6154d0c0873a4601f1a070bd4c4544aae146f7e4cc20ded3cbe9647",
     "lib/history/paths.cjs": "7bd86f1bdcf66b91fff2151eded041b011ed3e312df0285819641ebd7373bcbe",
     "lib/job-classes/measure.mjs": "5e1ea45c177af3514561464bc7416cb7ce8c78f9c6e0fb670975e61330bcc2bb",
@@ -203,7 +203,7 @@
     "tests/coexist.test.mjs": "11c0f6dfb77bf4214ecbbcb0f7323e9f48d9737f3962c51558d18d46f3ee956a",
     "tests/combined.test.mjs": "7ccfdda8eb33d2cccdd50518375dc3ab8e230707368cbc505a5318da6e9cb613",
     "tests/copilot-quota.test.mjs": "cd62b24972fb4252c7f00010776885cc141b7ca561df60b73d39abaa7dbe441c",
-    "tests/daemon.test.mjs": "e4dfb336a29b74370ccdba8c7476934fec8582b3e12383dd0d202bdf14611dc0",
+    "tests/daemon.test.mjs": "2275dcfbed68dc02c63204ecc492af16199e2f8ef670d5ac37c554e674b012e0",
     "tests/install-check.mjs": "47a7027261e69fd4544b57d554650c617b55b8a25e7b147e414a0163faa99630",
     "tests/job-classes.test.mjs": "cd64fce50101549ee52b43353a3ebfe7101335ccdad19f44bfe6bd1bd07a348d",
     "tests/network.test.mjs": "86ccf81c267ed708c3c576b89353a95acb6d5e0ed8e15e03a01199f05e654601",
