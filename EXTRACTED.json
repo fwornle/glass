@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "84b45018cb8e92db2ee115ce764614c74ddbebc7",
+      "sha": "bdd827de81d97dcc320c06fc9544bf901cb72434",
       "dirty": false
     },
     "proxy": {
@@ -203,7 +203,7 @@
     "tests/coexist.test.mjs": "11c0f6dfb77bf4214ecbbcb0f7323e9f48d9737f3962c51558d18d46f3ee956a",
     "tests/combined.test.mjs": "7ccfdda8eb33d2cccdd50518375dc3ab8e230707368cbc505a5318da6e9cb613",
     "tests/copilot-quota.test.mjs": "cd62b24972fb4252c7f00010776885cc141b7ca561df60b73d39abaa7dbe441c",
-    "tests/daemon.test.mjs": "33f91d0e358ca261965f14f1b00ee8e0c10a9fa5604a4f46dea83661e393ff17",
+    "tests/daemon.test.mjs": "2275dcfbed68dc02c63204ecc492af16199e2f8ef670d5ac37c554e674b012e0",
     "tests/install-check.mjs": "47a7027261e69fd4544b57d554650c617b55b8a25e7b147e414a0163faa99630",
     "tests/job-classes.test.mjs": "cd64fce50101549ee52b43353a3ebfe7101335ccdad19f44bfe6bd1bd07a348d",
     "tests/network.test.mjs": "86ccf81c267ed708c3c576b89353a95acb6d5e0ed8e15e03a01199f05e654601",
