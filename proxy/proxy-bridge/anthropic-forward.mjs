@@ -20,7 +20,7 @@
 
 import zlib from 'node:zlib';
 import { buildAnthropicForwardHeaders } from './anthropic-headers.mjs';
-import { createAnthropicUsageTap, bindTapTaskId, tapCapturesRawBodies } from './measurement.mjs';
+import { createAnthropicUsageTap, bindTapTaskId, tapCapturesRawBodies, ttftOf } from './measurement.mjs';
 import { canonicalizeModelName } from './model-canonical.mjs';
 import { sanitizeProject } from '../dist/token-usage.js';
 import { errorDetail } from './log-format.mjs';
@@ -286,6 +286,7 @@ export async function handleAnthropicMessages(req, res, {
     measurement.recordAnthropicTap({
       route, model, reqJson, proc, agent, project, requestId, taskId,
       usage: usageTap.usage, latencyMs: Date.now() - startTime, captureRaw, provider: answered, subscription,
+      ttftMs: ttftOf(usageTap.usage, startTime),
       upstream: upstreamBase, callKind,
     });
   }
