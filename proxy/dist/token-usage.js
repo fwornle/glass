@@ -665,6 +665,23 @@ export function initTokenDb(overrideDataDir) {
         process.stderr.write(`[token-usage] call-facts column migration failed (non-fatal): ${err.message}\n`);
     }
     // -----------------------------------------------------------------------
+    // Call timing + shape — ttft_ms, tool_calls (see TokenUsageRow). Nullable on
+    // purpose: NULL is "not measured", which a DEFAULT 0 would hide. Same
+    // PRAGMA-guarded, additive, non-fatal shape as the blocks above.
+    // -----------------------------------------------------------------------
+    try {
+        const cols10 = db.prepare(`PRAGMA table_info(token_usage)`).all();
+        const existingTiming = new Set(cols10.map(c => c.name));
+        for (const name of ['ttft_ms', 'tool_calls']) {
+            if (!existingTiming.has(name)) {
+                db.exec(`ALTER TABLE token_usage ADD COLUMN ${name} INTEGER`);
+            }
+        }
+    }
+    catch (err) {
+        process.stderr.write(`[token-usage] call-timing column migration failed (non-fatal): ${err.message}\n`);
+    }
+    // -----------------------------------------------------------------------
     // Phase 83-02 (D-11): duplicate-id collision fix — request-id dedup index.
     //
     // The /v1/messages tap (this proxy) and the coding-side adapters
@@ -795,8 +812,8 @@ export function initTokenDb(overrideDataDir) {
       route_key, route_band, route_step, offloaded_from, chain_position,
       attempt_trail, routing_source,
       conversation_key, turn_index, band_source, project,
-      upstream, call_kind
-    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      upstream, call_kind, ttft_ms, tool_calls
+    ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `);
     // Local id counter for this machine's USER_HASH. Seeded LATE (after
     // hydrate runs, see below) so peer-row imports tagged with USER_HASH
@@ -1034,6 +1051,10 @@ export function sanitizeUpstream(value) {
     }
 }
 const CALL_KINDS = new Set(['main', 'subagent', 'side']);
+/** A measured non-negative integer (ms, a count), else null — "not measured". */
+export function measuredCount(value) {
+    return typeof value === 'number' && Number.isFinite(value) && value >= 0 ? Math.round(value) : null;
+}
 export function logCall(handle, row) {
     try {
         // ATTR-05: per-row user_hash override (e.g. 'cladpt' for the /v1/messages
@@ -1069,7 +1090,9 @@ export function logCall(handle, row) {
             // a caller that predates them — or one that genuinely has no messages to
             // key on, like the file adapters — writes "not recorded" rather than a
             // fabricated turn 0 that would group with every other unkeyed row.
-            row.conversation_key ?? '', row.turn_index ?? 0, row.band_source ?? '', sanitizeProject(row.project), sanitizeUpstream(row.upstream), CALL_KINDS.has(row.call_kind ?? '') ? row.call_kind : '');
+            row.conversation_key ?? '', row.turn_index ?? 0, row.band_source ?? '', sanitizeProject(row.project), sanitizeUpstream(row.upstream), CALL_KINDS.has(row.call_kind ?? '') ? row.call_kind : '', 
+            // NULL unless measured (see TokenUsageRow): an explicit null, never undefined.
+            measuredCount(row.ttft_ms), measuredCount(row.tool_calls));
         };
         // D-11: coordinated, DB-authoritative id allocation with retry-on-conflict.
         // For the MACHINE hash the in-process counter (handle.nextLocalId) is a fast

@@ -195,8 +195,10 @@ export function bindCompleteTaskId(body, procName) {
  * Feed it every SSE chunk (sseChunk) or the one buffered body (jsonBody). With
  * captureRaw it also keeps the raw response text for the raw-body capture.
  */
-export function createAnthropicUsageTap({ captureRaw = false } = {}) {
-  const u = { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, sawUsage: false, rawResponse: '' };
+export function createAnthropicUsageTap({ captureRaw = false, now = Date.now } = {}) {
+  // firstTokenAt / toolCalls: as on the OpenAI tap (createOpenAIUsageTap) — the
+  // first content_block_delta of a stream, and the tool_use blocks the model emitted.
+  const u = { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, sawUsage: false, rawResponse: '', firstTokenAt: null, toolCalls: 0 };
   const decoder = new TextDecoder();
   let sseBuf = '';
   return {
@@ -212,6 +214,8 @@ export function createAnthropicUsageTap({ captureRaw = false } = {}) {
         if (!dataLine) continue;
         try {
           const d = JSON.parse(dataLine.slice(5).trim());
+          if (d.type === 'content_block_delta' && u.firstTokenAt === null) u.firstTokenAt = now();
+          if (d.type === 'content_block_start' && d.content_block?.type === 'tool_use') u.toolCalls += 1;
           if (d.type === 'message_start' && d.message && d.message.usage) {
             u.input = d.message.usage.input_tokens ?? u.input;
             u.output = d.message.usage.output_tokens ?? u.output;
@@ -233,6 +237,7 @@ export function createAnthropicUsageTap({ captureRaw = false } = {}) {
       if (captureRaw) u.rawResponse = buf.toString('utf8'); // Phase 84-06: raw-body capture (flag-gated)
       try {
         const j = JSON.parse(buf.toString('utf8'));
+        if (j && Array.isArray(j.content)) u.toolCalls = j.content.filter((b) => b?.type === 'tool_use').length;
         if (j && j.usage) {
           u.input = j.usage.input_tokens ?? 0;
           u.output = j.usage.output_tokens ?? 0;
@@ -254,11 +259,28 @@ export function createAnthropicUsageTap({ captureRaw = false } = {}) {
  *
  * input is FRESH input on both wires (openAIFreshInputTokens / parseResponsesUsage
  * subtract cached tokens), so a row means the same as a /v1/messages row.
+ *
+ * Also read on the way past, for comparing runs:
+ *   reasoning      — usage.completion_tokens_details.reasoning_tokens (chat) or
+ *                    usage.output_tokens_details.reasoning_tokens (responses);
+ *                    0 when the server does not report it (llama.cpp's server
+ *                    does not: its reasoning text is counted in output only).
+ *                    Part of output, never added to it.
+ *   firstTokenAt   — `now()` at the first generated token of a stream: content,
+ *                    reasoning or a tool-call delta (a role-only first chunk is
+ *                    not a token). null for a buffered body — nothing to time.
+ *   toolCalls      — tool calls the model emitted (distinct choice/index pairs in
+ *                    a stream, message.tool_calls in a body, function_call items
+ *                    on the Responses wire).
  */
-export function createOpenAIUsageTap({ wire = 'chat', captureRaw = false } = {}) {
-  const u = { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, sawUsage: false, model: '', rawResponse: '' };
+export function createOpenAIUsageTap({ wire = 'chat', captureRaw = false, now = Date.now } = {}) {
+  const u = {
+    input: 0, output: 0, cacheRead: 0, cacheWrite: 0, reasoning: 0, sawUsage: false, model: '', rawResponse: '',
+    firstTokenAt: null, toolCalls: 0,
+  };
   const decoder = new TextDecoder();
   let sseBuf = '';
+  const toolKeys = new Set();
   const take = (usage, model) => {
     if (!usage || typeof usage !== 'object') return;
     if (wire === 'responses') {
@@ -269,18 +291,38 @@ export function createOpenAIUsageTap({ wire = 'chat', captureRaw = false } = {})
       u.output = typeof usage.completion_tokens === 'number' ? usage.completion_tokens : 0;
       u.cacheRead = parseOpenAICache(usage).cache_read_tokens;
     }
+    u.reasoning = reasoningTokensOf(usage);
     u.cacheWrite = 0;
     if (typeof model === 'string' && model) u.model = model;
     u.sawUsage = true;
   };
+  const firstToken = () => { if (u.firstTokenAt === null) u.firstTokenAt = now(); };
   const event = (d) => {
+    if (!d || typeof d !== 'object') return;
     if (wire === 'responses') {
-      if (d && d.type === 'response.completed' && d.response) take(d.response.usage, d.response.model);
-      else if (d && d.response && typeof d.response.model === 'string' && !u.model) u.model = d.response.model;
+      if (typeof d.type === 'string' && /\.delta$/.test(d.type) && d.delta) firstToken();
+      if (d.type === 'response.output_item.added' && d.item?.type === 'function_call') toolKeys.add(d.item.id || `i${d.output_index}`);
+      if (d.type === 'response.completed' && d.response) {
+        take(d.response.usage, d.response.model);
+        for (const it of Array.isArray(d.response.output) ? d.response.output : []) {
+          if (it?.type === 'function_call') toolKeys.add(it.id || it.call_id);
+        }
+      } else if (d.response && typeof d.response.model === 'string' && !u.model) u.model = d.response.model;
+      u.toolCalls = toolKeys.size;
       return;
     }
-    if (d && typeof d.model === 'string' && d.model && !u.model) u.model = d.model;
-    if (d && d.usage) take(d.usage, d.model);
+    if (typeof d.model === 'string' && d.model && !u.model) u.model = d.model;
+    for (const c of Array.isArray(d.choices) ? d.choices : []) {
+      const delta = c?.delta;
+      if (!delta) continue;
+      if (Array.isArray(delta.tool_calls) && delta.tool_calls.length) {
+        firstToken();
+        for (const tc of delta.tool_calls) toolKeys.add(`${c.index ?? 0}:${tc?.index ?? tc?.id ?? toolKeys.size}`);
+      }
+      if (nonEmpty(delta.content) || nonEmpty(delta.reasoning_content) || nonEmpty(delta.reasoning)) firstToken();
+    }
+    u.toolCalls = toolKeys.size;
+    if (d.usage) take(d.usage, d.model);
   };
   return {
     usage: u,
@@ -302,9 +344,32 @@ export function createOpenAIUsageTap({ wire = 'chat', captureRaw = false } = {})
       try {
         const j = JSON.parse(buf.toString('utf8'));
         if (j && j.usage) take(j.usage, j.model);
+        u.toolCalls = toolCallsInBody(wire, j);
       } catch { /* not JSON — no usage to tap */ }
     },
   };
+}
+
+const nonEmpty = (v) => typeof v === 'string' && v.length > 0;
+
+/** Time to the first generated token of a tapped stream, or null (buffered, or no token). */
+export function ttftOf(usage, startTime) {
+  return typeof usage?.firstTokenAt === 'number' ? Math.max(0, usage.firstTokenAt - startTime) : null;
+}
+
+/** Reasoning tokens an OpenAI-wire usage object reports (either wire), else 0. */
+export function reasoningTokensOf(usage) {
+  const n = usage?.completion_tokens_details?.reasoning_tokens ?? usage?.output_tokens_details?.reasoning_tokens;
+  return typeof n === 'number' && Number.isFinite(n) && n > 0 ? n : 0;
+}
+
+/** Tool calls in a buffered (non-streamed) OpenAI-wire response body. */
+function toolCallsInBody(wire, j) {
+  if (!j || typeof j !== 'object') return 0;
+  if (wire === 'responses') return (Array.isArray(j.output) ? j.output : []).filter((it) => it?.type === 'function_call').length;
+  let n = 0;
+  for (const c of Array.isArray(j.choices) ? j.choices : []) n += Array.isArray(c?.message?.tool_calls) ? c.message.tool_calls.length : 0;
+  return n;
 }
 
 // ── Everything keyed to a data dir ───────────────────────────────────────────
@@ -531,7 +596,7 @@ export function createMeasurement({ dataDir, tokenDb, redactRawBody, canonicalMo
      * bodies. Only genuine completions with real usage — the caller excludes
      * count_tokens. A no-op without a token DB, like the row itself.
      */
-    recordAnthropicTap({ route, model, reqJson, proc, agent, project, requestId, taskId, usage, latencyMs, captureRaw, provider = '', subscription = 'max-oauth-passthrough', upstream = '', callKind = '' }) {
+    recordAnthropicTap({ route, model, reqJson, proc, agent, project, requestId, taskId, usage, latencyMs, ttftMs = null, captureRaw, provider = '', subscription = 'max-oauth-passthrough', upstream = '', callKind = '' }) {
       const db = tokenDb();
       if (!db || !usage.sawUsage) return;
       const uIn = usage.input; const uOut = usage.output;
@@ -558,6 +623,8 @@ export function createMeasurement({ dataDir, tokenDb, redactRawBody, canonicalMo
           cache_read_tokens: cacheRead,   // WIRE-02: surfaced separately from total
           cache_write_tokens: cacheWrite,
           latency_ms: latencyMs,
+          ttft_ms: ttftMs,
+          tool_calls: usage.toolCalls ?? null,
           // What this turn asked, redacted. Empty until now — not by policy but
           // because extractPromptPreview() only read string `content`, and on
           // this wire content is an array of typed blocks, so it would have
@@ -676,7 +743,7 @@ export function createMeasurement({ dataDir, tokenDb, redactRawBody, canonicalMo
      * bodies. `body` is the chat-shaped request (a Responses-API request converted
      * with responsesToChatBody). A no-op without a token DB or without usage.
      */
-    recordOpenAITap({ provider, wire, body, proc, agent, project, requestId, taskId, usage, latencyMs, captureRaw, upstream = '', callKind = '', routing = null }) {
+    recordOpenAITap({ provider, wire, body, proc, agent, project, requestId, taskId, usage, latencyMs, ttftMs = null, captureRaw, upstream = '', callKind = '', routing = null }) {
       const db = tokenDb();
       if (!db || !usage.sawUsage) return;
       const rawModel = usage.model || body?.model || 'unknown';
@@ -695,7 +762,11 @@ export function createMeasurement({ dataDir, tokenDb, redactRawBody, canonicalMo
           total_tokens: total,
           cache_read_tokens: usage.cacheRead,
           cache_write_tokens: usage.cacheWrite,
+          reasoning_tokens: usage.reasoning || 0,
           latency_ms: latencyMs,
+          // NULL when not measured: a buffered body has no first token to time.
+          ttft_ms: ttftMs,
+          tool_calls: usage.toolCalls ?? null,
           prompt_preview: promptPreview(body?.messages),
           tokens_estimated: total === 0 ? 1 : 0,
           agent,

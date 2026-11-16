@@ -3,7 +3,8 @@
 // A MEASURING PASSTHROUGH for the OpenAI wire (chat/completions and the Responses
 // API): forward the agent's request verbatim to the host it was going to anyway,
 // with the agent's own credentials, stream the response straight back, and tap
-// the usage into token_usage + the per-run context capture.
+// the usage into token_usage + the per-run context capture — with the call's
+// time to first token (streams only), reasoning tokens and tool-call count.
 //
 // Unlike server.mjs's OpenAI shim, nothing here chooses a provider or a model,
 // re-frames a stream or answers the call itself — the agent's provider, model and
@@ -25,7 +26,7 @@ import { buildAnthropicForwardHeaders } from './anthropic-headers.mjs';
 import {
   forwardWithRetry, upstreamUrl, copyResponseHeaders, pipeAndTap, answeringProvider, readRequestBody, parseRequestJson,
 } from './anthropic-forward.mjs';
-import { createOpenAIUsageTap, tapCapturesRawBodies } from './measurement.mjs';
+import { createOpenAIUsageTap, tapCapturesRawBodies, ttftOf } from './measurement.mjs';
 import { responsesToChatBody } from './shim-tools.mjs';
 import { normalizeOffloadConfig, offloadRowFields } from './offload.mjs';
 import { errorDetail } from './log-format.mjs';
@@ -131,7 +132,7 @@ export async function handleOpenAIPassthrough(req, res, {
         if (chatBody) {
           measurement.recordOpenAITap({
             provider, wire, body: chatBody, proc, agent, project, requestId: `offload-${randomUUID()}`, taskId,
-            usage: tap.usage, latencyMs: Date.now() - startTime, captureRaw, upstream: cfg.target.url, callKind,
+            usage: tap.usage, latencyMs: Date.now() - startTime, ttftMs: ttftOf(tap.usage, startTime), captureRaw, upstream: cfg.target.url, callKind,
             routing: offloadRowFields({ agent, cfg, decision, outcome, fromProvider: provider }),
           });
         }
@@ -166,7 +167,7 @@ export async function handleOpenAIPassthrough(req, res, {
       // A routing upstream (this proxy, as an opencode provider) names the account
       // that answered; the label the agent gave the router is not a provider.
       provider: answeringProvider(upstream, provider), wire, body: chatBody, proc, agent, project, requestId, taskId,
-      usage: usageTap.usage, latencyMs: Date.now() - startTime, captureRaw,
+      usage: usageTap.usage, latencyMs: Date.now() - startTime, ttftMs: ttftOf(usageTap.usage, startTime), captureRaw,
       upstream: upstreamBase, callKind, routing,
     });
   }
