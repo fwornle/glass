@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "0cc6cea7dfad2c00bb088c1c2cea55767bbab690",
+      "sha": "b11308d431510da63c8664f04addd5d551628629",
       "dirty": false
     },
     "proxy": {
@@ -207,7 +207,7 @@
     "proxy/proxy-bridge/usage-api.mjs": "62a73df7af8f02433e4cf4a3fa370ca557ad6bcb6253dd38b80b1b550b1e60f0",
     "scripts/measurement-reconciler.mjs": "ad1c27f8542855bfed4c5f3dc0cbb1fe62ba9ae315c40cde57930f530807ae97",
     "tests/ab.test.mjs": "b302aa18b2aaf94038167426c29c9c75379241a89b4c96d261207d88f3701f67",
-    "tests/agent-mouse.test.mjs": "635638d86036c0f012060f7493b376408ab6fd312c9bd6b4b229a13fdb267a4c",
+    "tests/agent-mouse.test.mjs": "0f854096bbb8f8f3be883407ba69f0af638471664b02208debb50e9d3d3b6975",
     "tests/cluster.test.mjs": "d59bd52dc0c32b762159f551ad9210566b1b54aec712c5eca68c8201654a92f4",
     "tests/coexist.test.mjs": "11c0f6dfb77bf4214ecbbcb0f7323e9f48d9737f3962c51558d18d46f3ee956a",
     "tests/combined.test.mjs": "7ccfdda8eb33d2cccdd50518375dc3ab8e230707368cbc505a5318da6e9cb613",
