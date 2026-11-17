@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "b11308d431510da63c8664f04addd5d551628629",
+      "sha": "f6f3e2e50aa1ee9fe4bc82865c3ed62773661896",
       "dirty": false
     },
     "proxy": {
@@ -11,10 +11,10 @@
       "dirty": false
     }
   },
-  "manifest": "80cea240f631db39758bc16fc677d972e0040e54fe3db459206c9b8124799f69",
+  "manifest": "d94bc286a8c84988141cd385c4dd3a5ae837c142782f2db7bd93d06aaf390572",
   "files": {
     ".gitguardian.yaml": "a766a085a4ff9ddecfd1176b50616bd5a24e5b51506b4171d6d303193ce760cc",
-    ".github/workflows/ci.yml": "dcb6951a6a31d6f8562b2ba83026cc9ee04b73a04e343ea34bf17815242aa5a2",
+    ".github/workflows/ci.yml": "5e5398b3f9687bdcff003f0e2e93b49687d07d5d53fe540c23c04ec9e9f679e6",
     ".github/workflows/docs.yml": "348f5acf565784ebe84e54460f34bc9b155c7d9b84aae132216a614fb063d3e6",
     ".github/workflows/release.yml": "8c603d35376d9845e04b454745981a23665365a15b715b966723d1b6e30ea0dc",
     ".gitignore": "ffad799ea223e3aac2d8640e2098393517995bbd0415c9cfabf49ad05c038901",
