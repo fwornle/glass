@@ -96,3 +96,14 @@ test('a malformed trail is no trail, not an error', () => {
   assert.equal(r.outcome, 'routed');
   assert.deepEqual(r.attempts, []);
 });
+
+test('offloaded_from naming the provider that answered is a fallback, not an offload', () => {
+  // Coding's proxy stamps offloaded_from on a call whose offload target failed and that the
+  // agent's own provider then answered.
+  const trail = JSON.stringify({ attempts: [{ provider: 'cluster', model: 'base-model-fast', error: 'gateway_5xx', ms: 195 }] });
+  const fell = routingRowOf({ timestamp: ago(0), route_key: 'bg-auto-measure-title', provider: 'gh-copilot', model: 'claude-haiku-5.5', offloaded_from: 'gh-copilot', attempt_trail: trail });
+  assert.equal(fell.outcome, 'failed');
+  const off = routingRowOf({ timestamp: ago(0), route_key: 'fg-chat/pi', provider: 'cluster', model: 'base-model', upstream: 'http://192.0.2.10:8000/v1', offloaded_from: 'gh-copilot', attempt_trail: '' });
+  assert.equal(off.outcome, 'offloaded');
+  assert.equal(off.host, '192.0.2.10');
+});
