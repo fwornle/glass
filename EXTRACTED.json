@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "293778b2424b3fda772ad964bfab862fc2b16426",
+      "sha": "17125cf65e40bfc0c5663491442e785cffd38be7",
       "dirty": false
     },
     "proxy": {
@@ -25,7 +25,7 @@
     "config/job-classes.yaml": "6381143a74b36460b1ca9c89f16a8af93869c3687b7c73595352c7c4049ef3c6",
     "config/redaction/redaction-patterns.json": "b676f618434a026f7607519e1184c3c80c1e101559be5738e9cc26cf213d9635",
     "docs/_tiers/architecture.deep.md": "051a0ee55a8db7371fba5a7709d9c6330ab4afaed337772253faf430e7144a9f",
-    "docs/_tiers/cluster.deep.md": "d7177d9f0d0178cf23d10ffa082ba8789ed7bb6fd3adf9e9667db57bd42fc998",
+    "docs/_tiers/cluster.deep.md": "f59d8436db5fed691316780bc247f2feb119c7f8cadf6f2a682751694e72b8ae",
     "docs/_tiers/comparing-runs.deep.md": "9436426b09c10792e92f6899ebb81c316ebc65045d82b6ea6c98e3e2cdabdf8f",
     "docs/_tiers/context-window.deep.md": "c424c11fac5a2c2f58398fe633f97627aaf2c2d7f1da0232a6d43c84ad58e26b",
     "docs/_tiers/development.deep.md": "ae1a48bf98dee066d1452891b9189d681ea6629679dbd735080e7ae3b684a4dc",
@@ -122,7 +122,7 @@
     "lib/glass/ab.mjs": "2680a111a08258d3ecafceb6ca64f6524d7c1d2c6641fef0f0c92682e8812559",
     "lib/glass/cli.mjs": "19f35efeac58db7743ce51bcc023b6d4fa5a6d412ae5eeefecf3a40926677f44",
     "lib/glass/client.mjs": "36cb784d4b55cdff379cbffffb86b9a53e0d1a9706564abc8ee78f4b03a1a75c",
-    "lib/glass/cluster.mjs": "95d7fe56f3ad918a07e27bb621ed7b0cc365b4afee50c8b2eb041b6525560856",
+    "lib/glass/cluster.mjs": "fe31f0071444c01077fb57bc28abe19388758192f5dba252b7affa9258a5b2e3",
     "lib/glass/coexist.mjs": "444fd5f1a170bad6077dcfae7cf64a6397cb4b7b31434236609c4a9c531fe453",
     "lib/glass/combined.mjs": "77069ce8443ef7d22ac00cb1b91f3f40f0b249df84fa49786154871a3df89d0e",
     "lib/glass/copilot-quota.mjs": "d09aad330f18d4571124484a908caf7f875b6ab79e3c176de3e097b69ecfeb3d",
@@ -177,7 +177,7 @@
     "lib/teams/config.cjs": "724aae3dfeb3246aec20679a71566a9406c99d06afbb8f99c51ad026f5b6a5a0",
     "mkdocs.yml": "8917e60a12a8db5913bedfd54573487d8aefa39c359865667d1698db71a9f6e4",
     "overrides/main.html": "58bef75c205f2ecf969addf151ae02b35b434c1a6b527dce12d153a9005fc42f",
-    "package.json": "2daf8e730b1c19923d6e331266b96894522cdd690ba69d99094866a20b8dd0c8",
+    "package.json": "66a9cea811163b22e94038552539b62bea41d037289559f4f3bc2d353eade473",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "4c355971338bbfcd39b9c9cbb7af16eda08112380bc5a151a6daa3b9f08aed3f",
@@ -208,7 +208,7 @@
     "scripts/measurement-reconciler.mjs": "ad1c27f8542855bfed4c5f3dc0cbb1fe62ba9ae315c40cde57930f530807ae97",
     "tests/ab.test.mjs": "b302aa18b2aaf94038167426c29c9c75379241a89b4c96d261207d88f3701f67",
     "tests/agent-mouse.test.mjs": "5983f113735275500795f6929056d74107ebc15d7faa6638c80a0d47ab32171c",
-    "tests/cluster.test.mjs": "87ba0fee8682858066b17b6e1dfef3d3852ea4547a0ce6117852974d87670a38",
+    "tests/cluster.test.mjs": "fb9facd427b82c44b839381f4309cdf79b4458fe645c7a6c55995fad695e2433",
     "tests/coexist.test.mjs": "11c0f6dfb77bf4214ecbbcb0f7323e9f48d9737f3962c51558d18d46f3ee956a",
     "tests/combined.test.mjs": "7ccfdda8eb33d2cccdd50518375dc3ab8e230707368cbc505a5318da6e9cb613",
     "tests/copilot-quota.test.mjs": "cd62b24972fb4252c7f00010776885cc141b7ca561df60b73d39abaa7dbe441c",
@@ -220,16 +220,16 @@
     "tests/routing.test.mjs": "6678210cbd484bc7c78165638e1b986f6fcc3980ed2b513926999525e29898b6",
     "tests/statusline.test.mjs": "1a36eaf4b21f99372e9c133609c5b1698df5b37f9e927f8562024f92b39f1188",
     "tests/update.test.mjs": "d5f813fd8e72a30389d8eeab1fc37f66bafcbb9c7f993503b4663615d7301497",
-    "ui/assets/CostTab-BGf2JTjA.js": "286a74f9820f214f731e86ff937ad3787d9bf97621d8cd88338b151eb6439d82",
-    "ui/assets/JobClassesTab-5HVCjdga.js": "d166b5d7f5fe402978cfc44e6106f772ab5a1a3ec92dd015cb388deb9f05c587",
-    "ui/assets/TrialsTab-D9N02vGt.js": "d34dc06eb73c2bad11e79588848f4175b739a20b0c26e2ba4c23c865bd77d5b5",
-    "ui/assets/index-B2La1CjD.js": "ec75be9232698f90dad92066c1e260a70259df2ed55bfd01f1180d96f414350e",
-    "ui/assets/index-BLBFxfQL.css": "16c0e3b202412985071c88f41a041d119d47284d0e0061ac4549bd0420300b3f",
+    "ui/assets/CostTab-CABCFav_.js": "2b02f918af31355e62cca8b4a9fad33520f23bef07ed52873ebfb9b400c8c515",
+    "ui/assets/JobClassesTab-lQjyqGQ7.js": "9dcc69b25e42a7f131a79e3be4900f644fd7a132965360c12c73a2cec384de00",
+    "ui/assets/TrialsTab-315ZkuVq.js": "8ed6b96f0b8250a6abc1d7b8a22a96a0c4c9f1f330e505cf3afb283416af88b1",
+    "ui/assets/index-BEnk6syH.js": "15e1104241c5b6640281fab3f356c05ddba89026df4c41ac02f5736ff40805aa",
+    "ui/assets/index-CbczTadz.css": "dd08ba396878a7a222ec44967bd96c0cf05530d95821745b1d9753f43b399216",
     "ui/assets/omitted-Be0_Qxkl.js": "166d9bf3626149b25a8a52b6c7c123fd5da132c215f410ae6a2d86e0781fa4a3",
     "ui/assets/vendor-charts-Dwi50mnp.js": "8f2b5ed14c6f03d9ed615e98b894ffb97e65b924803bc7b6147a912d694506c0",
     "ui/assets/vendor-icons-Kb_4VSMC.js": "e1ee0bdd98ecc8fcf8576fa21c76fc014e0cdbd0b39a0220ad9d87818c388159",
     "ui/assets/vendor-react-BixgUiYW.js": "84207fbc9bd45aef633cc3d9e883f2fd4c0ae2c99df3f920d9ba14883a464cc6",
     "ui/assets/vendor-redux-XJVtE8Si.js": "0430373614e66c5e7250f6605a1abcae05c64dd9fa26ca4c1570fbd79aff8aaa",
-    "ui/index.html": "32a218e70f69c650a525034d10d4baef8aa52792d78ab6ec4da1fad2afc76071"
+    "ui/index.html": "c1346fa6ab5760e2642351d8262ef762c7a122fd19f58713da9a78f73018f12b"
   }
 }
