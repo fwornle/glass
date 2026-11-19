@@ -70,7 +70,11 @@ export function normalizeOffloadConfig(raw = {}) {
   const r = raw && typeof raw === 'object' ? raw : {};
   const t = r.target && typeof r.target === 'object' ? r.target : {};
   const m = t.models && typeof t.models === 'object' ? t.models : {};
-  const url = String(t.url || '').trim().replace(/\/+$/, '');
+  // A bare http://host:port is the server's root, not its OpenAI API: the
+  // compatible servers answer under /v1, and a gateway may forward anything else
+  // to a backend — /models on the cluster gateway does, and fails with the
+  // backend's 503 while /v1/models answers.
+  const url = String(t.url || '').trim().replace(/\/+$/, '').replace(/^(https?:\/\/[^/\s]+)$/, '$1/v1');
   const agents = {};
   for (const a of OFFLOAD_AGENTS) agents[a] = r.agents?.[a] === true;
   const bands = BAND_ORDER.filter((b) => Array.isArray(r.bands) && r.bands.includes(b));
@@ -133,7 +137,14 @@ export function createTargetHealth({ fetch, getConfig, getKey = () => '', interv
         headers: key ? { authorization: `Bearer ${key}` } : {},
         signal: AbortSignal.timeout(5000),
       });
-      if (!r.ok) throw new Error(r.status === 401 || r.status === 403 ? `HTTP ${r.status} — key missing or rejected` : `HTTP ${r.status}`);
+      if (!r.ok) {
+        if (r.status === 401 || r.status === 403) throw new Error(`HTTP ${r.status} — key missing or rejected`);
+        // The endpoint's own words ("backend unavailable: Connection refused")
+        // tell a server that is down from an address that is wrong.
+        const body = await r.json().catch(() => null);
+        const said = body?.error?.message || body?.error || body?.message;
+        throw new Error(`HTTP ${r.status}${typeof said === 'string' && said ? ` — ${said}` : ''}`);
+      }
       const j = await r.json().catch(() => ({}));
       const models = Array.isArray(j?.data) ? j.data.map((d) => String(d?.id || '')).filter(Boolean) : [];
       Object.assign(state, { url, reachable: true, checkedAt: now(), latencyMs: now() - t0, models, error: '' });
