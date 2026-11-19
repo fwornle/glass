@@ -3,11 +3,11 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "b6c7d4602360eddbb2735e910ab4becc1b80c8cc",
+      "sha": "293778b2424b3fda772ad964bfab862fc2b16426",
       "dirty": false
     },
     "proxy": {
-      "sha": "0b20e3f868d2af55dca9acc71f37a9f0d2e9ea62",
+      "sha": "544a9d77545dcdb44587db91c1e8871814bdfc93",
       "dirty": false
     }
   },
@@ -33,7 +33,7 @@
     "docs/_tiers/index.deep.md": "22414c7eb8610a54a6d37c8f0e089eda2a07e3e6bee96414ae860d4482c295ed",
     "docs/_tiers/job-classes.deep.md": "c8c3bfb3b10c825e98c8b6b3934674ae0b7f906532650afb3093c43b32a7c032",
     "docs/_tiers/models.deep.md": "f030abb316f8963dedde4c6a367f38f1ffb4cbeaf27fcc89fafe6c28b963ce9f",
-    "docs/_tiers/offload.deep.md": "37961860500aa2d6698c58c6b580bb882e3da58b6eef58d7f29f7a167275ec8c",
+    "docs/_tiers/offload.deep.md": "81a5a7ed07676cd60ac7bbc340b36918cbab0f780207c87234374d8a24810892",
     "docs/_tiers/privacy.deep.md": "1782e4b0546cb75b4d72ddfc7f445587c31ea84e35d29d5fabcc4ef567968db1",
     "docs/_tiers/reference.deep.md": "f79ef327b6402ffbbf3db4b5f64d1c086944021f0c79411885ecbe829fb68b7d",
     "docs/_tiers/status-line.deep.md": "8357f57b7a83fc14cf54030d4b119f10ad2665e0c06a2cf37baf7aa2304bd694",
@@ -94,7 +94,7 @@
     "docs/job-classes-overview.md": "1b57761b3d83733c2d5aead1c2dcaf1433ddab0584a89f19a86e5d5dc4ca28e3",
     "docs/job-classes.md": "3b5d97e314f802749679a69c85ea5ef98c1217379875a588856a15a33c2feba7",
     "docs/models.md": "052cdb1859851266dc99771cfd48b73babff810e429d36e1c0ae3f049cc8cc17",
-    "docs/offload.md": "df9d647199b746746ff5f85a265971d8391109c1f1f71d1ef559beb4ff481c5d",
+    "docs/offload.md": "0b7a15aac3988d08da8e8ae6ef53d88cc128effbef1056d522afeb0dfe12494f",
     "docs/overview.md": "2a53482b7c6453fb1477965432758abc99221de8923d8379df70a054c759b46b",
     "docs/privacy.md": "1c1afb5ed34edd01478a9f6271458238d88f90d24c329c426a1eea94f2d28536",
     "docs/puml/_standard-style.puml": "c0d793f8dbcbf305650674089ee9df0e3298e136ea29d10bab588cdddbba5c8f",
@@ -177,7 +177,7 @@
     "lib/teams/config.cjs": "724aae3dfeb3246aec20679a71566a9406c99d06afbb8f99c51ad026f5b6a5a0",
     "mkdocs.yml": "8917e60a12a8db5913bedfd54573487d8aefa39c359865667d1698db71a9f6e4",
     "overrides/main.html": "58bef75c205f2ecf969addf151ae02b35b434c1a6b527dce12d153a9005fc42f",
-    "package.json": "40977d76723b58a4bf1237e820ebb60bbdceee5069c60d484af3548c51379d32",
+    "package.json": "2daf8e730b1c19923d6e331266b96894522cdd690ba69d99094866a20b8dd0c8",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "4c355971338bbfcd39b9c9cbb7af16eda08112380bc5a151a6daa3b9f08aed3f",
@@ -195,7 +195,7 @@
     "proxy/proxy-bridge/model-canonical.mjs": "cecffe2ae82b8faca557fecd4fc41378ac48450a220d48cad9b00e5b7deafa58",
     "proxy/proxy-bridge/model-trials.mjs": "b0bad08b93171c3f8bfac34f2fe631ca96011fa878e0b77cf5336fbd0b1708df",
     "proxy/proxy-bridge/no-proxy.mjs": "9f046217a50188971c42017cb21bb0991a43fcfc1f83537ce2615da033bf92e7",
-    "proxy/proxy-bridge/offload.mjs": "11f2c6b94926f3be292b1d54f37d77593294b796f0abefa3ae8d1759cc12d196",
+    "proxy/proxy-bridge/offload.mjs": "23b61a0117fc66144a369a5e8100ecbd8cc8c44519112e0d51b729fd23745f81",
     "proxy/proxy-bridge/openai-passthrough.mjs": "aba1c9fd5fd1e98069a50d02e330cfd9bdc0a1989b62bb1c601fb7088853310b",
     "proxy/proxy-bridge/prompt-classifier.mjs": "9b9018319101deec7c371f0938002e3a949654d6a793c7418899468a965eabb5",
     "proxy/proxy-bridge/raw-bodies.mjs": "dc0a777780fad655611eb9729c55b2b4835215164ee08ff4059cbff0ce815008",

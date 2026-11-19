@@ -120,6 +120,20 @@ export function estimateInputTokens(body) {
  * Reachability of the target, probed in the background so a dead endpoint
  * costs no call a timeout. Unreachable = out of every decision.
  */
+/**
+ * The server's own /health, next to the OpenAI base URL: `http://h:8000/v1` → `http://h:8000/health`.
+ * A gateway's /health speaks for the model server behind it; /v1/models may be a fixed list.
+ */
+export function healthUrlOf(url) {
+  return `${String(url).replace(/\/+$/, '').replace(/\/v\d+$/, '')}/health`;
+}
+
+/**
+ * Is the endpoint usable: it lists models AND its /health says it can serve. A listing
+ * alone passes a gateway whose model server is down (it answers /v1/models from a fixed
+ * list while every call returns 503). An endpoint without /health (404/405) is judged by
+ * its listing alone.
+ */
 export function createTargetHealth({ fetch, getConfig, getKey = () => '', intervalMs = 60_000, now = Date.now, setTimer = setInterval, clearTimer = clearInterval }) {
   const state = { url: '', reachable: false, checkedAt: 0, latencyMs: 0, models: [], error: 'not checked yet' };
   let timer = null;
@@ -147,6 +161,15 @@ export function createTargetHealth({ fetch, getConfig, getKey = () => '', interv
       }
       const j = await r.json().catch(() => ({}));
       const models = Array.isArray(j?.data) ? j.data.map((d) => String(d?.id || '')).filter(Boolean) : [];
+      const h = await fetch(healthUrlOf(url), {
+        headers: key ? { authorization: `Bearer ${key}` } : {},
+        signal: AbortSignal.timeout(5000),
+      });
+      if (!h.ok && h.status !== 404 && h.status !== 405) {
+        const body = await h.json().catch(() => null);
+        const said = body?.error?.message || body?.error || body?.message || body?.status;
+        throw new Error(`lists models, but /health answers HTTP ${h.status}${typeof said === 'string' && said ? ` — ${said}` : ''}`);
+      }
       Object.assign(state, { url, reachable: true, checkedAt: now(), latencyMs: now() - t0, models, error: '' });
     } catch (err) {
       Object.assign(state, { url, reachable: false, checkedAt: now(), latencyMs: now() - t0, models: [], error: String(err?.message || err).slice(0, 200) });
