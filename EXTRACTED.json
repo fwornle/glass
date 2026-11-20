@@ -3,11 +3,11 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "cf0404341247265340da82217af189ac9cfdb1b3",
+      "sha": "03c14b4c9574928653f2fbae31e6b6534ac40cc1",
       "dirty": false
     },
     "proxy": {
-      "sha": "fed0f5cd487eae1fedd9f50df5c6db6efaca5c4c",
+      "sha": "f858b5aa78ccd04dc3b85127c7abb408121240b5",
       "dirty": false
     }
   },
@@ -178,7 +178,7 @@
     "lib/teams/config.cjs": "724aae3dfeb3246aec20679a71566a9406c99d06afbb8f99c51ad026f5b6a5a0",
     "mkdocs.yml": "8917e60a12a8db5913bedfd54573487d8aefa39c359865667d1698db71a9f6e4",
     "overrides/main.html": "58bef75c205f2ecf969addf151ae02b35b434c1a6b527dce12d153a9005fc42f",
-    "package.json": "666afd349d63fa59fc8f200652d6b0e6e66d12979ae93143bee5ca27b5dfc11c",
+    "package.json": "3fa8ba3d918565d61a9a98db02662500ff61234b96a4ba20df12e3d026f40406",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "4c355971338bbfcd39b9c9cbb7af16eda08112380bc5a151a6daa3b9f08aed3f",
@@ -221,16 +221,16 @@
     "tests/routing.test.mjs": "6678210cbd484bc7c78165638e1b986f6fcc3980ed2b513926999525e29898b6",
     "tests/statusline.test.mjs": "1a36eaf4b21f99372e9c133609c5b1698df5b37f9e927f8562024f92b39f1188",
     "tests/update.test.mjs": "d5f813fd8e72a30389d8eeab1fc37f66bafcbb9c7f993503b4663615d7301497",
-    "ui/assets/CostTab-Cx-XWOHy.js": "896b91f311fa2e24fd5a5887de00bbfa7188c1052164a0831ac6040b4279dc66",
-    "ui/assets/JobClassesTab-iGDKt1g1.js": "4dfb0f440c2f3bb8316f52fd02d7314e74cf7038a55647e24e7f4510739e225e",
-    "ui/assets/TrialsTab-CeWRr8Un.js": "3bb6b72ae993f42723bca4371414993662e9393cbe45fc26c708d3c831066feb",
-    "ui/assets/index-CKNlDNj3.js": "1a6d3e2711f20b3ef3e3538c13b064758865245514d7f0ebd722e143f6130e5d",
-    "ui/assets/index-W5bykugl.css": "0d4af2aa618524c5850330de6c583d9904c3e46d41991ba8eb173ab7f1b9857f",
+    "ui/assets/CostTab-9PBnMl6D.js": "a8123dbab59c7aeff8aea7f14e42d8e31eef421be2561193d6da2f60d6d40ed4",
+    "ui/assets/JobClassesTab-8qV2uLDx.js": "6ae64c92638d4d3fb2fb0cb4e2cce41e9a1a341f66ce83e7de8e515367158818",
+    "ui/assets/TrialsTab-CAEOcYkv.js": "ee592cff7560bf1c49cfe4f76dd46c7a14ccaad3da21ac3614bca490d1a4d661",
+    "ui/assets/index-B3VS4RXQ.js": "91ea3dc338b8d26e9c1aa45eda2262b72f02b976a70f68ab53a9b163249549b5",
+    "ui/assets/index-DyaKzpMf.css": "cab500597df1aa613cf9ec56e721d6fb601e71781c6bf5e6c23e9397970a8ff2",
     "ui/assets/omitted-Be0_Qxkl.js": "166d9bf3626149b25a8a52b6c7c123fd5da132c215f410ae6a2d86e0781fa4a3",
     "ui/assets/vendor-charts-Dwi50mnp.js": "8f2b5ed14c6f03d9ed615e98b894ffb97e65b924803bc7b6147a912d694506c0",
     "ui/assets/vendor-icons-BRMS8TeC.js": "7ddc2e390c16367c7a9ee653dea0f407426943f829fdd17de039d00366e778f2",
     "ui/assets/vendor-react-BixgUiYW.js": "84207fbc9bd45aef633cc3d9e883f2fd4c0ae2c99df3f920d9ba14883a464cc6",
     "ui/assets/vendor-redux-XJVtE8Si.js": "0430373614e66c5e7250f6605a1abcae05c64dd9fa26ca4c1570fbd79aff8aaa",
-    "ui/index.html": "d5765de9f6c547827e44d4810ed08bfa74809a2fbe0e229d9bc433a771f58caa"
+    "ui/index.html": "8d9d21da96d6dd05b4d3cc6a41e01e34b755fddc169ba48a7c0593a23b611792"
   }
 }
