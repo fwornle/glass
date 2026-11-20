@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "03c14b4c9574928653f2fbae31e6b6534ac40cc1",
+      "sha": "db1e3569dd59df0115ee5684470301d196d616c3",
       "dirty": false
     },
     "proxy": {
@@ -25,7 +25,7 @@
     "config/job-classes.yaml": "6381143a74b36460b1ca9c89f16a8af93869c3687b7c73595352c7c4049ef3c6",
     "config/redaction/redaction-patterns.json": "b676f618434a026f7607519e1184c3c80c1e101559be5738e9cc26cf213d9635",
     "docs/_tiers/architecture.deep.md": "051a0ee55a8db7371fba5a7709d9c6330ab4afaed337772253faf430e7144a9f",
-    "docs/_tiers/cluster.deep.md": "b954310c114052bdf39f700fa083b16513450bf1874f74ddd1934aa522b3ffe2",
+    "docs/_tiers/cluster.deep.md": "f45efc2620698ed9b6c896a28f76ed3ba39e1dc7fcee5db71b49b1ce91690324",
     "docs/_tiers/comparing-runs.deep.md": "9436426b09c10792e92f6899ebb81c316ebc65045d82b6ea6c98e3e2cdabdf8f",
     "docs/_tiers/context-window.deep.md": "c424c11fac5a2c2f58398fe633f97627aaf2c2d7f1da0232a6d43c84ad58e26b",
     "docs/_tiers/development.deep.md": "ae1a48bf98dee066d1452891b9189d681ea6629679dbd735080e7ae3b684a4dc",
@@ -44,7 +44,7 @@
     "docs/assets/overview.css": "b46ee1bc44946d483aee1bfe81825194a42b343c9020d63f6737d287b098838c",
     "docs/assets/overview.js": "98ecba4bbdbef7fbc9548c2dafc06976403f3318bbff9360d7f618e6bf04cbb1",
     "docs/assets/tabbed-toc.js": "81ed2dba4963b6d10a182ff923b85ccab85fac8b5e19ce461bdf57b0a5c807d9",
-    "docs/cluster.md": "0b6dcb7a3441dd1f0904be197b93540530f532837fb724cf30b3b6311a204e25",
+    "docs/cluster.md": "f148bfc90215abf8daa32272719da46683712d6afde69cc2fc4379fb41b14358",
     "docs/comparing-runs.md": "943aecd3c0492c9c366a0cf271fb71abd850ba9810ad18ee1dbc726fb01fb11e",
     "docs/connectivity.md": "ef47567396d0ce4ec436522e10219dd74ac52668acd4b648b99c98ac31f334e1",
     "docs/context-window.md": "9e50526bb32ac5113ff91838fa3b920a448378e0aa3584612d88c837d1939ed3",
@@ -122,7 +122,7 @@
     "lib/glass/ab.mjs": "2680a111a08258d3ecafceb6ca64f6524d7c1d2c6641fef0f0c92682e8812559",
     "lib/glass/cli.mjs": "19f35efeac58db7743ce51bcc023b6d4fa5a6d412ae5eeefecf3a40926677f44",
     "lib/glass/client.mjs": "36cb784d4b55cdff379cbffffb86b9a53e0d1a9706564abc8ee78f4b03a1a75c",
-    "lib/glass/cluster.mjs": "9e723eb61bb481a4a82b86a210f7f6e4442ff53b96c9a895e72f4cc76a9950ce",
+    "lib/glass/cluster.mjs": "0843202e9214439d8b0ed91b61774ba2011bfcbb526c7357da8a4d737ce2f60b",
     "lib/glass/coexist.mjs": "444fd5f1a170bad6077dcfae7cf64a6397cb4b7b31434236609c4a9c531fe453",
     "lib/glass/combined.mjs": "77069ce8443ef7d22ac00cb1b91f3f40f0b249df84fa49786154871a3df89d0e",
     "lib/glass/copilot-quota.mjs": "d09aad330f18d4571124484a908caf7f875b6ab79e3c176de3e097b69ecfeb3d",
@@ -178,7 +178,7 @@
     "lib/teams/config.cjs": "724aae3dfeb3246aec20679a71566a9406c99d06afbb8f99c51ad026f5b6a5a0",
     "mkdocs.yml": "8917e60a12a8db5913bedfd54573487d8aefa39c359865667d1698db71a9f6e4",
     "overrides/main.html": "58bef75c205f2ecf969addf151ae02b35b434c1a6b527dce12d153a9005fc42f",
-    "package.json": "3fa8ba3d918565d61a9a98db02662500ff61234b96a4ba20df12e3d026f40406",
+    "package.json": "3eb627976e98512a1ada2103b52f59ce6477cb7f25577b29f4ca8c4deae1e8fe",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "4c355971338bbfcd39b9c9cbb7af16eda08112380bc5a151a6daa3b9f08aed3f",
@@ -209,7 +209,7 @@
     "scripts/measurement-reconciler.mjs": "ad1c27f8542855bfed4c5f3dc0cbb1fe62ba9ae315c40cde57930f530807ae97",
     "tests/ab.test.mjs": "b302aa18b2aaf94038167426c29c9c75379241a89b4c96d261207d88f3701f67",
     "tests/agent-mouse.test.mjs": "5983f113735275500795f6929056d74107ebc15d7faa6638c80a0d47ab32171c",
-    "tests/cluster.test.mjs": "2873e3406fae97bd3026852d305cd746813e0606ac5ced9b7bc8c65bafbb9dc3",
+    "tests/cluster.test.mjs": "db626c5cd2514eafcbb10d5a27cc39a87fc9e2fe3318d691b44d21548fd9d384",
     "tests/coexist.test.mjs": "11c0f6dfb77bf4214ecbbcb0f7323e9f48d9737f3962c51558d18d46f3ee956a",
     "tests/combined.test.mjs": "7ccfdda8eb33d2cccdd50518375dc3ab8e230707368cbc505a5318da6e9cb613",
     "tests/copilot-quota.test.mjs": "cd62b24972fb4252c7f00010776885cc141b7ca561df60b73d39abaa7dbe441c",
@@ -221,16 +221,16 @@
     "tests/routing.test.mjs": "6678210cbd484bc7c78165638e1b986f6fcc3980ed2b513926999525e29898b6",
     "tests/statusline.test.mjs": "1a36eaf4b21f99372e9c133609c5b1698df5b37f9e927f8562024f92b39f1188",
     "tests/update.test.mjs": "d5f813fd8e72a30389d8eeab1fc37f66bafcbb9c7f993503b4663615d7301497",
-    "ui/assets/CostTab-9PBnMl6D.js": "a8123dbab59c7aeff8aea7f14e42d8e31eef421be2561193d6da2f60d6d40ed4",
-    "ui/assets/JobClassesTab-8qV2uLDx.js": "6ae64c92638d4d3fb2fb0cb4e2cce41e9a1a341f66ce83e7de8e515367158818",
-    "ui/assets/TrialsTab-CAEOcYkv.js": "ee592cff7560bf1c49cfe4f76dd46c7a14ccaad3da21ac3614bca490d1a4d661",
-    "ui/assets/index-B3VS4RXQ.js": "91ea3dc338b8d26e9c1aa45eda2262b72f02b976a70f68ab53a9b163249549b5",
+    "ui/assets/CostTab-BbxxJnQY.js": "3f7e65bb69e898dfd06b1140f682abc893dda12f9dd0e64d513e6e72c525a2ab",
+    "ui/assets/JobClassesTab-CGCTRxXt.js": "c752096b7c80b202fe3a5fa9ca4cd856e2ddb3153b9e5da44b96a84d16c5ba75",
+    "ui/assets/TrialsTab-CsAODsal.js": "4440e6f94c03a496cfbfb62e91c2f8639f9aad5ffee0b38b099fe87f6a6a1a16",
     "ui/assets/index-DyaKzpMf.css": "cab500597df1aa613cf9ec56e721d6fb601e71781c6bf5e6c23e9397970a8ff2",
+    "ui/assets/index-dhVuOIK8.js": "ba1f185d8781f1341f56221c7e452fcca2785387e3ce7951134a72f5967454c9",
     "ui/assets/omitted-Be0_Qxkl.js": "166d9bf3626149b25a8a52b6c7c123fd5da132c215f410ae6a2d86e0781fa4a3",
     "ui/assets/vendor-charts-Dwi50mnp.js": "8f2b5ed14c6f03d9ed615e98b894ffb97e65b924803bc7b6147a912d694506c0",
     "ui/assets/vendor-icons-BRMS8TeC.js": "7ddc2e390c16367c7a9ee653dea0f407426943f829fdd17de039d00366e778f2",
     "ui/assets/vendor-react-BixgUiYW.js": "84207fbc9bd45aef633cc3d9e883f2fd4c0ae2c99df3f920d9ba14883a464cc6",
     "ui/assets/vendor-redux-XJVtE8Si.js": "0430373614e66c5e7250f6605a1abcae05c64dd9fa26ca4c1570fbd79aff8aaa",
-    "ui/index.html": "8d9d21da96d6dd05b4d3cc6a41e01e34b755fddc169ba48a7c0593a23b611792"
+    "ui/index.html": "16db1dc14f50aed7cd391d5822eed2d09207e00175c1e49f2e06b673b1fbf1c2"
   }
 }
