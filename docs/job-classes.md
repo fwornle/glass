@@ -18,9 +18,9 @@ labelled in the background with your own Copilot account. Opt-in, off by default
     model answers all of it. Job classes sort your prompts into kinds of job, so you can see
     what your work consists of and, later, which kinds a cheaper model does just as well.
 
-    A cheap **student** model labels every turn; a strong **teacher** model re-checks a share
-    of them. A class's labels are trusted once the teacher agrees with at least 90 % of them,
-    over at least 20 checked turns (the **gate**).
+    The strong **teacher** model labels your turns and checks some of them a second time. A
+    class's labels are trusted once the second pass agrees with at least 90 % of them, over
+    at least 20 checked turns (the **gate**). After that, a sample of 1 turn in 5 is enough.
 
     ## Switch it on
 
@@ -51,6 +51,21 @@ labelled in the background with your own Copilot account. Opt-in, off by default
     `glass job-classes pull` updates it. The repo itself is set up by someone who runs
     coding (see below).
 
+    ## Pooling the gate with your team
+
+    One person reaches the gate slowly: only the first prompt of each turn is labelled,
+    and only a share of those is checked. With a team's classes joined,
+    `glass job-classes publish` shares your **counts** — per class, how many turns were
+    labelled, checked and agreed, and which classes were confused — as one file,
+    `job-classes/gate/<pseudonym>.json`, pushed to the team's repo with your own git
+    credentials. No prompt is ever in it, and the pseudonym is a hash, not your name.
+    You need write access to that repo.
+
+    The Gate panel then shows a **Team** column beside this machine's: everyone's counts
+    added up, but only those labelled with the same models under the same version of the
+    classes. A teammate on other models is named below the table, not added. Publishing
+    again with unchanged counts changes nothing; a file older than 14 days is left out.
+
     ## glass and coding
 
     Most people only install glass, and it labels, measures and shows on its own. Building
@@ -58,17 +73,19 @@ labelled in the background with your own Copilot account. Opt-in, off by default
 
     | | glass alone | needs coding |
     |---|---|---|
-    | Label your turns (student + teacher, your Copilot account) | ✅ | |
+    | Label your turns (the teacher model, your Copilot account) | ✅ | |
     | Measure your past prompts; tree, map, gate | ✅ | |
     | Join and update a team's classes | ✅ | |
+    | Pool the gate with your team (`glass job-classes publish`) | ✅ | |
     | Create a team's classes, propose and fold new ones | | ✅ `coding job-classes init` / `propose` / `fold` |
     | Trials: can a cheaper model take over a background job? | read-only, on a machine that also runs coding | ✅ started and accepted in coding's dashboard |
     | Replay a class's past turns on a cheaper model; record the evidence | | ✅ `coding job-classes replay …` |
     | Route a proven class to a cheaper model (the class floor) | ✗ glass shows the label, the agent keeps its model | ✅ for pi, opencode and Copilot CLI |
     | Offload easy calls to your own endpoint | ✅ [Offload](offload.md) | |
 
-    Labels and gate counts stay on the machine that made them, in glass and in coding alike.
-    What a team shares is its classes and, from coding, the evidence of replays.
+    Labels stay on the machine that made them, in glass and in coding alike. What a team
+    shares is its classes, the gate counts its members publish, and, from coding, the
+    evidence of replays.
 
     **Next:** what is sent, the commands, how the gate is counted, and what a team's
     maintainer sets up — open the deep dive.

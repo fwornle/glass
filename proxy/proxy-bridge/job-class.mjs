@@ -82,6 +82,7 @@ import { parse as parseYaml } from 'yaml';
 import { turnIdentity } from './turn-identity.mjs';
 import { toolsInCurrentTurn } from './turn-band.mjs';
 import { toolMeta } from './context-turns.mjs';
+import { gateDirOf, gateSnapshot, memberId, teamPool } from './gate-pool.mjs';
 import { createTurnRecorder, turnStart } from './turn-record.mjs';
 
 /** Harness text that arrives as a user message but is nobody's job (mirrors the measurement's NOISE). */
@@ -408,6 +409,7 @@ export const TURN_JOB_CLASS_DDL = `
     prompt_chars     INTEGER NOT NULL DEFAULT 0,
     prompt_preview   TEXT    NOT NULL DEFAULT '',
     labelled_at      TEXT    NOT NULL,
+    weight           INTEGER NOT NULL DEFAULT 1,
     PRIMARY KEY (conversation_key, turn_index)
   )`;
 
@@ -424,7 +426,7 @@ export const TURN_JOB_CLASS_DDL = `
  *   startCapture?: Function,  // spawn, replaced in tests (turn-record.mjs)
  * }} deps
  */
-export function createJobClassTagger({ getConfig, complete, db, redact = null, log = () => {}, logErr = () => {}, random = Math.random, now = () => new Date(), startCapture }) {
+export function createJobClassTagger({ getConfig, complete, db, redact = null, log = () => {}, logErr = () => {}, random = Math.random, now = () => new Date(), startCapture, member = '' }) {
   const stats = { observed: 0, labelled: 0, teacherSampled: 0, skipped: {}, dropped: 0, failed: 0, invalid: 0, inFlight: 0 };
   // Turns of the classes a replay re-runs (turn-record.mjs), decided by the label.
   const recorder = createTurnRecorder({ redact, log, logErr, now, ...(startCapture ? { start: startCapture } : {}) });
@@ -436,6 +438,10 @@ export function createJobClassTagger({ getConfig, complete, db, redact = null, l
   const gates = new Map(); // taxonomy tag → {at, byClass}; the gate moves slowly
   const loaded = new Map(); // taxonomy file → {tax, mtime, error}
   let bindings = { path: '', mtime: 0, doc: null, error: '' };
+  const pooled = new Map(); // taxonomy file → {at, checked, complete} | {at, error}
+  // This member's pseudonym: its own published file is replaced by the live counts.
+  let me = member;
+  const self = () => (me ||= memberId());
   let insert = null;
   if (db) {
     try {
@@ -443,11 +449,14 @@ export function createJobClassTagger({ getConfig, complete, db, redact = null, l
       // Added after the first rows: the redacted opening of the text that was
       // classified, so a label can be checked against what it was given.
       try { db.exec(`ALTER TABLE turn_job_class ADD COLUMN prompt_preview TEXT NOT NULL DEFAULT ''`); } catch { /* present */ }
+      // Added with sampled reporting (P6): how many turns this label stands for
+      // (report_sample_every once every class has a verdict, else 1).
+      try { db.exec(`ALTER TABLE turn_job_class ADD COLUMN weight INTEGER NOT NULL DEFAULT 1`); } catch { /* present */ }
       insert = db.prepare(`INSERT OR IGNORE INTO turn_job_class
         (conversation_key, turn_index, agent, project, taxonomy, job_class, student_model, student_ms,
-         teacher_class, teacher_model, prompt_chars, prompt_preview, labelled_at)
+         teacher_class, teacher_model, prompt_chars, prompt_preview, labelled_at, weight)
         VALUES (@conversation_key, @turn_index, @agent, @project, @taxonomy, @job_class, @student_model, @student_ms,
-         @teacher_class, @teacher_model, @prompt_chars, @prompt_preview, @labelled_at)`);
+         @teacher_class, @teacher_model, @prompt_chars, @prompt_preview, @labelled_at, @weight)`);
     } catch (err) {
       logErr(`job-class: turn_job_class unavailable, labels are not stored (${err?.message || err})`);
     }
@@ -514,6 +523,45 @@ export function createJobClassTagger({ getConfig, complete, db, redact = null, l
     });
   }
 
+  /**
+   * The gate's checks per class for a taxonomy, as the TEAM counts them
+   * (gate-pool.mjs: this machine live + teammates' published files), in the
+   * pool this machine labels into most. Recounted at most every `ttlMs`.
+   * null when it cannot be read: the caller then keeps the configured rates.
+   * @returns {{checked: Record<string, number>, complete: boolean, collecting: string[]}|null}
+   */
+  function pooledChecks(file, t, { ttlMs = 5 * 60_000 } = {}) {
+    if (!db || !file || !t) return null;
+    const hit = pooled.get(file);
+    if (hit && hit.tag === t.tag && now().getTime() - hit.at < ttlMs) return hit.error ? null : hit.value;
+    let value = null;
+    let error = '';
+    try {
+      const team = teamPool({ gateDir: gateDirOf(file), self: self(), local: gateSnapshot({ db, tax: t, now: now() }), now: now() });
+      const size = (p) => Object.values(p.classes).reduce((n, c) => n + c.labelled, 0);
+      const local = team.pools.filter((p) => p.local).sort((a, b) => size(b) - size(a));
+      const pool = local[0] || [...team.pools].sort((a, b) => b.members.length - a.members.length || size(b) - size(a))[0] || null;
+      const checked = {};
+      for (const id of t.ids) checked[id] = pool?.classes[id]?.checked || 0;
+      const collecting = [...t.ids].filter((id) => checked[id] < GATE.minChecked);
+      value = { checked, complete: collecting.length === 0, collecting };
+    } catch (err) {
+      error = err?.message || String(err);
+      logErr(`job-class: team gate unreadable, keeping the configured rates (${error})`);
+    }
+    pooled.set(file, { at: now().getTime(), tag: t.tag, value, error });
+    return value;
+  }
+
+  /** collecting (label every turn) or reporting (1 in N), per P6; 'off' without report_sample_every. */
+  function samplingOf(cfg, file, t) {
+    const every = Number.isInteger(cfg?.reportSampleEvery) && cfg.reportSampleEvery > 1 ? cfg.reportSampleEvery : 0;
+    if (!every && !cfg?.sampleUntilGate) return { phase: 'off', every: 1, collecting: [] };
+    const p = pooledChecks(file, t);
+    if (!p) return { phase: 'collecting', every: 1, collecting: [], unreadable: true };
+    return { phase: every && p.complete ? 'reporting' : 'collecting', every: every && p.complete ? every : 1, collecting: p.collecting };
+  }
+
   async function ask(proc, t, text) {
     const r = await complete({ process: proc, messages: renderRequest(t, text) });
     return { label: parseLabel(t, r?.content), model: r?.provider && r?.model ? `${r.provider}/${r.model}` : String(r?.model || ''), ms: r?.latencyMs };
@@ -526,8 +574,13 @@ export function createJobClassTagger({ getConfig, complete, db, redact = null, l
       if (student.label === 'invalid') stats.invalid += 1;
       let teacher = { label: '', model: '' };
       // A class's own share (teacherSampleByClass) overrides the default, so a
-      // class that is meant to reach its gate is checked more often.
-      const share = cfg.teacherSampleByClass?.[resolveClass(t, student.label)] ?? cfg.teacherSamplePct;
+      // class that is meant to reach its gate is checked more often. With
+      // sample_until_gate, every turn of a class the team's gate still collects
+      // for is checked (an unreadable pool keeps the configured share).
+      const cls = resolveClass(t, student.label);
+      const configured = cfg.teacherSampleByClass?.[cls] ?? cfg.teacherSamplePct;
+      const p = cfg.sampleUntilGate && t.ids.has(cls) ? pooledChecks(meta.file, t) : null;
+      const share = p && p.checked[cls] < GATE.minChecked ? 1 : configured;
       if (random() < share) {
         stats.teacherSampled += 1;
         try { teacher = await ask(cfg.teacherProcess, t, text); } catch (err) { logErr(`job-class: teacher failed (${err?.message || err})`); }
@@ -539,6 +592,7 @@ export function createJobClassTagger({ getConfig, complete, db, redact = null, l
         teacher_class: teacher.label, teacher_model: teacher.model, prompt_chars: text.length,
         prompt_preview: text.slice(0, PREVIEW_CHARS).replace(/\s+/g, ' '),
         labelled_at: now().toISOString(),
+        weight: meta.weight || 1,
       };
       if (insert) insert.run(row);
       stats.labelled += 1;
@@ -589,8 +643,12 @@ export function createJobClassTagger({ getConfig, complete, db, redact = null, l
       if (!file) return skip('taxonomy-conflict');
       const t = taxonomy(file);
       if (!t) return skip('no-taxonomy');
+      // Reporting phase (P6): every class has a verdict, so a uniform sample of
+      // 1 turn in N is enough for the shares; the label stands for N turns.
+      const s = samplingOf(cfg, file, t);
+      if (s.phase === 'reporting' && random() >= 1 / s.every) return skip('sampled-out');
       recorder.begin(cfg.replay, key, { id, agent, project, messages, message });
-      label(key, id, { agent, project, file }, t, safe, cfg);
+      label(key, id, { agent, project, file, weight: s.every }, t, safe, cfg);
     } catch (err) {
       stats.failed += 1;
       logErr(`job-class: observe failed (${err?.message || err})`);
@@ -634,8 +692,9 @@ export function createJobClassTagger({ getConfig, complete, db, redact = null, l
     taxonomies: () => taxonomies().map(({ tax: _tax, ...e }) => e),
     stats: () => {
       const all = taxonomies();
+      const cfg = getConfig();
       return { ...stats, skipped: { ...stats.skipped }, replay: recorder.stats(), taxonomy: all[0]?.tag || null, taxonomyError: all[0] && !all[0].tax ? all[0].error : null,
-        taxonomies: all.map(({ tax: _tax, ...e }) => e), conflicts: bindings.doc?.conflicts || [] };
+        taxonomies: all.map(({ tax, ...e }) => ({ ...e, ...(tax ? { sampling: samplingOf(cfg, e.file, tax) } : {}) })), conflicts: bindings.doc?.conflicts || [] };
     },
   };
 }
