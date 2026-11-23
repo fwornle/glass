@@ -4,7 +4,8 @@
  * and /api/job-classes/coverage (the coverage map). One implementation for the
  * proxy (server.mjs) and glass's daemon, which serve the same dashboard tab.
  */
-import { classAgreement, jobClassCoverage, resolveClass, versionTags } from './job-class.mjs';
+import { classAgreement, GATE, jobClassCoverage, resolveClass, versionTags } from './job-class.mjs';
+import { gateDirOf, gateSnapshot, memberId, teamPool } from './gate-pool.mjs';
 
 const NOT_MINE = Symbol('not a job-class read');
 
@@ -19,12 +20,13 @@ const NOT_MINE = Symbol('not a job-class read');
  * @param {Function} o.config     () => the tagger's config, for the counters' "enabled"
  * @param {Function} o.sinceBootMs
  * @param {object} [o.floor]      createClassFloor(...): its counters, as `routing` (not in glass)
+ * @param {string} [o.member]     this machine's pseudonym (gate-pool.mjs memberId), for `scope=team`
  */
 export function handleJobClassRead(req, res, o) {
   return serve(req, res, o) !== NOT_MINE;
 }
 
-function serve(req, res, { tagger, db, referenceDir, config, sinceBootMs, floor = null }) {
+function serve(req, res, { tagger, db, referenceDir, config, sinceBootMs, floor = null, member = null }) {
 // Job classes (job-class.mjs): the tagger's counters, and tokens by class.
 // `summary` joins turn_job_class to token_usage on the turn identity, so a
 // class's tokens are every call of the turns labelled with it.
@@ -72,19 +74,28 @@ if (req.method === 'GET' && req.url?.startsWith('/api/job-classes/summary')) {
     const whereJ = where.replace('j.taxonomy', 'taxonomy');
     const resolve = (c) => (tax ? resolveClass(tax, c) : c);
     const merged = new Map();
+    // Per class and weight: a label made in the reporting phase (P6, glass's
+    // report_sample_every) stands for `weight` turns, so its turn and its tokens
+    // count that many times; every other label weighs 1. The column is older
+    // than some DBs a reader opens (glass reads its own): without it, 1.
+    const hasWeight = db.prepare(`SELECT 1 FROM pragma_table_info('turn_job_class') WHERE name = 'weight'`).get();
+    const weight = hasWeight ? 'j.weight' : '1';
+    let sampledLabels = 0;
     for (const r of db.prepare(`
-      SELECT j.job_class AS jobClass, COUNT(DISTINCT j.conversation_key || ':' || j.turn_index) AS turns,
+      SELECT j.job_class AS jobClass, ${weight} AS weight, COUNT(DISTINCT j.conversation_key || ':' || j.turn_index) AS turns,
              COUNT(t.id) AS calls, COALESCE(SUM(t.input_tokens), 0) AS inputTokens,
              COALESCE(SUM(t.output_tokens), 0) AS outputTokens,
              COALESCE(SUM(t.cache_read_tokens), 0) AS cacheReadTokens
       FROM turn_job_class j
       LEFT JOIN token_usage t ON t.conversation_key = j.conversation_key AND t.turn_index = j.turn_index
       WHERE j.labelled_at >= ? ${where}
-      GROUP BY j.job_class`).all(since, ...tags)) {
+      GROUP BY j.job_class, ${weight}`).all(since, ...tags)) {
       // A turn has one label, so turns of two raw classes never overlap and add up.
       const cls = resolve(r.jobClass);
+      const w = Math.max(1, Number(r.weight) || 1);
+      if (w > 1) sampledLabels += r.turns;
       const m = merged.get(cls) || { jobClass: cls, turns: 0, calls: 0, inputTokens: 0, outputTokens: 0, cacheReadTokens: 0 };
-      for (const k of ['turns', 'calls', 'inputTokens', 'outputTokens', 'cacheReadTokens']) m[k] += r[k];
+      for (const k of ['turns', 'calls', 'inputTokens', 'outputTokens', 'cacheReadTokens']) m[k] += r[k] * w;
       merged.set(cls, m);
     }
     const byClass = [...merged.values()].sort((a, b) => b.turns - a.turns || a.jobClass.localeCompare(b.jobClass));
@@ -100,8 +111,17 @@ if (req.method === 'GET' && req.url?.startsWith('/api/job-classes/summary')) {
              prompt_preview AS promptPreview, labelled_at AS labelledAt, taxonomy
       FROM turn_job_class WHERE 1 = 1 ${whereJ} ORDER BY labelled_at DESC LIMIT ?`).all(...tags, Math.min(Number(q.get('recent')) || 20, 200))
       .map((r) => ({ ...r, jobClass: resolve(r.jobClass), teacherClass: r.teacherClass ? resolve(r.teacherClass) : r.teacherClass })) : undefined;
+    // `scope=team` (P6): the team's published gate counts beside this machine's,
+    // over the gate's own window (90 days), not the page's. Only a team package
+    // (a taxonomy.yaml) has a gate/ directory; the shipped default has none.
+    let team;
+    if (q.get('scope') === 'team' && tax) {
+      const file = tagger.taxonomies?.().find((e) => e.tag === tax.tag)?.file || '';
+      const gateSince = new Date(Date.now() - GATE.days * 86_400_000).toISOString();
+      team = teamPool({ gateDir: gateDirOf(file), self: member || memberId(), local: gateSnapshot({ db, tax, since: gateSince }) });
+    }
     res.writeHead(200, { 'Content-Type': 'application/json' });
-    return res.end(JSON.stringify({ days, since, taxonomy: tag || null, byClass, agreement, recent }));
+    return res.end(JSON.stringify({ days, since, taxonomy: tag || null, byClass, agreement, recent, ...(sampledLabels ? { sampledLabels } : {}), ...(team ? { team } : {}) }));
   } catch (err) {
     res.writeHead(200, { 'Content-Type': 'application/json' });
     return res.end(JSON.stringify({ days, since, byClass: [], error: err?.message || String(err) }));
