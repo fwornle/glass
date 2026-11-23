@@ -259,6 +259,21 @@ export function teamPool({ gateDir, self, local = [], now = new Date(), staleDay
     members.push({ member: doc.member, publishedAt: doc.publishedAt, stale, pools: doc.pools.length });
     if (!stale) for (const p of doc.pools) add(p, doc.member, false);
   }
+  // A pool with no checker holds labels nobody has checked yet (a member who
+  // just started). It cannot form a gate of its own, and its labelled counts
+  // change no verdict, so it joins the pool of the same taxonomy and labeller
+  // that has a checker — the most checked one — instead of standing apart.
+  for (const [key, p] of [...pools.entries()]) {
+    if (p.checker) continue;
+    const checks = (q) => Object.values(q.classes).reduce((n, c) => n + c.checked, 0);
+    const into = [...pools.values()].filter((q) => q !== p && q.checker && q.taxonomy === p.taxonomy && q.labeller === p.labeller)
+      .sort((a, b) => checks(b) - checks(a))[0];
+    if (!into) continue;
+    addInto(into.classes, p.classes);
+    for (const m of p.members) if (!into.members.includes(m)) into.members.push(m);
+    if (p.local) into.local = true;
+    pools.delete(key);
+  }
   const list = [...pools.values()].map((p) => ({ ...p, classes: sortedClasses(p.classes) }))
     .sort((a, b) => Number(b.local) - Number(a.local) || b.members.length - a.members.length || poolKey(a).localeCompare(poolKey(b)));
   return { gateDir, self, members, pools: list };
