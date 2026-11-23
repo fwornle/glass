@@ -542,9 +542,13 @@ export function createJobClassTagger({ getConfig, complete, db, redact = null, l
       const local = team.pools.filter((p) => p.local).sort((a, b) => size(b) - size(a));
       const pool = local[0] || [...team.pools].sort((a, b) => b.members.length - a.members.length || size(b) - size(a))[0] || null;
       const checked = {};
-      for (const id of t.ids) checked[id] = pool?.classes[id]?.checked || 0;
+      const byClass = {};
+      for (const id of t.ids) {
+        checked[id] = pool?.classes[id]?.checked || 0;
+        byClass[id] = { sampled: checked[id], agree: pool?.classes[id]?.agree || 0 };
+      }
       const collecting = [...t.ids].filter((id) => checked[id] < GATE.minChecked);
-      value = { checked, complete: collecting.length === 0, collecting };
+      value = { checked, byClass, members: pool?.members?.length || 0, complete: collecting.length === 0, collecting };
     } catch (err) {
       error = err?.message || String(err);
       logErr(`job-class: team gate unreadable, keeping the configured rates (${error})`);
@@ -665,11 +669,21 @@ export function createJobClassTagger({ getConfig, complete, db, redact = null, l
   /**
    * Each class's gate verdict under a taxonomy, from its teacher-checked turns
    * (classAgreement). Recounted at most every `ttlMs`; {} without a DB.
+   *
+   * `scope: 'team'` (the floor's `gate_scope`, P6): the team's pooled counts
+   * (gate-pool.mjs) instead of this machine's. An unreadable team pool is {}:
+   * no verdict, so nothing is floored — never a silent fall back to local.
    * @returns {Record<string, {sampled: number, agree: number, verdict: string}>}
    */
-  function gate(tag, { ttlMs = 5 * 60_000 } = {}) {
+  function gate(tag, { ttlMs = 5 * 60_000, scope = 'local' } = {}) {
     const tax = taxonomyByTag(tag);
     if (!db || !tax) return {};
+    if (scope === 'team') {
+      const file = taxonomies().find((e) => e.tag === tax.tag)?.file || '';
+      const p = pooledChecks(file, tax, { ttlMs });
+      if (!p) return {};
+      return Object.fromEntries(Object.entries(p.byClass).map(([cls, c]) => [cls, { ...c, verdict: gateVerdict(c) }]));
+    }
     const hit = gates.get(tax.tag);
     if (hit && now().getTime() - hit.at < ttlMs) return hit.byClass;
     const since = new Date(now().getTime() - GATE.days * 86_400_000).toISOString();
