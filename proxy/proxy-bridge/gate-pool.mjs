@@ -54,9 +54,18 @@ const MAX_FILE_BYTES = 256 * 1024;
 /**
  * This member, as a stable pseudonym: the same hash as coding's P3 proposals
  * (lib/job-classes/evolve.mjs memberId), so one person is one member in both.
+ *
+ * `install` names a second labeller on the same machine (glass beside coding).
+ * Without it the two shared one gate file, and each replaced that file with its
+ * own live counts (teamPool skips `self`), so neither ever added the other's.
+ * They label different turns: a call glass forwards to coding's proxy carries a
+ * task binding, which that proxy treats as automated and never labels
+ * (isAutomatedRequest). So each install publishes its own file. No install
+ * keeps the plain hash, so coding's existing file and its proposals stay put.
  */
-export function memberId({ hostname = os.hostname(), user = os.userInfo().username } = {}) {
-  return crypto.createHash('sha1').update(`${hostname}:${user}`).digest('hex').slice(0, 10);
+export function memberId({ hostname = os.hostname(), user = os.userInfo().username, install = '' } = {}) {
+  const key = install ? `${hostname}:${user}:${install}` : `${hostname}:${user}`;
+  return crypto.createHash('sha1').update(key).digest('hex').slice(0, 10);
 }
 
 /**
