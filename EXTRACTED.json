@@ -3,11 +3,11 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "152335d5e8a6953a5cedcd5c98f7fa1a35290153",
+      "sha": "a9968ae704cb914c3594221dca03d27dbf9674a2",
       "dirty": false
     },
     "proxy": {
-      "sha": "22b4f448461ae0725a716f97a44be6dab52e518a",
+      "sha": "c1f0960841607174a1b1e1b9dd947ebe1af43eff",
       "dirty": false
     }
   },
@@ -18,7 +18,7 @@
     ".github/workflows/docs.yml": "348f5acf565784ebe84e54460f34bc9b155c7d9b84aae132216a614fb063d3e6",
     ".github/workflows/release.yml": "8c603d35376d9845e04b454745981a23665365a15b715b966723d1b6e30ea0dc",
     ".gitignore": "ffad799ea223e3aac2d8640e2098393517995bbd0415c9cfabf49ad05c038901",
-    "CLAUDE.md": "6387f39b31be30f733ad2ab4994b923b24bbda27961f798c90a3babe279d10d3",
+    "CLAUDE.md": "1e4970ef43a5f4aac4346db4620dbc7d3571eaf167dbdee5826472a4092dfe0f",
     "LICENSE": "a3f1da6c00419f6121a588d4926b402d63a8b8ad1117c42fdc65648cdbb7881f",
     "README.md": "1a5b385b9245e8fd0f66b791cae7bb79edb5ad60fa67f72de4d5fba9596f73cc",
     "bin/glass.mjs": "46b6f2865bf9523761abe0c8773d94ddbdc575a228dff4215eedf7bfad9e3dcd",
@@ -178,7 +178,7 @@
     "lib/teams/config.cjs": "724aae3dfeb3246aec20679a71566a9406c99d06afbb8f99c51ad026f5b6a5a0",
     "mkdocs.yml": "8917e60a12a8db5913bedfd54573487d8aefa39c359865667d1698db71a9f6e4",
     "overrides/main.html": "58bef75c205f2ecf969addf151ae02b35b434c1a6b527dce12d153a9005fc42f",
-    "package.json": "4ff1cf3421f071de26585540eafbbc8cd8f1eeb6a3182205aac813f4c6833d57",
+    "package.json": "e80e3eba6d4874fee37e849ccac40dc166f50164080844ff03a4beb0a51ccda3",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "4c355971338bbfcd39b9c9cbb7af16eda08112380bc5a151a6daa3b9f08aed3f",
