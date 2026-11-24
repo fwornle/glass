@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "a9968ae704cb914c3594221dca03d27dbf9674a2",
+      "sha": "21d013d3980fda0bf15fe73aea57129dc583775e",
       "dirty": false
     },
     "proxy": {
@@ -31,7 +31,7 @@
     "docs/_tiers/development.deep.md": "ae1a48bf98dee066d1452891b9189d681ea6629679dbd735080e7ae3b684a4dc",
     "docs/_tiers/getting-started.deep.md": "7199b67986c0165c66825ad6564ec8f2ca56cd9a52372cfa8d53c0695654b85f",
     "docs/_tiers/index.deep.md": "22414c7eb8610a54a6d37c8f0e089eda2a07e3e6bee96414ae860d4482c295ed",
-    "docs/_tiers/job-classes.deep.md": "692f3505d6bc95f86e4aaad6924cd83ce7da1ee977314eeb75156a3a052e0fac",
+    "docs/_tiers/job-classes.deep.md": "1889dd7f8a527184f533867ca43ce89e207abb08ee355a6b8055eb568dcbb2d6",
     "docs/_tiers/models.deep.md": "f030abb316f8963dedde4c6a367f38f1ffb4cbeaf27fcc89fafe6c28b963ce9f",
     "docs/_tiers/offload.deep.md": "e031b87b8f51cc922a4155449ba7e41ef937fa5a715899c88f47ca6b8c03c733",
     "docs/_tiers/privacy.deep.md": "8b84091f7b4f56ade148d7f9b2267079b49788144560ae08f77b4da271615bc8",
@@ -120,7 +120,7 @@
     "lib/features/vendor/js-yaml.cjs": "c738b0020702aa631abd8de23a902a3079d99d3060e44166955cb51f570881c4",
     "lib/glass/ab-cli.mjs": "bf72ee670c2727952a17cd809a5574309f02b334fc69086b435fd6ff0c3c0bb8",
     "lib/glass/ab.mjs": "2680a111a08258d3ecafceb6ca64f6524d7c1d2c6641fef0f0c92682e8812559",
-    "lib/glass/cli.mjs": "5bd39a57c92b66e779570238dd31b6a8bbf2195990a1004df392a6771a3b60b4",
+    "lib/glass/cli.mjs": "2b7e48cc096cbf930476c68fc52fd4355a773cfdd6173880926ca4c2f868ba88",
     "lib/glass/client.mjs": "36cb784d4b55cdff379cbffffb86b9a53e0d1a9706564abc8ee78f4b03a1a75c",
     "lib/glass/cluster.mjs": "0843202e9214439d8b0ed91b61774ba2011bfcbb526c7357da8a4d737ce2f60b",
     "lib/glass/coexist.mjs": "444fd5f1a170bad6077dcfae7cf64a6397cb4b7b31434236609c4a9c531fe453",
@@ -130,7 +130,7 @@
     "lib/glass/daemon.mjs": "422494ec7ec95757b0c5c8f4182a1256fb0aad0ca64aee1d554a042d94ed68cb",
     "lib/glass/egress.mjs": "c7e54a074c71890429bce2898ba1a287bb13194dc489d3ac0bd4f6a56aa4f25f",
     "lib/glass/home.mjs": "4f94b34129d8a2eebecd6536301816e4aac32680e6cb16b9ce670e1dd9a9ab74",
-    "lib/glass/job-classes-cli.mjs": "7bc67cd69dd24ae5f688f4d6cedc6e9bc5f040a269c01703026a61d2884eaad1",
+    "lib/glass/job-classes-cli.mjs": "4b0ca65c2220484178920ee72ecd981380012ecce69a7374a49f50c23c979ad0",
     "lib/glass/job-classes.mjs": "1e1d3d5c7a22ea63ec455b0e9ba233dae5d02dd968a80dbbe308678e90d05569",
     "lib/glass/keys.mjs": "e0b298d0b7a70c247793362bd49b420f7d63b5d9a55c3d7433c494d5b9fc5a94",
     "lib/glass/network.mjs": "3f1b1675b22a5bc895a479505f6dba4df4afb2b620c10e0696db448188cd4fd7",
@@ -178,7 +178,7 @@
     "lib/teams/config.cjs": "724aae3dfeb3246aec20679a71566a9406c99d06afbb8f99c51ad026f5b6a5a0",
     "mkdocs.yml": "8917e60a12a8db5913bedfd54573487d8aefa39c359865667d1698db71a9f6e4",
     "overrides/main.html": "58bef75c205f2ecf969addf151ae02b35b434c1a6b527dce12d153a9005fc42f",
-    "package.json": "e80e3eba6d4874fee37e849ccac40dc166f50164080844ff03a4beb0a51ccda3",
+    "package.json": "e24500c2f0633746bfaaa96fa289fc8676d1796b975267233465b8d6351af411",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "4c355971338bbfcd39b9c9cbb7af16eda08112380bc5a151a6daa3b9f08aed3f",
@@ -210,6 +210,7 @@
     "scripts/measurement-reconciler.mjs": "ad1c27f8542855bfed4c5f3dc0cbb1fe62ba9ae315c40cde57930f530807ae97",
     "tests/ab.test.mjs": "b302aa18b2aaf94038167426c29c9c75379241a89b4c96d261207d88f3701f67",
     "tests/agent-mouse.test.mjs": "5983f113735275500795f6929056d74107ebc15d7faa6638c80a0d47ab32171c",
+    "tests/cli-help.test.mjs": "248f7e10f32eacbea9a392e1e85caee16d31164b9e29394840b0f8c81ab69915",
     "tests/cluster.test.mjs": "db626c5cd2514eafcbb10d5a27cc39a87fc9e2fe3318d691b44d21548fd9d384",
     "tests/coexist.test.mjs": "11c0f6dfb77bf4214ecbbcb0f7323e9f48d9737f3962c51558d18d46f3ee956a",
     "tests/combined.test.mjs": "7ccfdda8eb33d2cccdd50518375dc3ab8e230707368cbc505a5318da6e9cb613",
