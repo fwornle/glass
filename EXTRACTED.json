@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "21d013d3980fda0bf15fe73aea57129dc583775e",
+      "sha": "29d42eeba8cdb491e815f7bbdb05350784f22c57",
       "dirty": false
     },
     "proxy": {
@@ -178,7 +178,7 @@
     "lib/teams/config.cjs": "724aae3dfeb3246aec20679a71566a9406c99d06afbb8f99c51ad026f5b6a5a0",
     "mkdocs.yml": "8917e60a12a8db5913bedfd54573487d8aefa39c359865667d1698db71a9f6e4",
     "overrides/main.html": "58bef75c205f2ecf969addf151ae02b35b434c1a6b527dce12d153a9005fc42f",
-    "package.json": "e24500c2f0633746bfaaa96fa289fc8676d1796b975267233465b8d6351af411",
+    "package.json": "dbf293fd1d2dd80d716ceef41fc3e9a936127d86b77343d795e0c32a625b4ec3",
     "proxy/dist/background-process.js": "6762d7c1f990085eff3b9e366bbbd0ee37530c72c328a17274753eb6a78df1fa",
     "proxy/dist/measurement-span.js": "7463cd40b12b6a303e28c598223fc588f3a39dcc4de370580536d15c30ed7c93",
     "proxy/dist/token-usage.js": "4c355971338bbfcd39b9c9cbb7af16eda08112380bc5a151a6daa3b9f08aed3f",
@@ -215,7 +215,7 @@
     "tests/coexist.test.mjs": "11c0f6dfb77bf4214ecbbcb0f7323e9f48d9737f3962c51558d18d46f3ee956a",
     "tests/combined.test.mjs": "7ccfdda8eb33d2cccdd50518375dc3ab8e230707368cbc505a5318da6e9cb613",
     "tests/copilot-quota.test.mjs": "cd62b24972fb4252c7f00010776885cc141b7ca561df60b73d39abaa7dbe441c",
-    "tests/daemon.test.mjs": "230cf90e2498b8c139a62c57a14c4679001ec873fdc2bffd4410e47446fbb98a",
+    "tests/daemon.test.mjs": "85486b3ce392fa48bf2005d431dd19869b3910cfda5695e276941ca90ea22c7e",
     "tests/install-check.mjs": "47a7027261e69fd4544b57d554650c617b55b8a25e7b147e414a0163faa99630",
     "tests/job-classes.test.mjs": "cd64fce50101549ee52b43353a3ebfe7101335ccdad19f44bfe6bd1bd07a348d",
     "tests/network.test.mjs": "86ccf81c267ed708c3c576b89353a95acb6d5e0ed8e15e03a01199f05e654601",
