@@ -5,7 +5,7 @@
  * proxy (server.mjs) and glass's daemon, which serve the same dashboard tab.
  */
 import { classAgreement, GATE, jobClassCoverage, resolveClass, versionTags } from './job-class.mjs';
-import { gateDirOf, gateSnapshot, memberId, teamPool } from './gate-pool.mjs';
+import { gateDirOf, gateSnapshot, machineMembers, memberId, teamPool } from './gate-pool.mjs';
 
 const NOT_MINE = Symbol('not a job-class read');
 
@@ -21,12 +21,14 @@ const NOT_MINE = Symbol('not a job-class read');
  * @param {Function} o.sinceBootMs
  * @param {object} [o.floor]      createClassFloor(...): its counters, as `routing` (not in glass)
  * @param {string} [o.member]     this machine's pseudonym (gate-pool.mjs memberId), for `scope=team`
+ * @param {string} [o.source]     which install serves this (`coding`, `glass`): this machine's row in the team view
+ * @param {Function} [o.gateExclude]  (team name) => pseudonyms this machine leaves out of the team's sums
  */
 export function handleJobClassRead(req, res, o) {
   return serve(req, res, o) !== NOT_MINE;
 }
 
-function serve(req, res, { tagger, db, referenceDir, config, sinceBootMs, floor = null, member = null }) {
+function serve(req, res, { tagger, db, referenceDir, config, sinceBootMs, floor = null, member = null, source = '', gateExclude = null }) {
 // Job classes (job-class.mjs): the tagger's counters, and tokens by class.
 // `summary` joins turn_job_class to token_usage on the turn identity, so a
 // class's tokens are every call of the turns labelled with it.
@@ -118,7 +120,14 @@ if (req.method === 'GET' && req.url?.startsWith('/api/job-classes/summary')) {
     if (q.get('scope') === 'team' && tax) {
       const file = tagger.taxonomies?.().find((e) => e.tag === tax.tag)?.file || '';
       const gateSince = new Date(Date.now() - GATE.days * 86_400_000).toISOString();
-      team = teamPool({ gateDir: gateDirOf(file), self: member || memberId(), local: gateSnapshot({ db, tax, since: gateSince }) });
+      const teamName = tax.name || '';
+      team = {
+        ...teamPool({
+          gateDir: gateDirOf(file), self: member || memberId(), local: gateSnapshot({ db, tax, since: gateSince }),
+          exclude: gateExclude ? gateExclude(teamName) : [], machine: machineMembers(), selfSource: source,
+        }),
+        name: teamName,
+      };
     }
     res.writeHead(200, { 'Content-Type': 'application/json' });
     return res.end(JSON.stringify({ days, since, taxonomy: tag || null, byClass, agreement, recent, ...(sampledLabels ? { sampledLabels } : {}), ...(team ? { team } : {}) }));

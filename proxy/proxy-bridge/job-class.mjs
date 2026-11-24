@@ -426,7 +426,7 @@ export const TURN_JOB_CLASS_DDL = `
  *   startCapture?: Function,  // spawn, replaced in tests (turn-record.mjs)
  * }} deps
  */
-export function createJobClassTagger({ getConfig, complete, db, redact = null, log = () => {}, logErr = () => {}, random = Math.random, now = () => new Date(), startCapture, member = '' }) {
+export function createJobClassTagger({ getConfig, complete, db, redact = null, log = () => {}, logErr = () => {}, random = Math.random, now = () => new Date(), startCapture, member = '', gateExclude = null }) {
   const stats = { observed: 0, labelled: 0, teacherSampled: 0, skipped: {}, dropped: 0, failed: 0, invalid: 0, inFlight: 0 };
   // Turns of the classes a replay re-runs (turn-record.mjs), decided by the label.
   const recorder = createTurnRecorder({ redact, log, logErr, now, ...(startCapture ? { start: startCapture } : {}) });
@@ -537,7 +537,10 @@ export function createJobClassTagger({ getConfig, complete, db, redact = null, l
     let value = null;
     let error = '';
     try {
-      const team = teamPool({ gateDir: gateDirOf(file), self: self(), local: gateSnapshot({ db, tax: t, now: now() }), now: now() });
+      // Members this machine leaves out (gate-pool.mjs readGateExclude) are not added here either:
+      // the sampling rate and the class floor follow the same sums as the Gate panel.
+      const exclude = gateExclude ? gateExclude(t.name || '') : [];
+      const team = teamPool({ gateDir: gateDirOf(file), self: self(), local: gateSnapshot({ db, tax: t, now: now() }), now: now(), exclude });
       const size = (p) => Object.values(p.classes).reduce((n, c) => n + c.labelled, 0);
       const local = team.pools.filter((p) => p.local).sort((a, b) => size(b) - size(a));
       const pool = local[0] || [...team.pools].sort((a, b) => b.members.length - a.members.length || size(b) - size(a))[0] || null;
@@ -702,6 +705,8 @@ export function createJobClassTagger({ getConfig, complete, db, redact = null, l
     /** The class a turn was labelled with, once its label is in; null before. */
     turnClass: (key) => turnClasses.get(key) || null,
     gate,
+    /** Drop the cached team sums and gate verdicts: the members left out just changed. */
+    forgetTeam: () => { pooled.clear(); gates.clear(); },
     taxonomy: taxonomyByTag,
     taxonomies: () => taxonomies().map(({ tax: _tax, ...e }) => e),
     stats: () => {
