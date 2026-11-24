@@ -45,6 +45,8 @@ export const STALE_DAYS = 14;
 export const FORMAT = 1;
 
 const MEMBER = /^[0-9a-f]{10}$/;
+/** Which install published a member file (`coding`, `glass`): optional, for reading only. */
+const SOURCE = /^[a-z][a-z0-9-]{0,19}$/;
 const WORD = /^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$/;
 const MODEL = /^[a-z0-9][a-z0-9._-]{0,127}$/;
 const MAX_CLASSES = 64;
@@ -66,6 +68,53 @@ const MAX_FILE_BYTES = 256 * 1024;
 export function memberId({ hostname = os.hostname(), user = os.userInfo().username, install = '' } = {}) {
   const key = install ? `${hostname}:${user}:${install}` : `${hostname}:${user}`;
   return crypto.createHash('sha1').update(key).digest('hex').slice(0, 10);
+}
+
+/** Every pseudonym this machine publishes under: coding's (no install) and glass's. */
+export function machineMembers(o = {}) {
+  return [memberId(o), memberId({ ...o, install: 'glass' })];
+}
+
+/**
+ * This machine's choice of team members to leave out of its gate sums, per team
+ * package (the taxonomy's `name`): `{ teams: { <name>: [pseudonym…] } }`. Local
+ * only — never published — so nobody can drop another member's counts for the
+ * whole team. A missing or unreadable file excludes nobody.
+ */
+export function readGateExclude(file) {
+  try {
+    const doc = JSON.parse(fs.readFileSync(file, 'utf8'));
+    const teams = {};
+    for (const [name, ids] of Object.entries(doc?.teams || {})) {
+      if (WORD.test(name) && Array.isArray(ids)) teams[name] = [...new Set(ids.map(String).filter((id) => MEMBER.test(id)))].sort();
+    }
+    return { teams };
+  } catch {
+    return { teams: {} };
+  }
+}
+
+/** The members `file` leaves out for team `name`; [] when none or no file. */
+export function excludedFor(file, name) {
+  return file && name ? readGateExclude(file).teams[name] || [] : [];
+}
+
+/**
+ * Set the members left out for team `name` (an empty list removes the entry).
+ * @returns {{teams: Record<string, string[]>}} the whole store after the write
+ */
+export function writeGateExclude(file, name, members) {
+  if (!WORD.test(String(name || ''))) throw new Error('team must be a taxonomy name');
+  if (!Array.isArray(members) || members.some((m) => !MEMBER.test(String(m)))) throw new Error('exclude must be a list of 10-character hex pseudonyms');
+  const doc = readGateExclude(file);
+  const ids = [...new Set(members.map(String))].sort();
+  if (ids.length) doc.teams[name] = ids;
+  else delete doc.teams[name];
+  fs.mkdirSync(path.dirname(file), { recursive: true });
+  const tmp = `${file}.${process.pid}.tmp`;
+  fs.writeFileSync(tmp, `${JSON.stringify(doc, null, 2)}\n`);
+  fs.renameSync(tmp, file);
+  return doc;
 }
 
 /**
@@ -164,6 +213,7 @@ export function validateMemberFile(doc, fileName = '') {
   if (!MEMBER.test(String(doc.member || ''))) errors.push('member must be a 10-character hex pseudonym');
   else if (fileName && path.basename(fileName) !== `${doc.member}.json`) errors.push(`file must be named ${doc.member}.json`);
   if (!Number.isFinite(Date.parse(doc.publishedAt))) errors.push('publishedAt must be a date');
+  if (doc.source !== undefined && !SOURCE.test(String(doc.source))) errors.push('source must be an install name (coding, glass)');
   if (!Array.isArray(doc.pools) || doc.pools.length > MAX_POOLS) return [...errors, `pools must be a list of at most ${MAX_POOLS}`];
   const seen = new Set();
   doc.pools.forEach((p, i) => {
@@ -200,13 +250,13 @@ const counts = (pools) => JSON.stringify(pools);
  *
  * @returns {{file: string, changed: boolean, doc: object}}
  */
-export function writeMemberFile(gateDir, { member, pools, now = new Date() }) {
+export function writeMemberFile(gateDir, { member, pools, source = '', now = new Date() }) {
   if (!MEMBER.test(String(member || ''))) throw new Error('member must be a 10-character hex pseudonym');
   const file = path.join(gateDir, `${member}.json`);
   let before = null;
   try { before = JSON.parse(fs.readFileSync(file, 'utf8')); } catch { /* first publish */ }
   const same = before && counts(before.pools) === counts(pools);
-  const doc = { format: FORMAT, member, publishedAt: same ? before.publishedAt : now.toISOString(), pools };
+  const doc = { format: FORMAT, member, ...(source ? { source } : {}), publishedAt: same ? before.publishedAt : now.toISOString(), pools };
   const errors = validateMemberFile(doc, file);
   if (errors.length) throw new Error(`refusing to write an invalid gate file: ${errors.join('; ')}`);
   const text = `${JSON.stringify(doc, null, 2)}\n`;
@@ -230,14 +280,24 @@ function addInto(target, classes) {
  * The team's counts: every member file in `gateDir`, plus this machine's LIVE
  * pools in place of its own (possibly older) published file, added per pool.
  *
- * @param {{gateDir: string|null, self: string, local: Array, now?: Date, staleDays?: number}} o
+ * `exclude` is this machine's own choice of members to leave out (readGateExclude):
+ * they are listed, flagged `excluded`, and not added — not even this machine's
+ * live counts, when it excludes itself. `machine` names every pseudonym of this
+ * machine (machineMembers: coding's and glass's), so a reader can tell "this
+ * machine · glass" from a teammate. Each member row carries its `source` (the
+ * install that published it, '' for a file from before sources), its `totals`
+ * and its pools, for a reader that shows who contributed what.
+ *
+ * @param {{gateDir: string|null, self: string, local: Array, now?: Date, staleDays?: number,
+ *   exclude?: string[], machine?: string[], selfSource?: string}} o
  * @returns {{gateDir: string|null, self: string, members: Array, pools: Array}}
- *   members: one row per file (or invalid file), `stale` ones are not added;
+ *   members: one row per file (or invalid file), `stale` and `excluded` ones are not added;
  *   pools: { taxonomy, labeller, checker, members: [pseudonym…], local: bool, classes }
  */
-export function teamPool({ gateDir, self, local = [], now = new Date(), staleDays = STALE_DAYS }) {
+export function teamPool({ gateDir, self, local = [], now = new Date(), staleDays = STALE_DAYS, exclude = [], machine = [], selfSource = '' }) {
   const members = [];
   const pools = new Map();
+  const left = new Set(exclude);
   const add = (p, member, isLocal) => {
     const key = poolKey(p);
     const t = pools.get(key) || { taxonomy: p.taxonomy, labeller: p.labeller, checker: p.checker, members: [], local: false, classes: {} };
@@ -246,8 +306,17 @@ export function teamPool({ gateDir, self, local = [], now = new Date(), staleDay
     addInto(t.classes, p.classes);
     pools.set(key, t);
   };
-  for (const p of local) add(p, self, true);
-  if (local.length) members.push({ member: self, self: true, live: true, stale: false, pools: local.length });
+  /** A member's own numbers, as the reader shows them: totals and each pool. */
+  const detail = (member, source, list) => {
+    const totals = emptyCounts();
+    for (const p of list) for (const c of Object.values(p.classes)) { totals.labelled += c.labelled; totals.checked += c.checked; totals.agree += c.agree; }
+    return {
+      source: source || '', thisMachine: member === self || machine.includes(member), excluded: left.has(member), totals,
+      detail: list.map((p) => ({ taxonomy: p.taxonomy, labeller: p.labeller, checker: p.checker, classes: sortedClasses(p.classes) })),
+    };
+  };
+  if (!left.has(self)) for (const p of local) add(p, self, true);
+  if (local.length) members.push({ member: self, self: true, live: true, stale: false, pools: local.length, ...detail(self, selfSource, local) });
 
   let files = [];
   try { files = gateDir ? fs.readdirSync(gateDir).filter((f) => f.endsWith('.json')).sort() : []; } catch { /* no gate dir yet */ }
@@ -265,8 +334,8 @@ export function teamPool({ gateDir, self, local = [], now = new Date(), staleDay
     const errors = validateMemberFile(doc, file);
     if (errors.length) { members.push({ member: f.replace(/\.json$/, ''), error: errors.join('; ') }); continue; }
     const stale = now.getTime() - Date.parse(doc.publishedAt) > staleDays * 86_400_000;
-    members.push({ member: doc.member, publishedAt: doc.publishedAt, stale, pools: doc.pools.length });
-    if (!stale) for (const p of doc.pools) add(p, doc.member, false);
+    members.push({ member: doc.member, publishedAt: doc.publishedAt, stale, pools: doc.pools.length, ...detail(doc.member, doc.source, doc.pools) });
+    if (!stale && !left.has(doc.member)) for (const p of doc.pools) add(p, doc.member, false);
   }
   // A pool with no checker holds labels nobody has checked yet (a member who
   // just started). It cannot form a gate of its own, and its labelled counts
@@ -300,8 +369,8 @@ export function teamPool({ gateDir, self, local = [], now = new Date(), staleDay
  *   git: (args: string[]) => Promise<{ok: boolean, stdout?: string, stderr?: string}>, now?: Date}} o
  * @returns {Promise<{file: string, changed: boolean, committed: boolean, pushed: boolean, error?: string}>}
  */
-export async function publishGate({ checkout, gateDir, member, pools, push = false, git, now = new Date() }) {
-  const w = writeMemberFile(gateDir, { member, pools, now });
+export async function publishGate({ checkout, gateDir, member, pools, source = '', push = false, git, now = new Date() }) {
+  const w = writeMemberFile(gateDir, { member, pools, source, now });
   const rel = path.relative(checkout, w.file).split(path.sep).join('/');
   if (rel.startsWith('..')) throw new Error(`${w.file} is outside the checkout ${checkout}`);
   const out = { file: w.file, changed: w.changed, committed: false, pushed: false };
