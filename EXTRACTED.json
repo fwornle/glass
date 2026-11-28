@@ -3,7 +3,7 @@
   "target": "public",
   "sources": {
     "coding": {
-      "sha": "898e0d24d5d81f54d531d6491d691a8230b87496",
+      "sha": "12d53f92be8ddabcb6b147cf0f1932b250719283",
       "dirty": false
     },
     "proxy": {
@@ -20,7 +20,7 @@
     ".gitignore": "ffad799ea223e3aac2d8640e2098393517995bbd0415c9cfabf49ad05c038901",
     "CLAUDE.md": "1e4970ef43a5f4aac4346db4620dbc7d3571eaf167dbdee5826472a4092dfe0f",
     "LICENSE": "a3f1da6c00419f6121a588d4926b402d63a8b8ad1117c42fdc65648cdbb7881f",
-    "README.md": "1a5b385b9245e8fd0f66b791cae7bb79edb5ad60fa67f72de4d5fba9596f73cc",
+    "README.md": "4ea00c329c4e0c3d99fcee34e64cb3af1ae40f1051ebde43288448c75bf79a44",
     "bin/glass.mjs": "46b6f2865bf9523761abe0c8773d94ddbdc575a228dff4215eedf7bfad9e3dcd",
     "config/job-classes.yaml": "6381143a74b36460b1ca9c89f16a8af93869c3687b7c73595352c7c4049ef3c6",
     "config/redaction/redaction-patterns.json": "b676f618434a026f7607519e1184c3c80c1e101559be5738e9cc26cf213d9635",
@@ -225,16 +225,16 @@
     "tests/routing.test.mjs": "6678210cbd484bc7c78165638e1b986f6fcc3980ed2b513926999525e29898b6",
     "tests/statusline.test.mjs": "964f662fbbb64cdbd18a52a49b558264b8de9b580b615807c6cd5b18ff55a27c",
     "tests/update.test.mjs": "d5f813fd8e72a30389d8eeab1fc37f66bafcbb9c7f993503b4663615d7301497",
-    "ui/assets/CostTab-J-XsPDRJ.js": "95bdbb5da2e68b0dfe38f922990344d3aeedb0b2945059001baa90c0a917b26e",
-    "ui/assets/JobClassesTab-DGT0nbPK.js": "14a10a52b002d39584b8287eb2948985dcf5071551786bb302fd8d365ddc2630",
-    "ui/assets/TrialsTab-eAWhg9dv.js": "d9671b706a1e7747145953c8597b4dceb6cbffb57bc1558caeb6884e79662100",
-    "ui/assets/index-DeiftTja.css": "0c657c27a022459a524bc7bbef20c249bcf45d866f10a1af8aa5cc9b4085caa6",
-    "ui/assets/index-DwfOSxE6.js": "3d5cb567118c093d4f2f0c23e5d468e68e486a5d9f7af823b5bf23651d86c443",
+    "ui/assets/CostTab-Dmw3JfkF.js": "7cd02e771b961c793d5c84d4b283f2ccb6692f350ffaebd88e1f2540de3bc643",
+    "ui/assets/JobClassesTab-8V0MgFcH.js": "e813a7dbae00611312e44c9d405b2230a417af31f420b19a4017de3ddfcfdd03",
+    "ui/assets/TrialsTab-xEwZmLXE.js": "9631cc93d5351bc6d92b968a8a03cb29eaa34eeb30a95a42673dac5c45fb4981",
+    "ui/assets/index-BVfyVDZt.css": "7c7178e48a7125dc72c12168eb646a83650062de8cdfcc78132d8ca362d54dfb",
+    "ui/assets/index-CNii7O1D.js": "3090932307c53ca16795e74c77f714066f7f0b51fd8f03b20c3c9e93ab145b56",
     "ui/assets/omitted-Be0_Qxkl.js": "166d9bf3626149b25a8a52b6c7c123fd5da132c215f410ae6a2d86e0781fa4a3",
     "ui/assets/vendor-charts-Dwi50mnp.js": "8f2b5ed14c6f03d9ed615e98b894ffb97e65b924803bc7b6147a912d694506c0",
     "ui/assets/vendor-icons-BRMS8TeC.js": "7ddc2e390c16367c7a9ee653dea0f407426943f829fdd17de039d00366e778f2",
     "ui/assets/vendor-react-BixgUiYW.js": "84207fbc9bd45aef633cc3d9e883f2fd4c0ae2c99df3f920d9ba14883a464cc6",
     "ui/assets/vendor-redux-XJVtE8Si.js": "0430373614e66c5e7250f6605a1abcae05c64dd9fa26ca4c1570fbd79aff8aaa",
-    "ui/index.html": "19816c9cbee4ed17ee6256dc2cc17155539824e51216cd7220f2960bc0d965aa"
+    "ui/index.html": "d56cf840208f8f5b2d13e263aa534c560875ae9246d8837361ed5db4280372ba"
   }
 }
